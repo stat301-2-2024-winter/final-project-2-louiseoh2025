@@ -1,0 +1,51 @@
+---
+title: "Progress Memo 1"
+subtitle: |
+  | Final Project 
+  | Data Science 2 with R (STAT 301-2)
+author: "Louise Oh"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  echo: false
+  warning: false
+  message: false
+
+from: markdown+emoji 
+reference-location: margin
+citation-location: margin
+---
+
+::: {.callout-tip icon=false}
+
+## Github Repo Link
+
+[https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git](https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git)
+
+:::
+
+
+## Data source
+
+Mental Health In Pregnancy During COVID-19^[Mental Health In Pregnancy During COVID-19 --- [https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19](https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19)]
+
+## Why this data
+
+Blah blah blah^[another footnote]
+
+## Data quality & complexity check
+
+Blah blah blah
+
+## Potential data issues
+
+Blah blah blah
+
+## Misc
+
+Blah Blah
