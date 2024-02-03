@@ -29,7 +29,10 @@ for (col in names(pregnancy)) {
   }
 }
 
+# change date format
 pregnancy <- pregnancy |>  
   mutate(delivery_date = dmy(paste("01", delivery_date)))
 
+# glimpse data
+glimpse(pregnancy)
 
