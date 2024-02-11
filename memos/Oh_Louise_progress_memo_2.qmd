@@ -1,0 +1,122 @@
+---
+title: "Progress Memo 2"
+subtitle: |
+  | Final Project 
+  | Data Science 2 with R (STAT 301-2)
+author: "Louise Oh"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  echo: false
+  warning: false
+  message: false
+
+from: markdown+emoji 
+reference-location: margin
+citation-location: margin
+---
+
+::: {.callout-tip icon=false}
+## Github Repo Link
+
+[https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git](https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git)
+
+:::
+
+## Dataset
+
+The Mental Health In Pregnancy During COVID-19 Dataset^[Mental Health In Pregnancy During COVID-19 --- [https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19](https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19)] is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.
+
+::: {.callout-note icon="false"}
+## Prediction Research Objective 
+
+The goal is regression, specifically what the weight of the child at birth will be based on the mother's biological and psychological factors in pregnancy during a pandemic.
+
+:::
+
+```{r}
+#| label: load
+
+# load packages
+library(tidyverse)
+library(tidymodels)
+library(here)
+
+# load data
+load(here("data/pregnancy_clean.rda"))
+load(here("results/pregnancy_split.rda"))
+load(here("results/pregnancy_recipes.rda"))
+load(here("results/fit_lm.rda"))
+load(here("results/fit_lasso.rda"))
+load(here("results/fit_ridge.rda"))
+load(here("results/fit_rf.rda"))
+
+```
+
+
+## Target Variable Analysis
+
+The second target variable is `birth_weight`. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way. Thus, there likely will be no major issues with the data and no transformation necessary for fitting the models.
+
+```{r}
+#| label: target-variable-analysis
+#| echo: false
+
+ggplot(pregnancy, aes(x = birth_weight)) +
+  geom_histogram(fill = "skyblue", color = "black", bins = 35) +
+  theme_minimal() +
+  labs(title = "Distribution of Child's Weight at Birth",
+       x = "Birth Weight (g)",
+       y = NULL)
+```
+
+## Recipe
+
+```{r}
+#| label: recipe
+#| eval: false
+
+
+```
+
+## Linear Regression Model
+
+```{r}
+#| label: linear
+#| eval: false
+
+
+```
+
+## Lasso Regression Model
+
+```{r}
+#| label: lasso
+#| eval: false
+
+
+```
+
+## Ridge Regression Model
+
+```{r}
+#| label: ridge
+#| eval: false
+
+
+```
+
+## Random Forest Model
+
+```{r}
+#| label: random-forest
+#| eval: false
+
+
+```
+
