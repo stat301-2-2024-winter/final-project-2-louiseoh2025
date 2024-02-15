@@ -23,6 +23,4 @@ pregnancy_test <- testing(pregnancy_split)
 pregnancy_folds <- vfold_cv(pregnancy_train, v = 5, repeats = 3, strata = birth_weight)
 
 # save datasets
-save(pregnancy_train, pregnancy_test, file = here("results/pregnancy_split.rda"))
-save(pregnancy_folds, file = here("results/pregnancy_folds.rda"))
-
+save(pregnancy_train, pregnancy_test, pregnancy_folds, file = here("results/pregnancy_split.rda"))
