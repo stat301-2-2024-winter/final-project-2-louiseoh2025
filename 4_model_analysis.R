@@ -1,6 +1,5 @@
 # Analysis of trained models (comparisons)
 # Select final model
-# Fit & analyze final model
 
 # load packages ----
 library(tidyverse)
@@ -19,6 +18,10 @@ load(here("results/pregnancy_split.rda"))
 # load fits and recipes
 load(here("results/fit_lm.rda"))
 load(here("results/fit_lasso.rda"))
+load(here("results/fit_ridge.rda"))
+load(here("results/tuned_rf.rda"))
+load(here("results/tuned_knn.rda"))
+load(here("results/tuned_bt.rda"))
 load(here("results/pregnancy_recipes.rda"))
 
 # collect metrics

@@ -8,3 +8,37 @@ This project aims to properly develop a predictive model using supervised learni
 
 - `memos/`: contains all progress memos that lead to the final project
 
+## R Scripts
+
+- `0_data_cleaning.R`: codes used to clean and save data ready for use
+
+- `1_initial_setup.R`: codes used to split and fold data
+
+- `2_recipes.R`: codes used to create two recipes used for fitting the models
+
+- `3_fit_lm.R`: codes used to specify and fit the linear regression model
+
+- `3_fit_lasso.R`: codes used to specify and fit the lasso regression model
+
+- `3_fit_ridge.R`: codes used to specify and fit the ridge regression model
+
+- `3_fit_rf.R`: codes used to specify and fit the random forest model
+
+- `3_fit_knn.R`: codes used to specify and fit the k-nearest neighbor model
+
+- `3_fit_bt.R`: codes used to specify and fit the boosted tree model
+
+- `4_model_analysis.R`: codes used to analyze which model works best
+
+- `5_fit_final.R`: codes used to fit the final model chosen for the prediction project
+
+## Reports
+
+- `Oh_Louise_final_report.qmd`: quarto markdown document to create the final report
+
+- `Oh_Louise_final_report.html`: the final report
+
+- `Oh_Louise_executive_summary.qmd`: quarto markdown document to create the executive summary
+
+- `Oh_Louise_executive_summary.html`: the executive summary
+
