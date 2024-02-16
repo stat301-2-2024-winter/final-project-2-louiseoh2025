@@ -54,14 +54,16 @@ load(here("results/pregnancy_recipes.rda"))
 load(here("results/fit_lm.rda"))
 load(here("results/fit_lasso.rda"))
 load(here("results/fit_ridge.rda"))
-load(here("results/fit_rf.rda"))
+load(here("results/tuned_rf.rda"))
+load(here("results/tuned_knn.rda"))
+load(here("results/tuned_bt.rda"))
 
 ```
 
 
 ## Target Variable Analysis
 
-The second target variable is `birth_weight`. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way. Thus, there likely will be no major issues with the data and no transformation necessary for fitting the models.
+The target variable is `birth_weight`. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way. Thus, there likely will be no major issues with the data and no transformation necessary for fitting the models.
 
 ```{r}
 #| label: target-variable-analysis
@@ -87,7 +89,7 @@ ggplot(pregnancy, aes(x = birth_weight)) +
 ## Linear Regression Model
 
 ```{r}
-#| label: linear
+#| label: lm
 #| eval: false
 
 
@@ -114,9 +116,28 @@ ggplot(pregnancy, aes(x = birth_weight)) +
 ## Random Forest Model
 
 ```{r}
-#| label: random-forest
+#| label: rf
 #| eval: false
 
 
 ```
+
+## K-Nearest Neighbor Model
+
+```{r}
+#| label: knn
+#| eval: false
+
+
+```
+
+## Boosted Tree Model
+
+```{r}
+#| label: bt
+#| eval: false
+
+
+```
+
 
