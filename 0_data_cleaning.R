@@ -15,6 +15,7 @@ glimpse(pregnancy_raw)
 # cleaned dataset will be named pregnancy
 pregnancy <- pregnancy_raw
 
+
 # filter all rows with missing values
 for (col in names(pregnancy)) {
   pregnancy <- pregnancy |> 

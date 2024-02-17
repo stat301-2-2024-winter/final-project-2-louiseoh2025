@@ -30,16 +30,16 @@ knn_spec <- nearest_neighbor(
   set_engine("kknn")
 
 # define workflows ----
-knn_wf <- workflow() |> 
+knn_wf2 <- workflow() |> 
   add_model(knn_spec) |> 
-  add_recipe(recipe)
+  add_recipe(recipe2)
 
 # hyperparameter tuning values ----
 knn_params <- parameters(knn_spec)
 knn_grid <- grid_regular(knn_params, levels = 5)
 
 # fit workflows/models ----
-knn_tuned <- knn_wf |> 
+knn_tuned <- knn_wf2 |> 
   tune_grid(pregnancy_folds, grid = knn_grid,
             control = control_grid(save_workflow = TRUE))
 

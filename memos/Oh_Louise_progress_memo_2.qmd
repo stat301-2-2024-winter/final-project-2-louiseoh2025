@@ -28,7 +28,7 @@ citation-location: margin
 
 :::
 
-## Dataset
+## Dataset Overview
 
 The Mental Health In Pregnancy During COVID-19 Dataset^[Mental Health In Pregnancy During COVID-19 --- [https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19](https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19)] is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.
 
@@ -39,105 +39,32 @@ The goal is regression, specifically what the weight of the child at birth will 
 
 :::
 
-```{r}
-#| label: load
+## Target Variable
 
-# load packages
-library(tidyverse)
-library(tidymodels)
-library(here)
+The target variable is `birth_weight`. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way, so no transformation is necessary.
 
-# load data
-load(here("data/pregnancy_clean.rda"))
-load(here("results/pregnancy_split.rda"))
-load(here("results/pregnancy_recipes.rda"))
-load(here("results/fit_lm.rda"))
-load(here("results/fit_lasso.rda"))
-load(here("results/fit_ridge.rda"))
-load(here("results/tuned_rf.rda"))
-load(here("results/tuned_knn.rda"))
-load(here("results/tuned_bt.rda"))
+## 1. Data Splitting and Resampling
 
-```
+The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into V subsets of approximately equal size for training and validation. This provides a robust estimate of model performance and V sets of performance metrics. With this particular setup, each model will be trained and evaluated 15 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracies by taking the uncertainty into account. See 1_*.R scripts for codes. 
 
 
-## Target Variable Analysis
+## 2. Recipes
 
-The target variable is `birth_weight`. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way. Thus, there likely will be no major issues with the data and no transformation necessary for fitting the models.
+There are two recipes used for the models. The first recipe is a standard recipe created with the following steps: filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), one-hot encode all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). The second recipe is a more customized recipe with revised and additional steps: only remove unique ID (step_rm), add interaction term between gestational age and birth height (step_interact), specify delivery date as date (step_date). Both recipes were prepped and baked, which seemed to work properly. See 2_*.R scripts for codes. 
 
-```{r}
-#| label: target-variable-analysis
-#| echo: false
+## 3. Models
 
-ggplot(pregnancy, aes(x = birth_weight)) +
-  geom_histogram(fill = "skyblue", color = "black", bins = 35) +
-  theme_minimal() +
-  labs(title = "Distribution of Child's Weight at Birth",
-       x = "Birth Weight (g)",
-       y = NULL)
-```
-
-## Recipe
-
-```{r}
-#| label: recipe
-#| eval: false
+Six models are created for the prediction problem: ordinary linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. The standard recipe was used to fit the lasso regression, ridge regression, and the boosted tree models. The customized recipe was used to fit the ordinary linear regression, random forest, and k-nearest neighbor models. The random forest, k-nearest neighbor, and boosted tree models were tuned using `tune_grid()`. All models seemed to run properly. See 3_*.R scripts for codes. 
 
 
-```
+## 4. Model Analysis (plan)
 
-## Linear Regression Model
+So far, the random forest model seems to work best based on the RMSE and its SE. However, the customized recipe and the models could be further refined before performing the model analyses. For the model analyses, more variety of measures could be compared. RMSE, RSQ, MSE, and other metrics will be used. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, a final model analysis will be performed on this model, which will be the final model used to predict the baby's birth weight for this project. 
 
-```{r}
-#| label: lm
-#| eval: false
+## Timeline
 
-
-```
-
-## Lasso Regression Model
-
-```{r}
-#| label: lasso
-#| eval: false
-
-
-```
-
-## Ridge Regression Model
-
-```{r}
-#| label: ridge
-#| eval: false
-
-
-```
-
-## Random Forest Model
-
-```{r}
-#| label: rf
-#| eval: false
-
-
-```
-
-## K-Nearest Neighbor Model
-
-```{r}
-#| label: knn
-#| eval: false
-
-
-```
-
-## Boosted Tree Model
-
-```{r}
-#| label: bt
-#| eval: false
-
-
-```
-
-
+- February 26: complete basic requirements for this project (2 recipes and 6 model types)
+- March 1: perform model analyses and finalize the recipes and model types
+- March 3: write a draft of the final report and have any questions answered by Prof/TAs
+- March 5: write the executive summary and update github repo and README documents
+- March 6: proofread and submit final project

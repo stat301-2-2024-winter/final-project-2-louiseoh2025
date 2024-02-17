@@ -36,6 +36,9 @@ rf_spec <-
 rf_wf <- workflow() |> 
   add_model(rf_spec) |> 
   add_recipe(recipe)
+rf_wf2 <- workflow() |> 
+  add_model(rf_spec) |> 
+  add_recipe(recipe2)
 
 # hyperparameter tuning values ----
 # check ranges for hyperparameters
@@ -54,7 +57,7 @@ rf_grid <- grid_regular(rf_params, levels = 5) # 125 parameters?
 # grid_latin_hypercube(rf_params, size = 20) good for many params
 
 # fit workflows/models ----
-rf_tuned <- rf_wf |> 
+rf_tuned <- rf_wf2 |> 
   tune_grid(pregnancy_folds, grid = rf_grid,
             control = control_grid(save_workflow = TRUE))
 

@@ -30,11 +30,14 @@ lm_spec <- linear_reg() |>
 lm_wf <- workflow() |> 
   add_model(lm_spec) |> 
   add_recipe(recipe)
+lm_wf2 <- workflow() |> 
+  add_model(lm_spec) |> 
+  add_recipe(recipe2)
 
 # fit workflows/models ----
 lm_fit <- fit(lm_wf, pregnancy_train)
 lm_fit_folds <- fit_resamples(
-  lm_wf, resamples = pregnancy_folds,
+  lm_wf2, resamples = pregnancy_folds,
   control = control_resamples(save_workflow = TRUE)
   )
 

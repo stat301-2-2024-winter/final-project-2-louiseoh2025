@@ -59,3 +59,4 @@ lasso_percent <- pregnancy_test |>
   bind_cols(predict(lm_fit, pregnancy_test)) |> 
   summarize(within_10_pct = mean((abs(.pred - birth_weight) / birth_weight) <= 0.1))
 lasso_percent |> knitr::kable()
+

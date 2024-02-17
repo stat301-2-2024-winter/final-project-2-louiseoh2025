@@ -14,7 +14,7 @@ tidymodels_prefer()
 # load training data
 load(here("results/pregnancy_split.rda"))
 
-# standard recipe
+# standard recipe - lasso, ridge, bt
 recipe <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
   # filter out variables have have zero variance
   step_zv(all_predictors()) |> 
@@ -22,12 +22,25 @@ recipe <- recipe(birth_weight ~ ., data = pregnancy_train) |>
   step_normalize(all_numeric_predictors()) |> 
   # one-hot encode all categorical predictors
   step_dummy(all_nominal_predictors(), one_hot = TRUE) |> 
-  step_rm(delivery_date)
+  # remove uniqueID and date
+  step_rm(delivery_date, osf_id)
 prep(recipe) |>
   bake(new_data = NULL)
 
-# customized recipe
-
+# customized recipe - lm, rf, knn
+recipe2 <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
+  step_zv(all_predictors()) |> 
+  step_normalize(all_numeric_predictors()) |> 
+  step_dummy(all_nominal_predictors(), one_hot = TRUE) |> 
+  # only remove unique ID
+  step_rm(osf_id) |> 
+  # add interaction term between gestational age and birth height
+  step_interact(~ gestational_age:birth_length) |> 
+  # specify delivery date as date
+  step_date(delivery_date) 
+prep(recipe2) |>
+  bake(new_data = NULL)
 
 # save recipes
-save(recipe, file = here("results/pregnancy_recipes.rda"))
+save(recipe, recipe2, file = here("results/pregnancy_recipes.rda"))
+
