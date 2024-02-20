@@ -38,7 +38,7 @@ bt_wf <- workflow() |>
 
 # hyperparameter tuning values ----
 bt_params <- parameters(bt_spec)  |> 
-  update(mtry = mtry(c(1, 14))) 
+  update(mtry = mtry(c(1, 14)))
 bt_grid <- grid_regular(bt_params, levels = 5)
 
 # fit workflows/models ----

@@ -24,6 +24,7 @@ recipe <- recipe(birth_weight ~ ., data = pregnancy_train) |>
   step_dummy(all_nominal_predictors(), one_hot = TRUE) |> 
   # remove uniqueID and date
   step_rm(delivery_date, osf_id)
+  # consider adding step impute
 prep(recipe) |>
   bake(new_data = NULL)
 
@@ -34,8 +35,12 @@ recipe2 <- recipe(birth_weight ~ ., data = pregnancy_train) |>
   step_dummy(all_nominal_predictors(), one_hot = TRUE) |> 
   # only remove unique ID
   step_rm(osf_id) |> 
-  # add interaction term between gestational age and birth height
-  step_interact(~ gestational_age:birth_length) |> 
+  # add interaction term between threaten_baby_* survey
+  step_interact(~ threaten_baby_danger:threaten_baby_harm) |> 
+  # add interaction term between anxiety and depression levels
+  step_interact(~ promis_anxiety:postnatal_depression) |> 
+  # sqrt postnatal_depression for normality
+  # -
   # specify delivery date as date
   step_date(delivery_date) 
 prep(recipe2) |>

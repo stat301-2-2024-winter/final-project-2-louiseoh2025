@@ -27,7 +27,7 @@ lm_spec <- linear_reg() |>
   set_mode("regression") 
 
 # define workflows ----
-lm_wf <- workflow() |> 
+baseline_wf <- workflow() |> 
   add_model(lm_spec) |> 
   add_recipe(recipe)
 lm_wf2 <- workflow() |> 
@@ -35,11 +35,11 @@ lm_wf2 <- workflow() |>
   add_recipe(recipe2)
 
 # fit workflows/models ----
-lm_fit <- fit(lm_wf, pregnancy_train)
+baseline_fit <- fit(baseline_wf, pregnancy_train)
 lm_fit_folds <- fit_resamples(
   lm_wf2, resamples = pregnancy_folds,
   control = control_resamples(save_workflow = TRUE)
   )
 
 # write out results (fitted/trained workflows) ----
-save(lm_fit, lm_fit_folds, file = here("results/fit_lm.rda"))
+save(baseline_fit, lm_fit_folds, file = here("results/fit_lm.rda"))

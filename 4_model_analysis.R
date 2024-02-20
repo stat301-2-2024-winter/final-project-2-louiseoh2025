@@ -32,19 +32,9 @@ metric_table <- lm_fit_folds |> collect_metrics() |> mutate(model = "lm") |>
 metric_table |> knitr::kable()
 
 # tuned models
-best_rf <- show_best(rf_tuned, metric = "rmse")[1,]
 select_best(rf_tuned, metric = "rmse")
-best_bt <- show_best(bt_tuned, metric = "rmse")[1,]
 select_best(bt_tuned, metric = "rmse")
-best_knn <- show_best(knn_tuned, metric = "rmse")[1,]
-select_best(knn_tuned, metric = "rmse")
-best_rmse <- tibble(
-  model = c("RF", "KNN", "BT"),
-  RMSE = c(best_rf$mean, best_knn$mean, best_bt$mean),
-  std_err = c(best_rf$std_err, best_knn$std_err, best_bt$std_err),
-  n = c(best_rf$n, best_knn$n, best_bt$n)
-)
-best_rmse |> knitr::kable()
+select_best(knn_tuned, metric = "rmse") 
 
 # RMSE table
 

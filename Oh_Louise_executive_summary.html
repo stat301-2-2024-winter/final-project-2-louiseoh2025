@@ -9,7 +9,7 @@
 <meta name="author" content="Louise Oh">
 <meta name="dcterms.date" content="2024-02-20">
 
-<title>Progress Memo 2</title>
+<title>Executive Summary</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2993,11 +2993,7 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#dataset-overview" id="toc-dataset-overview" class="nav-link active" data-scroll-target="#dataset-overview">Dataset Overview</a></li>
   <li><a href="#target-variable" id="toc-target-variable" class="nav-link" data-scroll-target="#target-variable">Target Variable</a></li>
-  <li><a href="#data-splitting-and-resampling" id="toc-data-splitting-and-resampling" class="nav-link" data-scroll-target="#data-splitting-and-resampling">1. Data Splitting and Resampling</a></li>
-  <li><a href="#recipes" id="toc-recipes" class="nav-link" data-scroll-target="#recipes">2. Recipes</a></li>
-  <li><a href="#models" id="toc-models" class="nav-link" data-scroll-target="#models">3. Models</a></li>
-  <li><a href="#model-analysis-plan" id="toc-model-analysis-plan" class="nav-link" data-scroll-target="#model-analysis-plan">4. Model Analysis (plan)</a></li>
-  <li><a href="#timeline" id="toc-timeline" class="nav-link" data-scroll-target="#timeline">Timeline</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 </nav>
 </div>
@@ -3005,7 +3001,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Progress Memo 2</h1>
+<h1 class="title">Executive Summary</h1>
 <p class="subtitle lead"></p><p>Final Project<br>
 Data Science 2 with R (STAT 301-2)</p><p></p>
 </div>
@@ -3068,49 +3064,8 @@ Prediction Research Objective
 <h2 class="anchored" data-anchor-id="target-variable">Target Variable</h2>
 <p>The target variable is <code>birth_weight</code>. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way, so no transformation is necessary.</p>
 </section>
-<section id="data-splitting-and-resampling" class="level2">
-<h2 class="anchored" data-anchor-id="data-splitting-and-resampling">1. Data Splitting and Resampling</h2>
-<p>The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, <code>birth_weight</code>. Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into V subsets of approximately equal size for training and validation. This provides a robust estimate of model performance and V sets of performance metrics. With this particular setup, each model will be trained and evaluated 15 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracies by taking the uncertainty into account. See 1_*.R scripts for codes.</p>
-</section>
-<section id="recipes" class="level2">
-<h2 class="anchored" data-anchor-id="recipes">2. Recipes</h2>
-<p>There are two recipes used for the models. The first recipe is a standard recipe created with the following steps: filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), one-hot encode all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The recipe was prepped and baked, and seemed to work.</p>
-<p>The second recipe is a more customized recipe with revised and additional steps after a simple EDA: only remove unique ID (step_rm), add interaction terms between the threaten_baby_ variables and between the anxiety and depression levels which were related to each other (step_interact), specify delivery date as date (step_date). The recipe was prepped and baked, and seemed to work. See 2_*.R scripts for codes.</p>
-<p>basic recipe:</p>
-<ul>
-<li><p>Zero variance filter on: all_predictors()</p></li>
-<li><p>Centering and scaling for: all_numeric_predictors()</p></li>
-<li><p>Dummy variables from: all_nominal_predictors()</p></li>
-<li><p>Variables removed: delivery_date, osf_id</p></li>
-</ul>
-<p>customized recipe:</p>
-<ul>
-<li><p>Zero variance filter on: all_predictors()</p></li>
-<li><p>Centering and scaling for: all_numeric_predictors()</p></li>
-<li><p>Dummy variables from: all_nominal_predictors()</p></li>
-<li><p>Variables removed: osf_id</p></li>
-<li><p>Interactions with: threaten_baby_danger:threaten_baby_harm</p></li>
-<li><p>Interactions with: promis_anxiety:postnatal_depression</p></li>
-<li><p>Date features from: delivery_date</p></li>
-</ul>
-</section>
-<section id="models" class="level2">
-<h2 class="anchored" data-anchor-id="models">3. Models</h2>
-<p>There is a baseline linear regression model which uses the standard recipe. Six additional models are created for the prediction problem: ordinary linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. The standard recipe was used to fit the lasso regression, ridge regression, and the boosted tree models. The customized recipe was used to fit the ordinary linear regression, random forest, and k-nearest neighbor models. The random forest, k-nearest neighbor, and boosted tree models were tuned using <code>tune_grid()</code>. All models seemed to run properly. See 3_*.R scripts for codes.</p>
-</section>
-<section id="model-analysis-plan" class="level2">
-<h2 class="anchored" data-anchor-id="model-analysis-plan">4. Model Analysis (plan)</h2>
-<p>So far, the random forest model seems to work best based on the RMSE and its SE. However, the customized recipe and the models could be further refined before performing the model analyses. For the model analyses, more variety of measures could be compared. RMSE, RSQ, MSE, and other metrics will be used. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, a final model analysis will be performed on this model, which will be the final model used to predict the baby’s birth weight for this project.</p>
-</section>
-<section id="timeline" class="level2">
-<h2 class="anchored" data-anchor-id="timeline">Timeline</h2>
-<ul>
-<li>February 26: complete basic requirements for this project (2 recipes and 6 model types)</li>
-<li>March 1: perform model analyses and finalize the recipes and model types</li>
-<li>March 3: write a draft of the final report and have any questions answered by Prof/TAs</li>
-<li>March 5: write the executive summary and update github repo and README documents</li>
-<li>March 6: proofread and submit final project</li>
-</ul>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
 </section>
 
 

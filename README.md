@@ -22,11 +22,11 @@ This project aims to properly develop a predictive model using supervised learni
 
 - `3_fit_ridge.R`: codes used to specify and fit the ridge regression model
 
-- `3_fit_rf.R`: codes used to specify and fit the random forest model
+- `3_fit_rf.R`: codes used to specify and fit/tune the random forest model
 
-- `3_fit_knn.R`: codes used to specify and fit the k-nearest neighbor model
+- `3_fit_knn.R`: codes used to specify and fit/tune the k-nearest neighbor model
 
-- `3_fit_bt.R`: codes used to specify and fit the boosted tree model
+- `3_fit_bt.R`: codes used to specify and fit/tune the boosted tree model
 
 - `4_model_analysis.R`: codes used to analyze which model works best
 

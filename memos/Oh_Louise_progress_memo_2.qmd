@@ -50,16 +50,46 @@ The cleaned pregnancy data was split into training (80%) and testing (20%) datas
 
 ## 2. Recipes
 
-There are two recipes used for the models. The first recipe is a standard recipe created with the following steps: filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), one-hot encode all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). The second recipe is a more customized recipe with revised and additional steps: only remove unique ID (step_rm), add interaction term between gestational age and birth height (step_interact), specify delivery date as date (step_date). Both recipes were prepped and baked, which seemed to work properly. See 2_*.R scripts for codes. 
+There are two recipes used for the models. The first recipe is a standard recipe created with the following steps: filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), one-hot encode all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The recipe was prepped and baked, and seemed to work. 
+
+The second recipe is a more customized recipe with revised and additional steps after a simple EDA: only remove unique ID (step_rm), add interaction terms between the threaten_baby_ variables and between the anxiety and depression levels which were related to each other (step_interact), specify delivery date as date (step_date). The recipe was prepped and baked, and seemed to work. See 2_*.R scripts for codes. 
+
+basic recipe:
+
+- Zero variance filter on: all_predictors()
+
+- Centering and scaling for: all_numeric_predictors()
+
+- Dummy variables from: all_nominal_predictors()
+
+- Variables removed: delivery_date, osf_id
+
+customized recipe:
+
+- Zero variance filter on: all_predictors()
+
+- Centering and scaling for: all_numeric_predictors()
+
+- Dummy variables from: all_nominal_predictors()
+
+- Variables removed: osf_id
+
+- Interactions with: threaten_baby_danger:threaten_baby_harm
+
+- Interactions with: promis_anxiety:postnatal_depression
+
+- Date features from: delivery_date
+
 
 ## 3. Models
 
-Six models are created for the prediction problem: ordinary linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. The standard recipe was used to fit the lasso regression, ridge regression, and the boosted tree models. The customized recipe was used to fit the ordinary linear regression, random forest, and k-nearest neighbor models. The random forest, k-nearest neighbor, and boosted tree models were tuned using `tune_grid()`. All models seemed to run properly. See 3_*.R scripts for codes. 
+There is a baseline linear regression model which uses the standard recipe. Six additional models are created for the prediction problem: ordinary linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. The standard recipe was used to fit the lasso regression, ridge regression, and the boosted tree models. The customized recipe was used to fit the ordinary linear regression, random forest, and k-nearest neighbor models. The random forest, k-nearest neighbor, and boosted tree models were tuned using `tune_grid()`. All models seemed to run properly. See 3_*.R scripts for codes. 
 
 
 ## 4. Model Analysis (plan)
 
 So far, the random forest model seems to work best based on the RMSE and its SE. However, the customized recipe and the models could be further refined before performing the model analyses. For the model analyses, more variety of measures could be compared. RMSE, RSQ, MSE, and other metrics will be used. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, a final model analysis will be performed on this model, which will be the final model used to predict the baby's birth weight for this project. 
+
 
 ## Timeline
 
