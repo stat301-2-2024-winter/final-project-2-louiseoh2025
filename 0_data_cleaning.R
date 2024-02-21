@@ -13,14 +13,10 @@ pregnancy_raw <- read_csv(here("data/pregnancy.csv")) |>
 glimpse(pregnancy_raw)
 
 # cleaned dataset will be named pregnancy
-pregnancy <- pregnancy_raw
 
-
-# filter all rows with missing values
-for (col in names(pregnancy)) {
-  pregnancy <- pregnancy |> 
-    filter(!is.na(!!sym(col)))
-}
+# filter all rows with missing outcome variable values
+pregnancy <- pregnancy_raw |> 
+  filter(!is.na(birth_weight))
 
 # rename variables
 pregnancy <- pregnancy |> 
@@ -30,7 +26,8 @@ pregnancy <- pregnancy |>
 
 # change date format
 pregnancy <- pregnancy |> 
-  mutate(delivery_date = dmy(paste("01", delivery_date)))
+  mutate(delivery_month = substr(delivery_date, 1, 3),
+         delivery_year = substr(delivery_date, 4, 7))
 
 # change variable types
 for (col in names(pregnancy)) {
@@ -58,8 +55,9 @@ pregnancy <- pregnancy |>
                                     "c-section" = "Caesarean-section (c-section)",
                                     "vaginally" = "Vaginally"))
 
-# glimpse clean data
+# view clean data
 glimpse(pregnancy)
+skimr::skim_without_charts(pregnancy)
 
 # save data
 save(pregnancy, file = here("data/pregnancy_clean.rda"))
@@ -74,7 +72,8 @@ pregnancy_codebook <- as_tibble(data.frame(
     "postnatal_depression",
     "promis_anxiety",
     "gestational_age_at_birth",  
-    "delivery_date", 
+    "delivery_month", 
+    "delivery_year",
     "birth_length",  
     "birth_weight",  
     "delivery_mode",  
@@ -92,7 +91,8 @@ pregnancy_codebook <- as_tibble(data.frame(
     "Edinburgh Postnatal Depression Scale (0: least depressed - 30: most depressed)",
     "Patient-Reported Outcomes Measurement Information System on Anxiety (7: least anxious - 35: most anxious)",
     "gestational age at birth (weeks)",
-    "date of delivery (year-month-day)",
+    "month of delivery",
+    "year of delivery",
     "length of the baby (cm)",
     "weight of the baby (g)",
     "method of delivery (vaginally, c-section: Caesarean-section)",

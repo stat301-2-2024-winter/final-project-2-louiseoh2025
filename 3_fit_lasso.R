@@ -23,21 +23,41 @@ load(here("results/pregnancy_split.rda"))
 load(here("results/pregnancy_recipes.rda"))
 
 # model specifications ----
-lasso_spec <- linear_reg(penalty = 0.01, mixture = 1) |> 
+lasso_spec <- linear_reg(penalty = tune(), 
+                      mixture = 0) |> 
   set_engine("glmnet") |> 
   set_mode("regression")
 
 # define workflows ----
 lasso_wf <- workflow() |> 
   add_model(lasso_spec) |> 
-  add_recipe(recipe)
+  add_recipe(recipe_np)
+lasso_wf2 <- workflow() |> 
+  add_model(lasso_spec) |> 
+  add_recipe(recipe2_np)
+
+# hyperparameter tuning grid ----
+lasso_params <- hardhat::extract_parameter_set_dials(lasso_spec)
+# lasso_params <- parameters(lasso_spec)
+
+# build tuning grid
+lasso_grid <- grid_regular(lasso_params, levels = 5)
 
 # fit workflows/models ----
-lasso_fit <- fit(lasso_wf, pregnancy_train)
-lasso_fit_folds <- fit_resamples(
-  lasso_wf, resamples = pregnancy_folds,
-  control = control_resamples(save_workflow = TRUE)
+lasso_tuned <- lasso_wf |> 
+  tune_grid(
+    resamples = pregnancy_folds,
+    grid = lasso_grid,
+    metrics = metric_set(rmse),
+    control = control_grid(save_workflow = TRUE)
+  )
+lasso_tuned2 <- lasso_wf2 |> 
+  tune_grid(
+    resamples = pregnancy_folds,
+    grid = lasso_grid,
+    metrics = metric_set(rmse),
+    control = control_grid(save_workflow = TRUE)
   )
 
 # write out results (fitted/trained workflows) ----
-save(lasso_fit, lasso_fit_folds, file = here("results/fit_lasso.rda"))
+save(lasso_tuned, lasso_tuned2, file = here("results/tuned_lasso.rda"))

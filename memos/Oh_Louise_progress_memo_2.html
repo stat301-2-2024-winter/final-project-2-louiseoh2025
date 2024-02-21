@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Louise Oh">
-<meta name="dcterms.date" content="2024-02-20">
+<meta name="dcterms.date" content="2024-02-21">
 
 <title>Progress Memo 2</title>
 <style>
@@ -2996,7 +2996,7 @@ vertical-align: -.125em;
   <li><a href="#data-splitting-and-resampling" id="toc-data-splitting-and-resampling" class="nav-link" data-scroll-target="#data-splitting-and-resampling">1. Data Splitting and Resampling</a></li>
   <li><a href="#recipes" id="toc-recipes" class="nav-link" data-scroll-target="#recipes">2. Recipes</a></li>
   <li><a href="#models" id="toc-models" class="nav-link" data-scroll-target="#models">3. Models</a></li>
-  <li><a href="#model-analysis-plan" id="toc-model-analysis-plan" class="nav-link" data-scroll-target="#model-analysis-plan">4. Model Analysis (plan)</a></li>
+  <li><a href="#model-analysis" id="toc-model-analysis" class="nav-link" data-scroll-target="#model-analysis">4. Model Analysis</a></li>
   <li><a href="#timeline" id="toc-timeline" class="nav-link" data-scroll-target="#timeline">Timeline</a></li>
   </ul>
 </nav>
@@ -3024,7 +3024,7 @@ Data Science 2 with R (STAT 301-2)</p><p></p>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 20, 2024</p>
+      <p class="date">February 21, 2024</p>
     </div>
   </div>
   
@@ -3098,9 +3098,13 @@ Prediction Research Objective
 <h2 class="anchored" data-anchor-id="models">3. Models</h2>
 <p>There is a baseline linear regression model which uses the standard recipe. Six additional models are created for the prediction problem: ordinary linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. The standard recipe was used to fit the lasso regression, ridge regression, and the boosted tree models. The customized recipe was used to fit the ordinary linear regression, random forest, and k-nearest neighbor models. The random forest, k-nearest neighbor, and boosted tree models were tuned using <code>tune_grid()</code>. All models seemed to run properly. See 3_*.R scripts for codes.</p>
 </section>
-<section id="model-analysis-plan" class="level2">
-<h2 class="anchored" data-anchor-id="model-analysis-plan">4. Model Analysis (plan)</h2>
+<section id="model-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="model-analysis">4. Model Analysis</h2>
 <p>So far, the random forest model seems to work best based on the RMSE and its SE. However, the customized recipe and the models could be further refined before performing the model analyses. For the model analyses, more variety of measures could be compared. RMSE, RSQ, MSE, and other metrics will be used. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, a final model analysis will be performed on this model, which will be the final model used to predict the baby’s birth weight for this project.</p>
+<section id="null-model" class="level4">
+<h4 class="anchored" data-anchor-id="null-model">Null Model</h4>
+<p>prep(recipe_np) |&gt; bake(new_data = NULL)</p>
+</section>
 </section>
 <section id="timeline" class="level2">
 <h2 class="anchored" data-anchor-id="timeline">Timeline</h2>

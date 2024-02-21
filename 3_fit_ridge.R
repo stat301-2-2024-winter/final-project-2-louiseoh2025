@@ -23,21 +23,41 @@ load(here("results/pregnancy_split.rda"))
 load(here("results/pregnancy_recipes.rda"))
 
 # model specifications ----
-ridge_spec <- linear_reg(penalty = 0.01, mixture = 0) |> 
+ridge_spec <- linear_reg(penalty = tune(), 
+                         mixture = 1) |> 
   set_engine("glmnet") |> 
   set_mode("regression")
 
 # define workflows ----
 ridge_wf <- workflow() |> 
   add_model(ridge_spec) |> 
-  add_recipe(recipe)
+  add_recipe(recipe_np)
+ridge_wf2 <- workflow() |> 
+  add_model(ridge_spec) |> 
+  add_recipe(recipe2_np)
+
+# hyperparameter tuning grid ----
+ridge_params <- hardhat::extract_parameter_set_dials(ridge_spec)
+# ridge_params <- parameters(ridge_spec)
+
+# build tuning grid
+ridge_grid <- grid_regular(ridge_params, levels = 5)
 
 # fit workflows/models ----
-ridge_fit <- fit(ridge_wf, pregnancy_train)
-ridge_fit_folds <- fit_resamples(
-  ridge_wf, resamples = pregnancy_folds,
-  control = control_resamples(save_workflow = TRUE)
+ridge_tuned <- ridge_wf |> 
+  tune_grid(
+    resamples = pregnancy_folds,
+    grid = ridge_grid,
+    metrics = metric_set(rmse),
+    control = control_grid(save_workflow = TRUE)
+  )
+ridge_tuned2 <- ridge_wf2 |> 
+  tune_grid(
+    resamples = pregnancy_folds,
+    grid = ridge_grid,
+    metrics = metric_set(rmse),
+    control = control_grid(save_workflow = TRUE)
   )
 
 # write out results (fitted/trained workflows) ----
-save(ridge_fit, ridge_fit_folds, file = here("results/fit_ridge.rda"))
+save(ridge_tuned, ridge_tuned2, file = here("results/tuned_ridge.rda"))

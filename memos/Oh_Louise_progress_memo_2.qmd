@@ -86,9 +86,15 @@ customized recipe:
 There is a baseline linear regression model which uses the standard recipe. Six additional models are created for the prediction problem: ordinary linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. The standard recipe was used to fit the lasso regression, ridge regression, and the boosted tree models. The customized recipe was used to fit the ordinary linear regression, random forest, and k-nearest neighbor models. The random forest, k-nearest neighbor, and boosted tree models were tuned using `tune_grid()`. All models seemed to run properly. See 3_*.R scripts for codes. 
 
 
-## 4. Model Analysis (plan)
+## 4. Model Analysis 
 
 So far, the random forest model seems to work best based on the RMSE and its SE. However, the customized recipe and the models could be further refined before performing the model analyses. For the model analyses, more variety of measures could be compared. RMSE, RSQ, MSE, and other metrics will be used. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, a final model analysis will be performed on this model, which will be the final model used to predict the baby's birth weight for this project. 
+
+#### Null Model
+```{r}
+prep(recipe_np) |>
+  bake(new_data = NULL)
+```
 
 
 ## Timeline

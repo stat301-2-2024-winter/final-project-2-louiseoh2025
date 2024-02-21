@@ -23,28 +23,42 @@ load(here("results/pregnancy_split.rda"))
 load(here("results/pregnancy_recipes.rda"))
 
 # model specifications ----
-bt_spec <- boost_tree(
-  mode = "regression",
-  min_n = tune(),
-  mtry = tune(), 
-  learn_rate = tune()
-) |> 
+bt_spec <- boost_tree(mode = "regression",
+                      min_n = tune(),
+                      mtry = tune(), 
+                      learn_rate = tune()) |> 
   set_engine("xgboost")
 
 # define workflows ----
 bt_wf <- workflow() |> 
   add_model(bt_spec) |> 
-  add_recipe(recipe)
+  add_recipe(recipe_tree)
+bt_wf2 <- workflow() |> 
+  add_model(bt_spec) |> 
+  add_recipe(recipe2_tree)
 
 # hyperparameter tuning values ----
-bt_params <- parameters(bt_spec)  |> 
-  update(mtry = mtry(c(1, 14)))
-bt_grid <- grid_regular(bt_params, levels = 5)
+# check ranges for hyperparameters
+hardhat::extract_parameter_set_dials(bt_spec) |> 
+  update(mtry = mtry(c(1, 15)))
+
+# change hyperparameter ranges
+bt_params <- parameters(bt_spec) |> 
+  update(mtry = mtry(c(1, 15))) 
+bt_params2 <- parameters(bt_spec) |> 
+  update(mtry = mtry(c(1, 16))) 
+
+# build tuning grid
+bt_grid <- grid_regular(bt_params, levels = 5) 
+bt_grid2 <- grid_regular(bt_params2, levels = 5) 
 
 # fit workflows/models ----
 bt_tuned <- bt_wf |> 
   tune_grid(pregnancy_folds, grid = bt_grid,
             control = control_grid(save_workflow = TRUE))
+bt_tuned2 <- bt_wf2 |> 
+  tune_grid(pregnancy_folds, grid = bt_grid2,
+            control = control_grid(save_workflow = TRUE))
 
 # write out results (fitted/trained workflows) ----
-save(bt_tuned, file = here("results/tuned_bt.rda"))
+save(bt_tuned, bt_tuned2, file = here("results/tuned_bt.rda"))
