@@ -61,6 +61,8 @@ recipe2_np <- recipe(birth_weight ~ ., data = pregnancy_train) |>
                   birth_length, threaten_life, threaten_baby_danger, threaten_baby_harm,
                   household_income, maternal_education, delivery_mode, nicu_stay,
                   delivery_month, delivery_year) |> 
+  # sqrt postnatal_depression for normality
+  step_sqrt(postnatal_depression) |> 
   step_dummy(all_nominal_predictors()) |> 
   step_zv(all_predictors()) |> 
   step_normalize(all_numeric_predictors()) |> 
@@ -68,9 +70,6 @@ recipe2_np <- recipe(birth_weight ~ ., data = pregnancy_train) |>
   step_interact(~ threaten_baby_danger:threaten_baby_harm) |> 
   # add interaction term between anxiety and depression levels
   step_interact(~ promis_anxiety:postnatal_depression) 
-  # sqrt postnatal_depression for normality
-  # step_sqrt(postnatal_depression) |> 
-  # step_mutate(postnatal_depression <= 0, 0, sqrt(postnatal_depression)) 
 prep(recipe2_np) |>
   bake(new_data = NULL)
 
@@ -81,13 +80,11 @@ recipe2_tree <- recipe(birth_weight ~ ., data = pregnancy_train) |>
                   birth_length, threaten_life, threaten_baby_danger, threaten_baby_harm,
                   household_income, maternal_education, delivery_mode, nicu_stay,
                   delivery_month, delivery_year) |> 
+  # sqrt postnatal_depression for normality
+  step_sqrt(postnatal_depression) |> 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) |> 
   step_zv(all_predictors()) |> 
-  step_normalize(all_numeric_predictors()) |> 
-  # add interaction term between threaten_baby_* survey
-  step_interact(~ threaten_baby_danger:threaten_baby_harm) |> 
-  # add interaction term between anxiety and depression levels
-  step_interact(~ promis_anxiety:postnatal_depression) 
+  step_normalize(all_numeric_predictors())
 prep(recipe2_tree) |>
   bake(new_data = NULL)
 

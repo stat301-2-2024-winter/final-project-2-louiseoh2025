@@ -2993,10 +2993,10 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#dataset-overview" id="toc-dataset-overview" class="nav-link active" data-scroll-target="#dataset-overview">Dataset Overview</a></li>
   <li><a href="#target-variable" id="toc-target-variable" class="nav-link" data-scroll-target="#target-variable">Target Variable</a></li>
-  <li><a href="#data-splitting-and-resampling" id="toc-data-splitting-and-resampling" class="nav-link" data-scroll-target="#data-splitting-and-resampling">1. Data Splitting and Resampling</a></li>
-  <li><a href="#recipes" id="toc-recipes" class="nav-link" data-scroll-target="#recipes">2. Recipes</a></li>
-  <li><a href="#models" id="toc-models" class="nav-link" data-scroll-target="#models">3. Models</a></li>
-  <li><a href="#model-analysis" id="toc-model-analysis" class="nav-link" data-scroll-target="#model-analysis">4. Model Analysis</a></li>
+  <li><a href="#data-splitting-and-resampling" id="toc-data-splitting-and-resampling" class="nav-link" data-scroll-target="#data-splitting-and-resampling">Data Splitting and Resampling</a></li>
+  <li><a href="#recipes" id="toc-recipes" class="nav-link" data-scroll-target="#recipes">Recipes</a></li>
+  <li><a href="#baseline-and-other-models" id="toc-baseline-and-other-models" class="nav-link" data-scroll-target="#baseline-and-other-models">Baseline and Other Models</a></li>
+  <li><a href="#model-analysis" id="toc-model-analysis" class="nav-link" data-scroll-target="#model-analysis">Model Analysis</a></li>
   <li><a href="#timeline" id="toc-timeline" class="nav-link" data-scroll-target="#timeline">Timeline</a></li>
   </ul>
 </nav>
@@ -3060,7 +3060,7 @@ Prediction Research Objective
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The goal is regression, specifically what the weight of the child at birth will be based on the mother’s biological and psychological factors in pregnancy during a pandemic.</p>
+<p>The goal is regression, specifically what the weight of the baby will be at birth based on the biological and psychological factors of mother and baby during a pandemic.</p>
 </div>
 </div>
 </section>
@@ -3069,48 +3069,182 @@ Prediction Research Objective
 <p>The target variable is <code>birth_weight</code>. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way, so no transformation is necessary.</p>
 </section>
 <section id="data-splitting-and-resampling" class="level2">
-<h2 class="anchored" data-anchor-id="data-splitting-and-resampling">1. Data Splitting and Resampling</h2>
-<p>The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, <code>birth_weight</code>. Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into V subsets of approximately equal size for training and validation. This provides a robust estimate of model performance and V sets of performance metrics. With this particular setup, each model will be trained and evaluated 15 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracies by taking the uncertainty into account. See 1_*.R scripts for codes.</p>
+<h2 class="anchored" data-anchor-id="data-splitting-and-resampling">Data Splitting and Resampling</h2>
+<p>The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, <code>birth_weight</code>. Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into 5 subsets of approximately equal size for training and validation. This provides a robust estimate of model performance and 5 sets of performance metrics. With this particular setup, each model will be trained and evaluated 15 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account. See 1_*.R scripts for codes.</p>
 </section>
 <section id="recipes" class="level2">
-<h2 class="anchored" data-anchor-id="recipes">2. Recipes</h2>
-<p>There are two recipes used for the models. The first recipe is a standard recipe created with the following steps: filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), one-hot encode all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The recipe was prepped and baked, and seemed to work.</p>
-<p>The second recipe is a more customized recipe with revised and additional steps after a simple EDA: only remove unique ID (step_rm), add interaction terms between the threaten_baby_ variables and between the anxiety and depression levels which were related to each other (step_interact), specify delivery date as date (step_date). The recipe was prepped and baked, and seemed to work. See 2_*.R scripts for codes.</p>
-<p>basic recipe:</p>
-<ul>
-<li><p>Zero variance filter on: all_predictors()</p></li>
-<li><p>Centering and scaling for: all_numeric_predictors()</p></li>
-<li><p>Dummy variables from: all_nominal_predictors()</p></li>
-<li><p>Variables removed: delivery_date, osf_id</p></li>
-</ul>
-<p>customized recipe:</p>
-<ul>
-<li><p>Zero variance filter on: all_predictors()</p></li>
-<li><p>Centering and scaling for: all_numeric_predictors()</p></li>
-<li><p>Dummy variables from: all_nominal_predictors()</p></li>
-<li><p>Variables removed: osf_id</p></li>
-<li><p>Interactions with: threaten_baby_danger:threaten_baby_harm</p></li>
-<li><p>Interactions with: promis_anxiety:postnatal_depression</p></li>
-<li><p>Date features from: delivery_date</p></li>
-</ul>
+<h2 class="anchored" data-anchor-id="recipes">Recipes</h2>
+<p>There are two recipes used for the models. The first recipe is a kitchen sink recipe created with the following steps: impute any missing values of variables with less than 20% missing data (step_impute_knn), filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), add dummy variables all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The kitchen sink recipe for parametric/tree models are revised with one-hot encoded to dummy variables.</p>
+<p>The second recipe is a more customized recipe with revised and additional steps after a simple EDA: add interaction terms between the threaten_baby_* variables and between the anxiety and depression levels which were related to each other (step_interact), transform postnatal_depression for normal distribution (step_sqrt). Similarly, the customized recipe for parametric/tree models are revised with one-hot encoded to dummy variables, and the interactions were removed since they do not affect tree-based models.</p>
+<p>All recipes were prepped and baked, and were fitted to four different models which seemed to work. See 2_*.R scripts for codes.</p>
 </section>
-<section id="models" class="level2">
-<h2 class="anchored" data-anchor-id="models">3. Models</h2>
-<p>There is a baseline linear regression model which uses the standard recipe. Six additional models are created for the prediction problem: ordinary linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. The standard recipe was used to fit the lasso regression, ridge regression, and the boosted tree models. The customized recipe was used to fit the ordinary linear regression, random forest, and k-nearest neighbor models. The random forest, k-nearest neighbor, and boosted tree models were tuned using <code>tune_grid()</code>. All models seemed to run properly. See 3_*.R scripts for codes.</p>
+<section id="baseline-and-other-models" class="level2">
+<h2 class="anchored" data-anchor-id="baseline-and-other-models">Baseline and Other Models</h2>
+<p>Six models are created for the prediction problem: linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. Each of the models are fitted using the kitchen sink recipe and then the customized recipe. The recipes were modified for parametric and nonparametric models. Linear regression model is fitted using resamples, and the other models are tuned using tune grids. The baseline model is the linear regression model fitted using resamples using the kitchen sink recipe. All models seemed to run. See 3_*.R scripts for codes.</p>
 </section>
 <section id="model-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="model-analysis">4. Model Analysis</h2>
-<p>So far, the random forest model seems to work best based on the RMSE and its SE. However, the customized recipe and the models could be further refined before performing the model analyses. For the model analyses, more variety of measures could be compared. RMSE, RSQ, MSE, and other metrics will be used. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, a final model analysis will be performed on this model, which will be the final model used to predict the baby’s birth weight for this project.</p>
-<section id="null-model" class="level4">
-<h4 class="anchored" data-anchor-id="null-model">Null Model</h4>
-<p>prep(recipe_np) |&gt; bake(new_data = NULL)</p>
-</section>
+<h2 class="anchored" data-anchor-id="model-analysis">Model Analysis</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-analysis" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table 1: Initial Model Analysis</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: left;">recipe</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Linear Regression</td>
+<td style="text-align: left;">kitchen sink</td>
+<td style="text-align: right;">421.5219</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">5.174068</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Linear Regression</td>
+<td style="text-align: left;">customized</td>
+<td style="text-align: right;">421.7310</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">5.144507</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lasso Regression</td>
+<td style="text-align: left;">kitchen sink</td>
+<td style="text-align: right;">421.4393</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">5.194969</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lasso Regression</td>
+<td style="text-align: left;">customized</td>
+<td style="text-align: right;">421.6298</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">5.166292</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ridge Regression</td>
+<td style="text-align: left;">kitchen sink</td>
+<td style="text-align: right;">421.2600</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">5.188534</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ridge Regression</td>
+<td style="text-align: left;">customized</td>
+<td style="text-align: right;">421.4163</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">5.161690</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">K Nearest Neighbor</td>
+<td style="text-align: left;">kitchen sink</td>
+<td style="text-align: right;">497.8965</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4.187948</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">K Nearest Neighbor</td>
+<td style="text-align: left;">customized</td>
+<td style="text-align: right;">497.6805</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4.187564</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Boosted Tree</td>
+<td style="text-align: left;">kitchen sink</td>
+<td style="text-align: right;">402.4491</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">5.052987</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Boosted Tree</td>
+<td style="text-align: left;">customized</td>
+<td style="text-align: right;">402.8935</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4.983850</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;">kitchen sink</td>
+<td style="text-align: right;">399.5232</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4.988618</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;">customized</td>
+<td style="text-align: right;">399.3777</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4.927999</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p><a href="#tbl-analysis">Table 1</a> shows the RMSE and its standard error for the six different models fitted/tuned using the kitchen sink recipe and the customized recipe. So far, the random forest model using the customized recipe seems to work best based on the lowest RMSE of 399.38 and its standard error. However, the customized recipe could be further refined since there is not much difference in model performance between the kitchen sink and the customized recipes.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-metrics" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table 2: Final Model Metrics</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">metric</th>
+<th style="text-align: right;">RandomForest</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">RMSE</td>
+<td style="text-align: right;">394.3222953</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MAE</td>
+<td style="text-align: right;">303.1418999</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RSQ</td>
+<td style="text-align: right;">0.4915084</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>For the final analyses, RMSE, RSQ, MSE, autoplots and other metrics will be futher used to assess the model. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, analysis will be performed on the final model, and the final model used to predict the baby’s birth weight for this project. For now the random forest model using the customized recipe is the best model. <a href="#tbl-metrics">Table 2</a> shows the RMSE, RSQ, and MAE of this final model fitted to the entire training dataset.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-pred" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table 3: Final Model Prediction Within 10%</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">within_10_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.6474938</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The final model will also be assessed on its accuracy. <a href="#tbl-pred">Table 3</a> shows that 64.75% of the current final model prediction data is within the 10% interval of actual values. The recipes and final model may change for the final report. These analyses are examples and placeholders to be used for the real final model later. See 4_*.R scripts for codes.</p>
 </section>
 <section id="timeline" class="level2">
 <h2 class="anchored" data-anchor-id="timeline">Timeline</h2>
 <ul>
-<li>February 26: complete basic requirements for this project (2 recipes and 6 model types)</li>
-<li>March 1: perform model analyses and finalize the recipes and model types</li>
+<li>February 29: finalize the recipes and models, compare models</li>
+<li>March 1: decide on final model and analyze its performance</li>
 <li>March 3: write a draft of the final report and have any questions answered by Prof/TAs</li>
 <li>March 5: write the executive summary and update github repo and README documents</li>
 <li>March 6: proofread and submit final project</li>

@@ -35,7 +35,7 @@ The Mental Health In Pregnancy During COVID-19 Dataset^[Mental Health In Pregnan
 ::: {.callout-note icon="false"}
 ## Prediction Research Objective 
 
-The goal is regression, specifically what the weight of the child at birth will be based on the mother's biological and psychological factors in pregnancy during a pandemic.
+The goal is regression, specifically what the weight of the baby will be at birth based on the biological and psychological factors of mother and baby during a pandemic.
 
 :::
 
@@ -43,64 +43,73 @@ The goal is regression, specifically what the weight of the child at birth will 
 
 The target variable is `birth_weight`. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way, so no transformation is necessary.
 
-## 1. Data Splitting and Resampling
+## Data Splitting and Resampling
 
-The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into V subsets of approximately equal size for training and validation. This provides a robust estimate of model performance and V sets of performance metrics. With this particular setup, each model will be trained and evaluated 15 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracies by taking the uncertainty into account. See 1_*.R scripts for codes. 
-
-
-## 2. Recipes
-
-There are two recipes used for the models. The first recipe is a standard recipe created with the following steps: filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), one-hot encode all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The recipe was prepped and baked, and seemed to work. 
-
-The second recipe is a more customized recipe with revised and additional steps after a simple EDA: only remove unique ID (step_rm), add interaction terms between the threaten_baby_ variables and between the anxiety and depression levels which were related to each other (step_interact), specify delivery date as date (step_date). The recipe was prepped and baked, and seemed to work. See 2_*.R scripts for codes. 
-
-basic recipe:
-
-- Zero variance filter on: all_predictors()
-
-- Centering and scaling for: all_numeric_predictors()
-
-- Dummy variables from: all_nominal_predictors()
-
-- Variables removed: delivery_date, osf_id
-
-customized recipe:
-
-- Zero variance filter on: all_predictors()
-
-- Centering and scaling for: all_numeric_predictors()
-
-- Dummy variables from: all_nominal_predictors()
-
-- Variables removed: osf_id
-
-- Interactions with: threaten_baby_danger:threaten_baby_harm
-
-- Interactions with: promis_anxiety:postnatal_depression
-
-- Date features from: delivery_date
+The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into 5 subsets of approximately equal size for training and validation. This provides a robust estimate of model performance and 5 sets of performance metrics. With this particular setup, each model will be trained and evaluated 15 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account. See 1_*.R scripts for codes. 
 
 
-## 3. Models
+## Recipes
 
-There is a baseline linear regression model which uses the standard recipe. Six additional models are created for the prediction problem: ordinary linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. The standard recipe was used to fit the lasso regression, ridge regression, and the boosted tree models. The customized recipe was used to fit the ordinary linear regression, random forest, and k-nearest neighbor models. The random forest, k-nearest neighbor, and boosted tree models were tuned using `tune_grid()`. All models seemed to run properly. See 3_*.R scripts for codes. 
+There are two recipes used for the models. The first recipe is a kitchen sink recipe created with the following steps: impute any missing values of variables with less than 20% missing data (step_impute_knn), filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), add dummy variables all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The kitchen sink recipe for parametric/tree models are revised with one-hot encoded to dummy variables. 
+
+The second recipe is a more customized recipe with revised and additional steps after a simple EDA: add interaction terms between the threaten_baby_* variables and between the anxiety and depression levels which were related to each other (step_interact), transform postnatal_depression for normal distribution (step_sqrt). Similarly, the customized recipe for parametric/tree models are revised with one-hot encoded to dummy variables, and the interactions were removed since they do not affect tree-based models.
+
+All recipes were prepped and baked, and were fitted to four different models which seemed to work. See 2_*.R scripts for codes. 
 
 
-## 4. Model Analysis 
+## Baseline and Other Models
 
-So far, the random forest model seems to work best based on the RMSE and its SE. However, the customized recipe and the models could be further refined before performing the model analyses. For the model analyses, more variety of measures could be compared. RMSE, RSQ, MSE, and other metrics will be used. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, a final model analysis will be performed on this model, which will be the final model used to predict the baby's birth weight for this project. 
+Six models are created for the prediction problem: linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. Each of the models are fitted using the kitchen sink recipe and then the customized recipe. The recipes were modified for parametric and nonparametric models. Linear regression model is fitted using resamples, and the other models are tuned using tune grids. The baseline model is the linear regression model fitted using resamples using the kitchen sink recipe. All models seemed to run. See 3_*.R scripts for codes. 
 
-#### Null Model
+
+## Model Analysis 
+
 ```{r}
-prep(recipe_np) |>
-  bake(new_data = NULL)
+#| label: tbl-analysis
+#| tbl-cap: "Initial Model Analysis"
+#| echo: false
+library(here)
+library(tidyverse)
+library(knitr)
+load(here("results/analysis_rmse.rda"))
+bind_rows(tbl_lm, tbl_lm2,
+          tbl_lasso, tbl_lasso2,
+          tbl_ridge, tbl_ridge2,
+          tbl_knn, tbl_knn2,
+          tbl_bt, tbl_bt2,
+          tbl_rf, tbl_rf2)|> 
+  distinct(model, recipe, .keep_all = TRUE) |> 
+  select(model, recipe, everything()) |> 
+  kable()
 ```
 
+@tbl-analysis shows the RMSE and its standard error for the six different models fitted/tuned using the kitchen sink recipe and the customized recipe. So far, the random forest model using the customized recipe seems to work best based on the lowest RMSE of 399.38 and its standard error. However, the customized recipe could be further refined since there is not much difference in model performance between the kitchen sink and the customized recipes. 
+
+```{r}
+#| label: tbl-metrics
+#| tbl-cap: "Final Model Metrics"
+#| echo: false
+
+load(here("results/final_results.rda"))
+final_table |> kable()
+```
+
+For the final analyses, RMSE, RSQ, MSE, autoplots and other metrics will be futher used to assess the model. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, analysis will be performed on the final model, and the final model used to predict the baby's birth weight for this project. For now the random forest model using the customized recipe is the best model. @tbl-metrics shows the RMSE, RSQ, and MAE of this final model fitted to the entire training dataset. 
+
+```{r}
+#| label: tbl-pred
+#| tbl-cap: "Final Model Prediction Within 10%"
+#| echo: false
+
+final_percent |> kable()
+```
+
+The final model will also be assessed on its accuracy. @tbl-pred shows that 64.75% of the current final model prediction data is within the 10% interval of actual values. The recipes and final model may change for the final report. These analyses are examples and placeholders to be used for the real final model later. See 4_*.R scripts for codes. 
 
 ## Timeline
 
-- February 26: complete basic requirements for this project (2 recipes and 6 model types)
-- March 1: perform model analyses and finalize the recipes and model types
+- February 29: finalize the recipes and models, compare models
+- March 1: decide on final model and analyze its performance
 - March 3: write a draft of the final report and have any questions answered by Prof/TAs
 - March 5: write the executive summary and update github repo and README documents
 - March 6: proofread and submit final project

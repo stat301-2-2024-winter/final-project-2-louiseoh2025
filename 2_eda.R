@@ -14,6 +14,9 @@ tidymodels_prefer()
 # load training data
 load(here("results/pregnancy_split.rda"))
 
+# glimpse data
+glimpse(pregnancy_train)
+
 # univariate
 vars <- pregnancy_train |> 
   colnames()
@@ -34,7 +37,7 @@ for (var in vars) {
 }
 
 ## postnatal_depression scaling
-ggplot(pregnancy_train, aes(x = sqrt(postnatal_depression))) +
+ggplot(pregnancy_train, aes(x = (postnatal_depression))) +
   geom_histogram() +
   theme_minimal()
 
@@ -46,6 +49,6 @@ ggcorrplot::ggcorrplot(corr,
                        type = "lower",
                        lab = TRUE, 
                        method = "square")
-# promis_anxiety and postnatal_depression = .8
-# threaten_baby_danger and threaten_baby_harm = .73
+## promis_anxiety and postnatal_depression = .8
+## threaten_baby_danger and threaten_baby_harm = .73
 
