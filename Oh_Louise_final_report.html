@@ -3479,15 +3479,25 @@ Prediction Research Objective
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p><strong>Should cover the data splitting procedure and clearly identify what type of prediction problem it is. State and describe the model types you will be fitting. Describe any parameters that will be tuned. Describe what recipes will be used. Describe the resampling technique used. In some cases an extended discussion about recipe variations might be useful. Especially if students are using recipe variation to try and explore the predictive importance of certain variables. Explain the metric that will be used to compare and ultimately used to select a final model.</strong></p>
-<section id="recipes" class="level4">
-<h4 class="anchored" data-anchor-id="recipes">Recipes</h4>
+<section id="data-spliting" class="level4">
+<h4 class="anchored" data-anchor-id="data-spliting">Data Spliting</h4>
+<p>The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, <code>birth_weight</code>.</p>
 </section>
-<section id="models" class="level4">
-<h4 class="anchored" data-anchor-id="models">Models</h4>
+<section id="resampling" class="level4">
+<h4 class="anchored" data-anchor-id="resampling">Resampling</h4>
+<p>Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into 5 subsets of approximately equal size for training and validation. With this particular setup, each model will be trained and evaluated 15 times. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account.</p>
+</section>
+<section id="recipe" class="level4">
+<h4 class="anchored" data-anchor-id="recipe">Recipe</h4>
+<p>Kitchen sink recipe Customized recipe</p>
+</section>
+<section id="model-type-and-parameter-tuning" class="level4">
+<h4 class="anchored" data-anchor-id="model-type-and-parameter-tuning">Model Type and Parameter Tuning</h4>
+<p>Linear regression model - none Lasso regression model - penalty Ridge regression model - penalty K Nearest Neighbor model - neighbors Boosted Tree model - mtry, min_n Random Forest model - mtry, min_n, learn_rate</p>
 </section>
 <section id="metric" class="level4">
 <h4 class="anchored" data-anchor-id="metric">Metric</h4>
+<p>This prediction research objective is a regression problem. Therefore, the RMSE metric mean and standard error is used to compare and ultimately select the final model.</p>
 </section>
 </section>
 <section id="model-building-selection-results" class="level2">

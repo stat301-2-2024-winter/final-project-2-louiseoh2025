@@ -115,16 +115,27 @@ The target variable is `birth_weight`, a numerical variable in the form of doubl
 
 ## Methods
 
-**Should cover the data splitting procedure and clearly identify what type of prediction problem it is. State and describe the model types you will be fitting. Describe any parameters that will be tuned. Describe what recipes will be used. Describe the resampling technique used. In some cases an extended discussion about recipe variations might be useful. Especially if students are using recipe variation to try and explore the predictive importance of certain variables. Explain the metric that will be used to compare and ultimately used to select a final model.**
+#### Data Spliting
+The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. 
 
-#### Recipes
+#### Resampling
+Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into 5 subsets of approximately equal size for training and validation. With this particular setup, each model will be trained and evaluated 15 times. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account.
 
 
-#### Models
+#### Recipe
+Kitchen sink recipe
+Customized recipe
 
+#### Model Type and Parameter Tuning
+Linear regression model - none
+Lasso regression model - penalty
+Ridge regression model - penalty
+K Nearest Neighbor model - neighbors
+Boosted Tree model - mtry, min_n
+Random Forest model - mtry, min_n, learn_rate
 
 #### Metric
-
+This prediction research objective is a regression problem. Therefore, the RMSE metric mean and standard error is used to compare and ultimately select the final model. 
 
 
 ## Model Building & Selection Results
