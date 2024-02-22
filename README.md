@@ -9,6 +9,8 @@ This project aims to properly develop a predictive model using supervised learni
 
 - `memos/`: contains all progress memos that lead to the final project
 
+- `results/`: contains all splitted data, fitted/tuned models, analysis tables, and other outputs created from the .R scripts
+
 ## R Scripts
 
 - `0_data_cleaning.R`: codes used to clean and save data ready for use
@@ -17,23 +19,28 @@ This project aims to properly develop a predictive model using supervised learni
 
 - `2_eda.R`: codes used for eda of training data to create customized recipes
 
-- `2_recipes.R`: codes used to create two recipes used for fitting the models
+- `2_recipes.R`: codes used to create all recipes used for fitting the models
 
-- `3_fit_lm.R`: codes used to specify and fit/resample the baseline/linear regression model
+- `3_fit_baseline.R`: codes used to specify and fit/resample the null/baseline models
 
-- `3_fit_lasso.R`: codes used to specify and fit/tune the lasso regression model
+- `3_fit_lm.R`: codes used to specify and fit/resample the linear regression models
 
-- `3_fit_ridge.R`: codes used to specify and fit/tune the ridge regression model
+- `3_tune_lasso.R`: codes used to specify and fit/tune the lasso regression models
 
-- `3_fit_rf.R`: codes used to specify and fit/tune the random forest model
+- `3_tune_ridge.R`: codes used to specify and fit/tune the ridge regression models
 
-- `3_fit_knn.R`: codes used to specify and fit/tune the k-nearest neighbor model
+- `3_tune_knn.R`: codes used to specify and fit/tune the k-nearest neighbor models
 
-- `3_fit_bt.R`: codes used to specify and fit/tune the boosted tree model
+- `3_tune_bt.R`: codes used to specify and fit/tune the boosted tree models
+
+- `3_tune_rf.R`: codes used to specify and fit/tune the random forest models
 
 - `4_model_analysis.R`: codes used to analyze which model works best
 
-- `4_fit_final.R`: codes used to fit and asses the final model chosen for the prediction project
+- `5_fit_final.R`: codes used to fit the final model chosen for the prediction project
+
+- `5_assess_final.R`: codes used to assess the final model fitted for the prediction project
+
 
 ## Reports
 

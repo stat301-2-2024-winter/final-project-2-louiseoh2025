@@ -50,9 +50,9 @@ The cleaned pregnancy data was split into training (80%) and testing (20%) datas
 
 ## Recipes
 
-**The baseline recipe**
+There are 5 recipes in total. There is a baseline recipe which only utilizes step_rm, step_dumm, step_zv, and step_normalize. The other models are more customized. 
 
-There are two recipes used for the models. The first recipe is a kitchen sink recipe created with the following steps: impute any missing values of variables with less than 20% missing data (step_impute_knn), filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), add dummy variables all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The kitchen sink recipe for parametric/tree models are revised with one-hot encoded to dummy variables. 
+The first recipe is a kitchen sink recipe created with the following steps: impute any missing values of variables with less than 20% missing data (step_impute_knn), filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), add dummy variables all categorical predictors (step_dummy), and remove uniqueID and original date variable (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The kitchen sink recipe for parametric/tree models are revised with one-hot encoded to dummy variables. 
 
 The second recipe is a more customized recipe with revised and additional steps after a simple EDA: add interaction terms between the threaten_baby_* variables and between the anxiety and depression levels which were related to each other (step_interact), transform postnatal_depression for normal distribution (step_sqrt). Similarly, the customized recipe for parametric/tree models are revised with one-hot encoded to dummy variables, and the interactions were removed since they do not affect tree-based models.
 
@@ -71,7 +71,7 @@ A null model and a simple linear regression model are used as baseline models. A
 #| tbl-cap: "Initial Model Analysis"
 #| echo: false
 library(here)
-load(here("results/analysis_models.rda"))
+load(here("results/assess_models.rda"))
 tbl_rmse
 ```
 

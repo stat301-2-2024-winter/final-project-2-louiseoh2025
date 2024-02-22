@@ -187,5 +187,5 @@ tbl_rmse <- bind_rows(tbl_null, tbl_baseline,
 tbl_rmse
 
 # save rmse tables
-save(tbl_rmse, file = here("results/analysis_models.rda"))
+save(tbl_rmse, file = here("results/assess_models.rda"))
 

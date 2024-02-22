@@ -16,7 +16,7 @@ tidymodels_prefer()
 load(here("results/pregnancy_split.rda"))
 
 
-## RECIPE kitchen sink for baseline -----
+## RECIPE for baseline -----
 recipe_baseline <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
   # remove uniqueID and delivery_date
   step_rm(osf_id, delivery_date) |> 
