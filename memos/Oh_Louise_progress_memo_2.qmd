@@ -50,6 +50,8 @@ The cleaned pregnancy data was split into training (80%) and testing (20%) datas
 
 ## Recipes
 
+**The baseline recipe**
+
 There are two recipes used for the models. The first recipe is a kitchen sink recipe created with the following steps: impute any missing values of variables with less than 20% missing data (step_impute_knn), filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), add dummy variables all categorical predictors (step_dummy), and remove uniqueID and date (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The kitchen sink recipe for parametric/tree models are revised with one-hot encoded to dummy variables. 
 
 The second recipe is a more customized recipe with revised and additional steps after a simple EDA: add interaction terms between the threaten_baby_* variables and between the anxiety and depression levels which were related to each other (step_interact), transform postnatal_depression for normal distribution (step_sqrt). Similarly, the customized recipe for parametric/tree models are revised with one-hot encoded to dummy variables, and the interactions were removed since they do not affect tree-based models.
@@ -59,7 +61,7 @@ All recipes were prepped and baked, and were fitted to four different models whi
 
 ## Baseline and Other Models
 
-Six models are created for the prediction problem: linear regression, lasso regression, ridge regression, random forest, k-nearest neighbor, and boosted tree. Each of the models are fitted using the kitchen sink recipe and then the customized recipe. The recipes were modified for parametric and nonparametric models. Linear regression model is fitted using resamples, and the other models are tuned using tune grids. The baseline model is the linear regression model fitted using resamples using the kitchen sink recipe. All models seemed to run. See 3_*.R scripts for codes. 
+A null model and a simple linear regression model are used as baseline models. A baseline recipe is used in fitting the two models. Six other models are created for the prediction problem: linear regression, lasso regression, ridge regression, k-nearest neighbor, boosted tree, and random forest. Each of the models are fitted using two different recipes. Each recipe was modified for parametric and nonparametric models. All models seemed to run. See 3_*.R scripts for codes. 
 
 
 ## Model Analysis 
@@ -69,42 +71,35 @@ Six models are created for the prediction problem: linear regression, lasso regr
 #| tbl-cap: "Initial Model Analysis"
 #| echo: false
 library(here)
-library(tidyverse)
-library(knitr)
-load(here("results/analysis_rmse.rda"))
-bind_rows(tbl_lm, tbl_lm2,
-          tbl_lasso, tbl_lasso2,
-          tbl_ridge, tbl_ridge2,
-          tbl_knn, tbl_knn2,
-          tbl_bt, tbl_bt2,
-          tbl_rf, tbl_rf2)|> 
-  distinct(model, recipe, .keep_all = TRUE) |> 
-  select(model, recipe, everything()) |> 
-  kable()
+load(here("results/analysis_models.rda"))
+tbl_rmse
 ```
 
-@tbl-analysis shows the RMSE and its standard error for the six different models fitted/tuned using the kitchen sink recipe and the customized recipe. So far, the random forest model using the customized recipe seems to work best based on the lowest RMSE of 399.38 and its standard error. However, the customized recipe could be further refined since there is not much difference in model performance between the kitchen sink and the customized recipes. 
+@tbl-analysis shows the RMSE and its standard error for the baseline models and the 6 other models fitted/tuned using two distinct recipes, each customed for non-parametric and tree-based models. So far, the random forest model using the customized recipe seems to work best based on the lowest RMSE of 399.38 and its standard error. However, the customized recipes could be further refined since there is not much difference in model performance between the two recipes and the baseline recipe. See 4_*.R scripts for codes. 
+
+## Final Model Assessment 
+
+A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, analysis will be performed on the final model using RMSE, RSQ, MSE, and MAPE. The final model used to predict the baby's birth weight for this project.
 
 ```{r}
 #| label: tbl-metrics
-#| tbl-cap: "Final Model Metrics"
+#| tbl-cap: "Final Model Assessment Metrics"
 #| echo: false
 
-load(here("results/final_results.rda"))
-final_table |> kable()
+load(here("results/assess_final.rda"))
+final_table
 ```
 
-For the final analyses, RMSE, RSQ, MSE, autoplots and other metrics will be futher used to assess the model. A best model will be chosen, and this model will be fitted using the whole training dataset instead of the folds. Afterwards, analysis will be performed on the final model, and the final model used to predict the baby's birth weight for this project. For now the random forest model using the customized recipe is the best model. @tbl-metrics shows the RMSE, RSQ, and MAE of this final model fitted to the entire training dataset. 
+For now the random forest model using recipe 2 for tree-based models is the best model. @tbl-metrics shows the RMSE, RSQ, MAE, and MAPE of this final model fitted to the entire training dataset. 
 
 ```{r}
-#| label: tbl-pred
-#| tbl-cap: "Final Model Prediction Within 10%"
+#| label: fig-assess
+#| fig-cap: "Final Model Actual vs. Predicted Data"
 #| echo: false
-
-final_percent |> kable()
+final_plot
 ```
 
-The final model will also be assessed on its accuracy. @tbl-pred shows that 64.75% of the current final model prediction data is within the 10% interval of actual values. The recipes and final model may change for the final report. These analyses are examples and placeholders to be used for the real final model later. See 4_*.R scripts for codes. 
+@fig-assess plots the predicted birth weight by the actual birth weight of the random forest model using recipe 2 for tree-based models. See 5_*.R scripts for codes. 
 
 ## Timeline
 

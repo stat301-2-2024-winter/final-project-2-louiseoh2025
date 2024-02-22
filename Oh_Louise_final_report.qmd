@@ -116,17 +116,21 @@ The target variable is `birth_weight`, a numerical variable in the form of doubl
 ## Methods
 
 #### Data Spliting
+
 The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. 
 
 #### Resampling
+
 Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into 5 subsets of approximately equal size for training and validation. With this particular setup, each model will be trained and evaluated 15 times. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account.
 
 
 #### Recipe
+
 Kitchen sink recipe
 Customized recipe
 
 #### Model Type and Parameter Tuning
+
 Linear regression model - none
 Lasso regression model - penalty
 Ridge regression model - penalty
@@ -135,7 +139,16 @@ Boosted Tree model - mtry, min_n
 Random Forest model - mtry, min_n, learn_rate
 
 #### Metric
-This prediction research objective is a regression problem. Therefore, the RMSE metric mean and standard error is used to compare and ultimately select the final model. 
+
+This prediction research objective is a regression problem. The following metrics are used to compare and ultimately select the final model:
+
+- RMSE (Root Mean Squared Error): Measures the average magnitude of the errors between predicted and observed values, with lower values indicating better performance.
+
+- MAE (Mean Absolute Error): Measures the average absolute differences between predicted and observed values, providing a direct measure of the magnitude of errors without considering their direction.
+
+- MAPE (Mean Absolute Percentage Error): Measures the average percentage difference between predicted and observed values, providing a relative measure of the accuracy of predictions.
+
+- RSQ (R-Squared): Represents the proportion of the variance in the dependent variable that is predictable from the independent variables in a regression model, with higher values indicating better fit.
 
 
 ## Model Building & Selection Results

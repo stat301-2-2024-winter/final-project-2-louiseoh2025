@@ -21,28 +21,38 @@ load(here("results/pregnancy_split.rda"))
 # load pre-processing/feature engineering/recipe
 load(here("results/pregnancy_recipes.rda"))
 
-# model specifications ----
+## USING RECIPE 1 np -----
+# model specification
 lm_spec <- linear_reg() |> 
   set_engine("lm") |> 
   set_mode("regression") 
-
-# define workflows ----
-lm_wf <- workflow() |> 
+# define workflow
+lm_workflow1 <- workflow() |> 
   add_model(lm_spec) |> 
-  add_recipe(recipe_np)
-lm_wf2 <- workflow() |> 
-  add_model(lm_spec) |> 
-  add_recipe(recipe2_np)
-
-# fit workflows/models ----
-lm_fit <- fit_resamples(
-  lm_wf, resamples = pregnancy_folds,
-  control = control_resamples(save_workflow = TRUE)
-  )
-lm_fit2 <- fit_resamples(
-  lm_wf2, resamples = pregnancy_folds,
-  control = control_resamples(save_workflow = TRUE)
+  add_recipe(recipe1_np)
+# fit workflow/model
+lm_fit1 <- lm_workflow1 |> 
+  fit_resamples(
+    resamples = pregnancy_folds,
+    control = control_resamples(save_workflow = TRUE)
 )
 
+## USING RECIPE 2 np -----
+
+# model specification
+lm_spec <- linear_reg() |> 
+  set_engine("lm") |> 
+  set_mode("regression") 
+# define workflow
+lm_workflow2 <- workflow() |> 
+  add_model(lm_spec) |> 
+  add_recipe(recipe2_np)
+# fit workflow/model
+lm_fit2 <- lm_workflow2 |> 
+  fit_resamples(
+    resamples = pregnancy_folds,
+    control = control_resamples(save_workflow = TRUE)
+  )
+
 # write out results (fitted/trained workflows) ----
-save(lm_fit, lm_fit2, file = here("results/fit_lm.rda"))
+save(lm_fit1, lm_fit2, file = here("results/fit_lm.rda"))

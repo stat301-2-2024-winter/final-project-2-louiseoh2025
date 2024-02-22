@@ -19,6 +19,7 @@ tidymodels_prefer()
 load(here("results/pregnancy_split.rda"))
 
 # load fits and recipes
+load(here("results/fit_baseline.rda"))
 load(here("results/fit_lm.rda"))
 load(here("results/tuned_lasso.rda"))
 load(here("results/tuned_ridge.rda"))
@@ -27,145 +28,164 @@ load(here("results/tuned_bt.rda"))
 load(here("results/tuned_rf.rda"))
 load(here("results/pregnancy_recipes.rda"))
 
-# autoplots -----
+## AUTOPLOT -----
 
 # lasso
-autoplot(lasso_tuned, metric = "rmse") + 
+autoplot(lasso_tuned1, metric = "rmse") + 
   theme_minimal() +
-  ggtitle("Lasso Regression Model (kitchen sink)")
+  labs(title = "Lasso Regression Model",
+       subtitle = "recipe 1 (non parametric)")
 autoplot(lasso_tuned2, metric = "rmse") + 
   theme_minimal() +
-  ggtitle("Lasso Regression Model (customized)")
+  labs(title = "Lasso Regression Model",
+       subtitle = "recipe 2 (non parametric)")
 # ridge
-autoplot(ridge_tuned, metric = "rmse") + 
-  theme_minimal() +
-  ggtitle("Ridge Regression Model (kitchen sink)")
+autoplot(ridge_tuned1, metric = "rmse") + 
+  theme_minimal()  +
+  labs(title = "Ridge Regression Model",
+       subtitle = "recipe 1 (non parametric)")
 autoplot(ridge_tuned2, metric = "rmse") + 
-  theme_minimal() +
-  ggtitle("Ridge Regression Model (customized)")
+  theme_minimal()  +
+  labs(title = "Ridge Regression Model",
+       subtitle = "recipe 1 (non parametric)")
 # knn
-autoplot(knn_tuned, metric = "rmse") + 
+autoplot(knn_tuned1, metric = "rmse") + 
   theme_minimal() +
-  ggtitle("K-Nearest Neighbor Model (kitchen sink)")
+  labs(title = "K Nearest Neighbor Model",
+       subtitle = "recipe 1 (tree)")
 autoplot(knn_tuned2, metric = "rmse") + 
   theme_minimal() +
-  ggtitle("K-Nearest Neighbor Model (customized)")
+  labs(title = "K Nearest Neighbor Model",
+       subtitle = "recipe 2 (tree)")
 # bt
-autoplot(bt_tuned, metric = "rmse") + 
+autoplot(bt_tuned1, metric = "rmse") + 
   theme_minimal() +
-  ggtitle("Boosted Tree Model (kitchen sink)")
+  labs(title = "Boosted Tree Model",
+       subtitle = "recipe 1 (tree)")
 autoplot(bt_tuned2, metric = "rmse") + 
   theme_minimal() +
-  ggtitle("Boosted Tree Model (customized)")
+  labs(title = "Boosted Tree Model",
+       subtitle = "recipe 2 (tree)")
 # rf
-autoplot(rf_tuned, metric = "rmse") + 
+autoplot(rf_tuned1, metric = "rmse") + 
   theme_minimal() +
-  ggtitle("Random Forest Model (kitchen sink)")
+  labs(title = "Random Forest Model",
+       subtitle = "recipe 1 (tree)")
 autoplot(rf_tuned2, metric = "rmse") + 
   theme_minimal() +
-  ggtitle("Random Forest Model (customized)")
+  labs(title = "Random Forest Model",
+       subtitle = "recipe 2 (tree)")
 
-# tuned models -----
-select_best(lasso_tuned, metric = "rmse")
+## TUNED MODEL PARAMETERS -----
+select_best(lasso_tuned1, metric = "rmse")
 select_best(lasso_tuned2, metric = "rmse")
-select_best(ridge_tuned, metric = "rmse")
+select_best(ridge_tuned1, metric = "rmse")
 select_best(ridge_tuned2, metric = "rmse")
-select_best(knn_tuned, metric = "rmse") 
+select_best(knn_tuned1, metric = "rmse") 
 select_best(knn_tuned2, metric = "rmse") 
-select_best(bt_tuned, metric = "rmse") 
+select_best(bt_tuned1, metric = "rmse") 
 select_best(bt_tuned2, metric = "rmse") 
-select_best(rf_tuned, metric = "rmse") 
+select_best(rf_tuned1, metric = "rmse") 
 select_best(rf_tuned2, metric = "rmse") 
 
-# RMSE table -----
-tbl_lm <- lm_fit |> 
+## RMSE -----
+
+tbl_null <- null_fit |> 
+  show_best("rmse") |> 
+  slice_min(mean) |> 
+  select(mean, n, std_err) |> 
+  mutate(model = "Null",
+         recipe = "baseline")
+tbl_baseline <- baseline_fit |> 
+  show_best("rmse") |> 
+  slice_min(mean) |> 
+  select(mean, n, std_err) |> 
+  mutate(model = "Baseline (linear)",
+         recipe = "baseline")
+tbl_lm1 <- lm_fit1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Linear Regression",
-         recipe = "kitchen sink")
+         recipe = "recipe 1 (non parametric)")
 tbl_lm2 <- lm_fit2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Linear Regression",
-         recipe = "customized")
-tbl_lasso <- lasso_tuned |> 
+         recipe = "recipe 2 (non parametric)")
+tbl_lasso1 <- lasso_tuned1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Lasso Regression",
-         recipe = "kitchen sink")
+         recipe = "recipe 1 (non parametric)")
 tbl_lasso2 <- lasso_tuned2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Lasso Regression",
-         recipe = "customized")
-tbl_ridge <- ridge_tuned |> 
+         recipe = "recipe 2 (non parametric)")
+tbl_ridge1 <- ridge_tuned1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Ridge Regression",
-         recipe = "kitchen sink")
+         recipe = "recipe 1 (non parametric)")
 tbl_ridge2 <- ridge_tuned2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Ridge Regression",
-         recipe = "customized")
-tbl_knn <- knn_tuned |> 
+         recipe = "recipe 2 (non parametric)")
+tbl_knn1 <- knn_tuned1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "K Nearest Neighbor",
-         recipe = "kitchen sink")
+         recipe = "recipe 1 (tree)")
 tbl_knn2 <- knn_tuned2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "K Nearest Neighbor",
-         recipe = "customized")
-tbl_bt <- bt_tuned |> 
+         recipe = "recipe 2 (tree)")
+tbl_bt1 <- bt_tuned1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Boosted Tree",
-         recipe = "kitchen sink")
+         recipe = "recipe 1 (tree)")
 tbl_bt2 <- bt_tuned2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Boosted Tree",
-         recipe = "customized")
-tbl_rf <- rf_tuned |> 
+         recipe = "recipe 2 (tree)")
+tbl_rf1 <- rf_tuned1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Random Forest",
-         recipe = "kitchen sink")
+         recipe = "recipe 1 (tree)")
 tbl_rf2 <- rf_tuned2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Random Forest",
-         recipe = "customized")
-bind_rows(tbl_lm, tbl_lm2,
-          tbl_lasso, tbl_lasso2,
-          tbl_ridge, tbl_ridge2,
-          tbl_knn, tbl_knn2,
-          tbl_bt, tbl_bt2,
-          tbl_rf, tbl_rf2)|> 
+         recipe = "recipe 2 (tree)")
+tbl_rmse <- bind_rows(tbl_null, tbl_baseline,
+                      tbl_lm1, tbl_lm2,
+                      tbl_lasso1, tbl_lasso2,
+                      tbl_ridge1, tbl_ridge2,
+                      tbl_knn1, tbl_knn2,
+                      tbl_bt1, tbl_bt2,
+                      tbl_rf1, tbl_rf2) |> 
   distinct(model, recipe, .keep_all = TRUE) |> 
   select(model, recipe, everything()) |> 
   kable()
+tbl_rmse
 
 # save rmse tables
-save(tbl_lm, tbl_lm2,
-     tbl_lasso, tbl_lasso2,
-     tbl_ridge, tbl_ridge2,
-     tbl_knn, tbl_knn2,
-     tbl_bt, tbl_bt2,
-     tbl_rf, tbl_rf2,
-     file = here("results/model_analysis.rda"))
+save(tbl_rmse, file = here("results/analysis_models.rda"))
 
