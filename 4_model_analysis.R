@@ -167,5 +167,5 @@ save(tbl_lm, tbl_lm2,
      tbl_knn, tbl_knn2,
      tbl_bt, tbl_bt2,
      tbl_rf, tbl_rf2,
-     file = here("results/analysis_rmse.rda"))
+     file = here("results/model_analysis.rda"))
 

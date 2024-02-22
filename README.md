@@ -14,13 +14,15 @@ This project aims to properly develop a predictive model using supervised learni
 
 - `1_initial_setup.R`: codes used to split and fold data
 
+- `2_eda.R`: codes used for eda of training data to create customized recipes
+
 - `2_recipes.R`: codes used to create two recipes used for fitting the models
 
-- `3_fit_lm.R`: codes used to specify and fit the linear regression model
+- `3_fit_lm.R`: codes used to specify and fit/resample the baseline/linear regression model
 
-- `3_fit_lasso.R`: codes used to specify and fit the lasso regression model
+- `3_fit_lasso.R`: codes used to specify and fit/tune the lasso regression model
 
-- `3_fit_ridge.R`: codes used to specify and fit the ridge regression model
+- `3_fit_ridge.R`: codes used to specify and fit/tune the ridge regression model
 
 - `3_fit_rf.R`: codes used to specify and fit/tune the random forest model
 
@@ -30,7 +32,7 @@ This project aims to properly develop a predictive model using supervised learni
 
 - `4_model_analysis.R`: codes used to analyze which model works best
 
-- `5_fit_final.R`: codes used to fit the final model chosen for the prediction project
+- `4_fit_final.R`: codes used to fit and asses the final model chosen for the prediction project
 
 ## Reports
 
