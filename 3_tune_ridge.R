@@ -22,7 +22,7 @@ load(here("results/pregnancy_split.rda"))
 # load pre-processing/feature engineering/recipe
 load(here("results/pregnancy_recipes.rda"))
 
-## USING RECIPE 1 np -----
+## USING RECIPE 1 -----
 # model specification
 ridge_spec <- linear_reg(penalty = tune(), 
                          mixture = 1) |> 
@@ -31,7 +31,7 @@ ridge_spec <- linear_reg(penalty = tune(),
 # define workflow
 ridge_workflow1 <- workflow() |> 
   add_model(ridge_spec) |> 
-  add_recipe(recipe1_np)
+  add_recipe(recipe1)
 # hyperparameter tuning grid
 ridge_params <- hardhat::extract_parameter_set_dials(ridge_spec)
 # build tuning grid
@@ -45,7 +45,7 @@ ridge_tuned1 <- ridge_workflow1 |>
     control = control_grid(save_workflow = TRUE)
   )
 
-## USING RECIPE 2 np -----
+## USING RECIPE 2 -----
 # model specification
 ridge_spec <- linear_reg(penalty = tune(), 
                          mixture = 1) |> 
@@ -54,7 +54,7 @@ ridge_spec <- linear_reg(penalty = tune(),
 # define workflow
 ridge_workflow2 <- workflow() |> 
   add_model(ridge_spec) |> 
-  add_recipe(recipe2_np)
+  add_recipe(recipe2)
 # hyperparameter tuning grid
 ridge_params <- hardhat::extract_parameter_set_dials(ridge_spec)
 # build tuning grid

@@ -2995,7 +2995,7 @@ vertical-align: -.125em;
   <li><a href="#target-variable" id="toc-target-variable" class="nav-link" data-scroll-target="#target-variable">Target Variable</a></li>
   <li><a href="#data-splitting-and-resampling" id="toc-data-splitting-and-resampling" class="nav-link" data-scroll-target="#data-splitting-and-resampling">Data Splitting and Resampling</a></li>
   <li><a href="#recipes" id="toc-recipes" class="nav-link" data-scroll-target="#recipes">Recipes</a></li>
-  <li><a href="#baseline-and-other-models" id="toc-baseline-and-other-models" class="nav-link" data-scroll-target="#baseline-and-other-models">Baseline and Other Models</a></li>
+  <li><a href="#model-types" id="toc-model-types" class="nav-link" data-scroll-target="#model-types">Model Types</a></li>
   <li><a href="#model-analysis" id="toc-model-analysis" class="nav-link" data-scroll-target="#model-analysis">Model Analysis</a></li>
   <li><a href="#final-model-assessment" id="toc-final-model-assessment" class="nav-link" data-scroll-target="#final-model-assessment">Final Model Assessment</a></li>
   <li><a href="#timeline" id="toc-timeline" class="nav-link" data-scroll-target="#timeline">Timeline</a></li>
@@ -3075,14 +3075,14 @@ Prediction Research Objective
 </section>
 <section id="recipes" class="level2">
 <h2 class="anchored" data-anchor-id="recipes">Recipes</h2>
-<p>There are 5 recipes in total. There is a baseline recipe which only utilizes step_rm, step_dumm, step_zv, and step_normalize. The other models are more customized.</p>
-<p>The first recipe is a kitchen sink recipe created with the following steps: impute any missing values of variables with less than 20% missing data (step_impute_knn), filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), add dummy variables all categorical predictors (step_dummy), and remove uniqueID and original date variable (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The kitchen sink recipe for parametric/tree models are revised with one-hot encoded to dummy variables.</p>
-<p>The second recipe is a more customized recipe with revised and additional steps after a simple EDA: add interaction terms between the threaten_baby_* variables and between the anxiety and depression levels which were related to each other (step_interact), transform postnatal_depression for normal distribution (step_sqrt). Similarly, the customized recipe for parametric/tree models are revised with one-hot encoded to dummy variables, and the interactions were removed since they do not affect tree-based models.</p>
-<p>All recipes were prepped and baked, and were fitted to four different models which seemed to work. See 2_*.R scripts for codes.</p>
+<p>There are two sets of recipes, 4 recipes in total.</p>
+<p>The first recipe is a kitchen sink recipe created with the following steps: impute any missing values of variables with less than 20% missing data (step_impute_knn), filter out variables have have zero variance (step_zv), center and scale all predictors (step_normalize), add dummy variables all categorical predictors (step_dummy), and remove uniqueID and original date variable (step_rm). This is the most basic recipe similar to a kitchen sink recipe. The kitchen sink recipe for nonparametric/tree models are revised with one-hot encoded to dummy variables.</p>
+<p>The second recipe is a more customized recipe with revised and additional steps after a simple EDA: add interaction terms between the threaten_baby_* variables and between the anxiety and depression levels which were related to each other (step_interact), transform postnatal_depression for normal distribution (step_sqrt). Similarly, the customized recipe for nonparametric/tree models are revised with one-hot encoded to dummy variables, and the interactions were removed since they do not affect tree-based models.</p>
+<p>All recipes were prepped and baked, and were fitted to the different models which seemed to work. See 2_*.R scripts for codes.</p>
 </section>
-<section id="baseline-and-other-models" class="level2">
-<h2 class="anchored" data-anchor-id="baseline-and-other-models">Baseline and Other Models</h2>
-<p>A null model and a simple linear regression model are used as baseline models. A baseline recipe is used in fitting the two models. Six other models are created for the prediction problem: linear regression, lasso regression, ridge regression, k-nearest neighbor, boosted tree, and random forest. Each of the models are fitted using two different recipes. Each recipe was modified for parametric and nonparametric models. All models seemed to run. See 3_*.R scripts for codes.</p>
+<section id="model-types" class="level2">
+<h2 class="anchored" data-anchor-id="model-types">Model Types</h2>
+<p>A null model fitted using the kitchen sink recipe for parametric models is used as the baseline model. Six other models are created for the prediction problem: linear regression, lasso regression, ridge regression, k-nearest neighbor, boosted tree, and random forest. Each of the models are fitted using the two different recipes. Each recipe was modified for parametric and nonparametric models. All models seemed to run. See 3_*.R scripts for codes.</p>
 </section>
 <section id="model-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="model-analysis">Model Analysis</h2>
@@ -3103,96 +3103,89 @@ Prediction Research Objective
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Null</td>
-<td style="text-align: left;">baseline</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
 <td style="text-align: right;">535.3409</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">4.041919</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Baseline (linear)</td>
-<td style="text-align: left;">baseline</td>
-<td style="text-align: right;">535.3409</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">4.041919</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Linear Regression</td>
-<td style="text-align: left;">recipe 1 (non parametric)</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
 <td style="text-align: right;">421.5219</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">5.174068</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Linear Regression</td>
-<td style="text-align: left;">recipe 2 (non parametric)</td>
+<td style="text-align: left;">recipe 2 (parametric)</td>
 <td style="text-align: right;">421.7310</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">5.144507</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Lasso Regression</td>
-<td style="text-align: left;">recipe 1 (non parametric)</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
 <td style="text-align: right;">421.4393</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">5.194969</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Lasso Regression</td>
-<td style="text-align: left;">recipe 2 (non parametric)</td>
+<td style="text-align: left;">recipe 2 (parametric)</td>
 <td style="text-align: right;">421.6298</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">5.166292</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Ridge Regression</td>
-<td style="text-align: left;">recipe 1 (non parametric)</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
 <td style="text-align: right;">421.2600</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">5.188534</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Ridge Regression</td>
-<td style="text-align: left;">recipe 2 (non parametric)</td>
+<td style="text-align: left;">recipe 2 (parametric)</td>
 <td style="text-align: right;">421.4163</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">5.161690</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">K Nearest Neighbor</td>
 <td style="text-align: left;">recipe 1 (tree)</td>
 <td style="text-align: right;">497.8965</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">4.187948</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">K Nearest Neighbor</td>
 <td style="text-align: left;">recipe 2 (tree)</td>
 <td style="text-align: right;">497.6805</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">4.187564</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Boosted Tree</td>
 <td style="text-align: left;">recipe 1 (tree)</td>
 <td style="text-align: right;">402.4491</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">5.052987</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Boosted Tree</td>
 <td style="text-align: left;">recipe 2 (tree)</td>
 <td style="text-align: right;">402.8935</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">4.983850</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Random Forest</td>
 <td style="text-align: left;">recipe 1 (tree)</td>
 <td style="text-align: right;">399.5232</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">4.988618</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Random Forest</td>
 <td style="text-align: left;">recipe 2 (tree)</td>
 <td style="text-align: right;">399.3777</td>
@@ -3204,7 +3197,7 @@ Prediction Research Objective
 </div>
 </div>
 </div>
-<p><a href="#tbl-analysis">Table 1</a> shows the RMSE and its standard error for the baseline models and the 6 other models fitted/tuned using two distinct recipes, each customed for non-parametric and tree-based models. So far, the random forest model using the customized recipe seems to work best based on the lowest RMSE of 399.38 and its standard error. However, the customized recipes could be further refined since there is not much difference in model performance between the two recipes and the baseline recipe. See 4_*.R scripts for codes.</p>
+<p><a href="#tbl-analysis">Table 1</a> shows the RMSE and its standard error for the baseline models and the 6 other models fitted/tuned using two distinct recipes, each customed for non-parametric and tree-based models. So far, the random forest model using the customized recipe seems to work best based on the lowest RMSE of 399.38 and its standard error. This is significantly better than the null model, which has an RMSE of 535.34. However, the customized recipes could be further refined since there is not much difference in model performance between the two recipes and the baseline recipe. See 4_*.R scripts for codes.</p>
 </section>
 <section id="final-model-assessment" class="level2">
 <h2 class="anchored" data-anchor-id="final-model-assessment">Final Model Assessment</h2>
@@ -3253,10 +3246,12 @@ Prediction Research Objective
 </div>
 </div>
 </div>
-<p><a href="#fig-assess">Figure 1</a> plots the predicted birth weight by the actual birth weight of the random forest model using recipe 2 for tree-based models. See 5_*.R scripts for codes.</p>
+<p><a href="#fig-assess">Figure 1</a> plots the predicted birth weight by the actual birth weight of the random forest model using recipe 2 for tree-based models.</p>
+<p>These assessment tools will be used on the models fitted using finalized recipes for the final report. See 5_*.R scripts for codes.</p>
 </section>
 <section id="timeline" class="level2">
 <h2 class="anchored" data-anchor-id="timeline">Timeline</h2>
+<p>So far, I feel good about my progress since I have a placeholder for all models and everything seems to run. I have to update some codes and edit the recipes for the final report. Below is a rough timeline to have my project completed on time.</p>
 <ul>
 <li>February 29: finalize the recipes and models, compare models</li>
 <li>March 1: decide on final model and analyze its performance</li>

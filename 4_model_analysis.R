@@ -19,7 +19,7 @@ tidymodels_prefer()
 load(here("results/pregnancy_split.rda"))
 
 # load fits and recipes
-load(here("results/fit_baseline.rda"))
+load(here("results/fit_null.rda"))
 load(here("results/fit_lm.rda"))
 load(here("results/tuned_lasso.rda"))
 load(here("results/tuned_ridge.rda"))
@@ -34,20 +34,20 @@ load(here("results/pregnancy_recipes.rda"))
 autoplot(lasso_tuned1, metric = "rmse") + 
   theme_minimal() +
   labs(title = "Lasso Regression Model",
-       subtitle = "recipe 1 (non parametric)")
+       subtitle = "recipe 1 (parametric)")
 autoplot(lasso_tuned2, metric = "rmse") + 
   theme_minimal() +
   labs(title = "Lasso Regression Model",
-       subtitle = "recipe 2 (non parametric)")
+       subtitle = "recipe 2 (parametric)")
 # ridge
 autoplot(ridge_tuned1, metric = "rmse") + 
   theme_minimal()  +
   labs(title = "Ridge Regression Model",
-       subtitle = "recipe 1 (non parametric)")
+       subtitle = "recipe 1 (parametric)")
 autoplot(ridge_tuned2, metric = "rmse") + 
   theme_minimal()  +
   labs(title = "Ridge Regression Model",
-       subtitle = "recipe 1 (non parametric)")
+       subtitle = "recipe 1 (parametric)")
 # knn
 autoplot(knn_tuned1, metric = "rmse") + 
   theme_minimal() +
@@ -95,49 +95,43 @@ tbl_null <- null_fit |>
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Null",
-         recipe = "baseline")
-tbl_baseline <- baseline_fit |> 
-  show_best("rmse") |> 
-  slice_min(mean) |> 
-  select(mean, n, std_err) |> 
-  mutate(model = "Baseline (linear)",
-         recipe = "baseline")
+         recipe = "recipe 1 (parametric)")
 tbl_lm1 <- lm_fit1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Linear Regression",
-         recipe = "recipe 1 (non parametric)")
+         recipe = "recipe 1 (parametric)")
 tbl_lm2 <- lm_fit2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Linear Regression",
-         recipe = "recipe 2 (non parametric)")
+         recipe = "recipe 2 (parametric)")
 tbl_lasso1 <- lasso_tuned1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Lasso Regression",
-         recipe = "recipe 1 (non parametric)")
+         recipe = "recipe 1 (parametric)")
 tbl_lasso2 <- lasso_tuned2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Lasso Regression",
-         recipe = "recipe 2 (non parametric)")
+         recipe = "recipe 2 (parametric)")
 tbl_ridge1 <- ridge_tuned1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Ridge Regression",
-         recipe = "recipe 1 (non parametric)")
+         recipe = "recipe 1 (parametric)")
 tbl_ridge2 <- ridge_tuned2 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
   mutate(model = "Ridge Regression",
-         recipe = "recipe 2 (non parametric)")
+         recipe = "recipe 2 (parametric)")
 tbl_knn1 <- knn_tuned1 |> 
   show_best("rmse") |> 
   slice_min(mean) |> 
@@ -174,7 +168,7 @@ tbl_rf2 <- rf_tuned2 |>
   select(mean, n, std_err) |> 
   mutate(model = "Random Forest",
          recipe = "recipe 2 (tree)")
-tbl_rmse <- bind_rows(tbl_null, tbl_baseline,
+tbl_rmse <- bind_rows(tbl_null, 
                       tbl_lm1, tbl_lm2,
                       tbl_lasso1, tbl_lasso2,
                       tbl_ridge1, tbl_ridge2,

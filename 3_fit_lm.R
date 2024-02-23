@@ -21,7 +21,7 @@ load(here("results/pregnancy_split.rda"))
 # load pre-processing/feature engineering/recipe
 load(here("results/pregnancy_recipes.rda"))
 
-## USING RECIPE 1 np -----
+## USING RECIPE 1 -----
 # model specification
 lm_spec <- linear_reg() |> 
   set_engine("lm") |> 
@@ -29,7 +29,7 @@ lm_spec <- linear_reg() |>
 # define workflow
 lm_workflow1 <- workflow() |> 
   add_model(lm_spec) |> 
-  add_recipe(recipe1_np)
+  add_recipe(recipe1)
 # fit workflow/model
 lm_fit1 <- lm_workflow1 |> 
   fit_resamples(
@@ -37,7 +37,7 @@ lm_fit1 <- lm_workflow1 |>
     control = control_resamples(save_workflow = TRUE)
 )
 
-## USING RECIPE 2 np -----
+## USING RECIPE 2 -----
 
 # model specification
 lm_spec <- linear_reg() |> 
@@ -46,7 +46,7 @@ lm_spec <- linear_reg() |>
 # define workflow
 lm_workflow2 <- workflow() |> 
   add_model(lm_spec) |> 
-  add_recipe(recipe2_np)
+  add_recipe(recipe2)
 # fit workflow/model
 lm_fit2 <- lm_workflow2 |> 
   fit_resamples(

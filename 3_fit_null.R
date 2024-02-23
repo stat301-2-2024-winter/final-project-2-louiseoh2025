@@ -24,13 +24,13 @@ load(here("results/pregnancy_recipes.rda"))
 ## NULL MODEL ----
 
 # model specification
-null_spec <- null_model() %>% 
-  set_engine("parsnip") %>% 
+null_spec <- null_model() |> 
+  set_engine("parsnip") |> 
   set_mode("regression") 
 # define workflow
-null_workflow <- workflow() %>% 
-  add_model(null_spec) %>% 
-  add_recipe(recipe_baseline)
+null_workflow <- workflow() |> 
+  add_model(null_spec) |> 
+  add_recipe(recipe1)
 # fit workflow/model
 null_fit <- null_workflow |> 
   fit_resamples(
@@ -38,23 +38,7 @@ null_fit <- null_workflow |>
     control = control_resamples(save_workflow = TRUE)
   )
 
-## BASELINE LINEAR ----
-
-# model specification
-baseline_spec <- linear_reg() |> 
-  set_mode("regression") |> 
-  set_engine("lm")
-# define workflow
-baseline_workflow <- workflow() |>
-  add_model(baseline_spec) |>
-  add_recipe(recipe_baseline)
-# fit workflow/model
-baseline_fit <- null_workflow |> 
-  fit_resamples(
-    resamples = pregnancy_folds,
-    control = control_resamples(save_workflow = TRUE)
-  )
 
 
 # write out results (fitted/trained workflows) ----
-save(null_fit, baseline_fit, file = here("results/fit_baseline.rda"))
+save(null_fit, file = here("results/fit_null.rda"))

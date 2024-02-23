@@ -16,21 +16,8 @@ tidymodels_prefer()
 load(here("results/pregnancy_split.rda"))
 
 
-## RECIPE for baseline -----
-recipe_baseline <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
-  # remove uniqueID and delivery_date
-  step_rm(osf_id, delivery_date) |> 
-  # add dummy variable to all categorical predictors
-  step_dummy(all_nominal_predictors()) |> 
-  # filter out variables have have zero variance
-  step_zv(all_predictors()) |> 
-  # center and scale all predictors
-  step_normalize(all_numeric_predictors())
-prep(recipe_np) |>
-  bake(new_data = NULL)
-
-## RECIPE 1 for non parametric -----
-recipe1_np <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
+## RECIPE 1 for parametric -----
+recipe1 <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
   step_rm(osf_id, delivery_date) |> 
   # impute missing numerical variables using knn 
   step_impute_knn(maternal_age, postnatal_depression, promis_anxiety, gestational_age, 
@@ -40,7 +27,7 @@ recipe1_np <- recipe(birth_weight ~ ., data = pregnancy_train) |>
   step_dummy(all_nominal_predictors()) |> 
   step_zv(all_predictors()) |> 
   step_normalize(all_numeric_predictors())
-prep(recipe1_np) |>
+prep(recipe1) |>
   bake(new_data = NULL)
 
 ## RECIPE 1 for trees -----
@@ -56,8 +43,8 @@ recipe1_tree <- recipe(birth_weight ~ ., data = pregnancy_train) |>
 prep(recipe1_tree) |>
   bake(new_data = NULL)
 
-## RECIPE 2 for non parametric -----
-recipe2_np <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
+## RECIPE 2 for parametric -----
+recipe2 <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
   step_rm(osf_id, delivery_date) |> 
   step_impute_knn(maternal_age, postnatal_depression, promis_anxiety, gestational_age, 
                   birth_length, threaten_life, threaten_baby_danger, threaten_baby_harm,
@@ -72,7 +59,7 @@ recipe2_np <- recipe(birth_weight ~ ., data = pregnancy_train) |>
   step_interact(~ threaten_baby_danger:threaten_baby_harm) |> 
   # add interaction term between anxiety and depression levels
   step_interact(~ promis_anxiety:postnatal_depression) 
-prep(recipe2_np) |>
+prep(recipe2) |>
   bake(new_data = NULL)
 
 ## RECIPE 2 for trees -----
@@ -91,8 +78,7 @@ prep(recipe2_tree) |>
   bake(new_data = NULL)
 
 # save recipes
-save(recipe_baseline, 
-     recipe1_np, recipe1_tree, 
-     recipe2_np, recipe2_tree, 
+save(recipe1, recipe1_tree, 
+     recipe2, recipe2_tree, 
      file = here("results/pregnancy_recipes.rda"))
 
