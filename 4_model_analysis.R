@@ -77,16 +77,50 @@ autoplot(rf_tuned2, metric = "rmse") +
        subtitle = "recipe 2 (tree)")
 
 ## TUNED MODEL PARAMETERS -----
-select_best(lasso_tuned1, metric = "rmse")
-select_best(lasso_tuned2, metric = "rmse")
-select_best(ridge_tuned1, metric = "rmse")
-select_best(ridge_tuned2, metric = "rmse")
-select_best(knn_tuned1, metric = "rmse") 
-select_best(knn_tuned2, metric = "rmse") 
-select_best(bt_tuned1, metric = "rmse") 
-select_best(bt_tuned2, metric = "rmse") 
-select_best(rf_tuned1, metric = "rmse") 
-select_best(rf_tuned2, metric = "rmse") 
+lasso1_best <- select_best(lasso_tuned1, metric = "rmse") |> 
+  mutate(recipe = "recipe 1 (parametric)")
+lasso2_best <- select_best(lasso_tuned2, metric = "rmse") |> 
+  mutate(recipe = "recipe 2 (parametric)")
+lasso_best <- bind_rows(lasso1_best, lasso2_best) |> 
+  select(recipe, everything()) |> 
+  kable(caption = "Lasso Regression")
+lasso_best
+ridge1_best <- select_best(ridge_tuned1, metric = "rmse") |> 
+  mutate(recipe = "recipe 1 (parametric)")
+ridge2_best <- select_best(ridge_tuned2, metric = "rmse") |> 
+  mutate(recipe = "recipe 2 (parametric)")
+ridge_best <- bind_rows(ridge1_best, ridge2_best) |> 
+  select(recipe, everything()) |> 
+  kable(caption = "Ridge Regression")
+ridge_best
+knn1_best <- select_best(knn_tuned1, metric = "rmse") |> 
+  mutate(recipe = "recipe 1 (tree)")
+knn2_best <- select_best(knn_tuned2, metric = "rmse") |> 
+  mutate(recipe = "recipe 2 (tree)")
+knn_best <- bind_rows(knn1_best, knn2_best) |> 
+  select(recipe, everything()) |> 
+  kable(caption = "K Nearest Neighbor")
+knn_best
+bt1_best <- select_best(bt_tuned1, metric = "rmse") |> 
+  mutate(recipe = "recipe 1 (tree)")
+bt2_best <- select_best(bt_tuned2, metric = "rmse") |> 
+  mutate(recipe = "recipe 2 (tree)")
+bt_best <- bind_rows(bt1_best, bt2_best) |> 
+  select(recipe, everything()) |> 
+  kable(caption = "Boosted Tree")
+bt_best
+rf1_best <- select_best(rf_tuned1, metric = "rmse") |> 
+  mutate(recipe = "recipe 1 (tree)")
+rf2_best <- select_best(rf_tuned2, metric = "rmse") |> 
+  mutate(recipe = "recipe 2 (tree)")
+rf_best <- bind_rows(rf1_best, rf2_best) |> 
+  select(recipe, everything()) |> 
+  kable(caption = "Random Forest")
+rf_best
+
+# save model para tables
+save(lasso_best, ridge_best, knn_best, bt_best, rf_best,
+     file = here("results/model_analysis_parameters.rda"))
 
 ## RMSE -----
 
@@ -180,6 +214,6 @@ tbl_rmse <- bind_rows(tbl_null,
   kable()
 tbl_rmse
 
-# save rmse tables
-save(tbl_rmse, file = here("results/assess_models.rda"))
+# save rmse table
+save(tbl_rmse, file = here("results/model_analysis_rmse.rda"))
 

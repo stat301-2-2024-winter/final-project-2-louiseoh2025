@@ -1,5 +1,5 @@
 ---
-title: "my own title"
+title: "Predicting Birth Weight During the Pandemic: Using ML to Improve Pregnancy Care"
 subtitle: |
   | Final Project 
   | Data Science 2 with R (STAT 301-2)
@@ -31,19 +31,22 @@ citation-location: margin
 ```{r}
 #| label: load-everything
 #| echo: false
+
 # load packages
 library(tidyverse)
 library(tidymodels)
 library(here)
 library(knitr)
 library(skimr)
-# load fits
-load(here("results/fit_lm.rda"))
-load(here("results/tuned_lasso.rda"))
-load(here("results/tuned_ridge.rda"))
-load(here("results/tuned_knn.rda"))
-load(here("results/tuned_bt.rda"))
-load(here("results/tuned_rf.rda"))
+library(patchwork)
+# load data
+load(here("data/pregnancy_codebook.rda"))
+load(here("data/pregnancy_clean.rda"))
+load(here("results/pregnancy_split.rda"))
+# load analysis
+load(here("results/model_analysis_parameters.rda"))
+load(here("results/model_analysis_rmse.rda"))
+load(here("results/assess_final.rda"))
 ```
 
 
@@ -54,7 +57,7 @@ The COVID-19 pandemic was a substantial stressor, especially for pregnant indivi
 ::: {.callout-note icon="false"}
 ## Prediction Research Objective 
 
-The goal is regression, specifically what the weight of the baby will be at birth based on the biological and psychological factors of mother and baby during a pandemic.
+The goal is regression, specifically what the weight of the baby will be at birth based on the biological and psychological factors of mother and baby in pregnancy during a pandemic.
 
 :::
 
@@ -63,44 +66,40 @@ Developing a regression model to predict the weight of a child at birth based on
 
 ## Data Overview
 
+@tbl-data-codebook shows the variables and their descriptions in The Mental Health In Pregnancy During COVID-19 Dataset^[Mental Health In Pregnancy During COVID-19 --- [https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19](https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19)] used for this project. 
+
 ```{r}
 #| label: tbl-data-codebook
 #| tbl-cap: "Data Codebook"
 #| echo: false
 
-# load data codebook
-load(here("data/pregnancy_codebook.rda"))
 # view codebook
 pregnancy_codebook |> 
   kable()
 ```
 
-@tbl-data-codebook 
+@tbl-data-overview shows an overview of the cleaned dataset. Data cleaning involved filtering out rows with missing `birth_weight` data and converting variables into appropriate variable types. Longer variable names were renamed, dates were changed into date formats, and factors were appropriately recoded and renamed. 
 
 ```{r}
 #| label: tbl-data-overview
 #| tbl-cap: "Skim Dataset"
 #| echo: false
 
-# load data 
-load(here("data/pregnancy_clean.rda"))
 # skim data
 skim_without_charts(pregnancy)
 ```
 
-**write about the dataset, variables, and missingness**
+After performing data cleaning, there are 6078 observations with 18 variables. There is one target variable, `birth_weight`, 8 factor predictors and 9 numeric predictors. There are missing values in variables `household_income`, `maternal_eduction`, `delivery_date`, `delivery_mode`, `nicu_stay`, `delivery_month`, `delivery_year`, `maternal_age`, `postnatal_depression`, `promis_anxiety`, `gestational_age`, `birth_length`, `threaten_life`, `threaten_baby_danger`, and `threaten_baby_harm` -- all variables excluding the target variable, unique ID, and `language`. However, all variables have over 90% complete rate. 
 
-@tbl-data-overview
+#### Target Variable
 
-**skewedness or class imbalance?**
+The target variable is `birth_weight`, a numerical variable in the form of double. @fig-target-var below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end. The original data has a distribution closer to a normal distribution compared to when it is transformed. Thus, the original data without transformation will be used for fitting the models.
 
 ```{r}
 #| label: fig-target-var
 #| fig-cap: "Distribution of Target Variable"
 #| echo: false
 
-# load splitted data
-load(here("results/pregnancy_split.rda"))
 # target variable distribution
 ggplot(pregnancy_train, aes(x = birth_weight)) +
   geom_histogram(fill = "skyblue", color = "black", bins = 35) +
@@ -110,12 +109,10 @@ ggplot(pregnancy_train, aes(x = birth_weight)) +
        y = NULL)
 ```
 
-The target variable is `birth_weight`, a numerical variable in the form of double. @fig-target-var below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end. The original data has a distribution closer to a normal distribution compared to when it is transformed. Thus, the original data without transformation will be used for fitting the models.
-
 
 ## Methods
 
-#### Data Spliting
+#### Data Splitting
 
 The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. 
 
@@ -124,45 +121,154 @@ The cleaned pregnancy data was split into training (80%) and testing (20%) datas
 Repeated V-fold cross-validation with 5 folds and 3 repeats are performed on the training data. This technique randomly and repeatedly splits the data into 5 subsets of approximately equal size for training and validation. With this particular setup, each model will be trained and evaluated 15 times. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account.
 
 
-#### Recipe
+#### Recipes
 
-Kitchen sink recipe
-Customized recipe
+There are two distinct recipes fitted into all model types: the Kitchen Sink recipe (recipe 1) and a customized recipe (recipe 2). There are two versions of each recipe, one for parametric models and one for non-parametric/tree-based models.
+
+**Kitchen Sink Recipe (recipe 1):**
+
+- Remove unique ID and date variable.
+
+The unique ID was removed because it does not help predict the baby's weight and will add confusion to the model fitting. The date variable was removed because the month and year were created as new variables during the data cleaning process, and these two new variables were used as predictor variables. The status of NICU stay was removed because NICU is determined after the birth of the baby, so it cannot be used as a predictor variable. The length of the baby was used as a predictor variable because this is more easily predicted during the pregnancy period through technology. 
+
+- Impute missing numerical variables using k nearest neighbors method.
+
+All predictor variables except `language` had missing values. These missing values were filled in by replacing missing values with the average (or weighted average) of the k nearest neighbors' values. This approach leverages the similarity between data points to estimate missing values. In real-world datasets, missing values are a common occurrence due to various reasons such as data entry errors, sensor malfunctions, or simply because the data was not collected. Imputing missing values is necessary to ensure that the dataset is complete and suitable for analysis or modeling. This step prepare the dataset for further analysis or modeling within a tidy and systematic workflow.
+  
+- Dummy encode all nominal predictors.
+
+Many machine learning algorithms require numerical input data. Dummy encoding allows categorical variables to be represented in a format that is compatible with these algorithms, enabling the model to learn from categorical data effectively. Dummy encoding eliminates the risk for unintended bias by representing each category as a separate binary variable, ensuring that the model treats all categories equally. Furthermore, nominal predictors with multiple categories may have some categories with only a few observations. Dummy encoding ensures that each category gets its own binary variable, preventing any single category from dominating the representation.
+
+- Remove variables with zero variance.
+
+Variables with one constant value do not provide any useful information for prediction. Keeping them in the dataset can potentially degrade the performance of machine learning algorithms, as they introduce unnecessary complexity without adding any predictive power. Keeping irrelevant variables in the dataset can make it more challenging to interpret the results of the model. By removing zero-variance variables, the resulting model becomes simpler and more interpretable, as it focuses only on the most relevant features for prediction.
+
+- Normalize numeric data to be ~ N(0, 1).
+
+Normalization ensures that all numeric variables are on a similar scale. This is useful since features with larger scales can dominate the optimization process, leading to suboptimal performance.
+
+- *recipe for tree-based model was one-hot dummy encoded*
+
+Recipe for tree-based model is different based on how the models inherently handle categorical variables. Tree-based models benefit such encoding to properly utilize categorical variables in their numerical framework.
+
+**Customized Recipe (receipe 2):**
+
+From the kitchen sink recipe, the following steps were added. 
+
+- Apply square root transform to `postnatal_depression` for normality.
+
+Before the predictors were normalized, the `postnatal_depression` variable was transformed for a normal distribution. This decision was based on a univariate analysis shown in @fig-appendix-eda1 (see Appendix: EDA).
+
+- Add interaction term between `promis_anxiety` and `postnatal_depression` levels.
+
+Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This approach can reveal synergistic effects, identify subgroups with distinct symptom patterns, and improve the model's accuracy in the mother's mental health predictors on baby's birth weight. This decision was based on a bivariate analysis shown in @fig-appendix-eda2 (see Appendix: EDA).
+
+- *recipe for tree-based model had interaction terms removed*
+
+Interaction terms are often unnecessary and potentially detrimental when using tree-based models. Focusing on simpler feature representations allows tree-based models to leverage their strengths in capturing complex interactions while maintaining interpretability and generalization performance.
 
 #### Model Type and Parameter Tuning
 
-Linear regression model - none
-Lasso regression model - penalty
-Ridge regression model - penalty
-K Nearest Neighbor model - neighbors
-Boosted Tree model - mtry, min_n
-Random Forest model - mtry, min_n, learn_rate
+0. Null model
 
-#### Metric
+1. Linear regression model 
 
-This prediction research objective is a regression problem. The following metrics are used to compare and ultimately select the final model:
+2. Elastic Net: Lasso regression model - penalty
+
+3. Elastic Net: Ridge regression model - penalty
+
+4. K Nearest Neighbor model - neighbors
+
+5. Boosted Tree model - mtry, min_n
+
+6. Random Forest model - mtry, min_n, learn_rate
+
+#### Metrics
+
+This prediction research objective is a regression problem. The RMSE (Root Mean Squared Error) will be used to compare and select the best model among the six models. Using RMSE is advantageous due to its interpretability and sensitivity to errors. Its ability to penalize large errors more heavily ensures a focus on reducing significant discrepancies in predictions. Its wide acceptance and differentiability make it suitable for optimization algorithms, facilitating model training. RMSE is also robust to outliers, which enhances the model's resilience to extreme values in the data. Ultimately, RMSE offers a straightforward and easily comparable measure of model performance, aiding in the selection of the most effective regression model.
+
+RMSE, MAE, RSQ, and MAPE are used to assess the final model. These four metrics in combination offer a comprehensive evaluation of the model's performance from various perspectives. RMSE and MAE provide insights into the magnitude of errors, while MAPE offers a relative measure of accuracy, and RSQ indicates how well the model explains the variance in the dependent variable, collectively providing a holistic understanding of the model's predictive capability, accuracy, and goodness of fit.
 
 - RMSE (Root Mean Squared Error): Measures the average magnitude of the errors between predicted and observed values, with lower values indicating better performance.
 
 - MAE (Mean Absolute Error): Measures the average absolute differences between predicted and observed values, providing a direct measure of the magnitude of errors without considering their direction.
 
-- MAPE (Mean Absolute Percentage Error): Measures the average percentage difference between predicted and observed values, providing a relative measure of the accuracy of predictions.
-
 - RSQ (R-Squared): Represents the proportion of the variance in the dependent variable that is predictable from the independent variables in a regression model, with higher values indicating better fit.
+
+- MAPE (Mean Absolute Percentage Error): Measures the average percentage difference between predicted and observed values, providing a relative measure of the accuracy of predictions.
 
 
 ## Model Building & Selection Results
 
-**Should reiterate the metric that will be used to compare models and determine which will be the final/winning model. Include a table of the best performing model results. Review and analysis of tuning parameters should happen here. Should further tuning be explored? Or how should tuning be adjusted when fitting data like this in the future. This would be a good section to describe what the best parameters were for each model type. Could include a discussion comparing any systematic differences in performance between model types or recipes. If variations in recipes were used to explore predictive importance of certain variables, then it should be discussed here. The section will likely end with the selection of the final/winning model (provide your reasoning). Was it surprising or not surprising that this particular model won? Explain.**
+#### Best Tuning Parameters
+
+The lasso regression, ridge regression, k nearest neighbor, boosted tree, and random forest models had their parameters tuned. @tbl-parameters shows the best parameters of each model adjusted to and used to fit the data. 
+
+```{r}
+#| label: tbl-parameters
+#| tbl-cap: "Best Hyperparameters for Each Model"
+#| echo: false
+
+lasso_best
+ridge_best
+knn_best
+bt_best
+rf_best
+```
+
+This would be a good section to describe what the best parameters were for each model type. Could include a discussion comparing any systematic differences in performance between model types or recipes. If variations in recipes were used to explore predictive importance of certain variables, then it should be discussed here. 
+
+
+#### Selecting the Best Model
+
+@tbl-analysis presents the RMSE (Root Mean Square Error) values for different models created with both recipes, serving as indicators of predictive accuracy. Lower RMSE values signify reduced discrepancies between predicted and actual values, indicating superior performance. Among the listed models, the Random Forest model using the customized recipe stands out, boasting the lowest RMSE of 399.32. The standard error os 4.81 suggests that there may be some degree of fluctuation or inconsistency in the accuracy assessment, with the RMSE value potentially deviating by approximately 4.81 units from the true error on average. Still, the Random Forest model excels in accurately predicting outcomes compared to others. Consequently, when prioritizing precise predictions, selecting the Random Forest model using recipe 2 would be the most favorable option. 
+
+```{r}
+#| label: tbl-analysis
+#| tbl-cap: "RMSE Analysis for Model Selection"
+#| echo: false
+
+tbl_rmse
+```
+
+Comparing the RMSE values across models, it is evident that all complex models outperform the null model significantly. The null model yields an RMSE of 535.34, whereas even the least performing complex model, like the K Nearest Neighbor using recipe 2, has an RMSE of 504.75, showcasing a large improvement. The best performing model, the Random Forest model using recipe 2, substantially reduces the RMSE by approximately 136.02 units compared to the null model.
+
+It is not entirely surprising that a Random Forest model outperforms other models in this scenario. Random Forest's ensemble approach, ability to capture non-linear relationships, and robustness to noise and overfitting often contribute to its superior performance. Additionally, its handling of categorical variables and less sensitivity to feature scaling can provide advantages over other models.
+
 
 ## Final Model Analysis
 
-**This is where you fit your final/winning model to the testing data. Assess the final model’s performance with at least the metric used to determine the winning model, but it is also advisable to use other performance metrics (especially ones that might be easier to communicate/understand). Should include an exploration of predictions vs the true values (graph) or a confusion matrix (table). Remember to consider the scale of your outcome variable at this time — did you transform the target variable? If a transformation was used, then you should consider conducting analyses on both the original and transformed scale of the target variable. Is the model any good? It might be the best of the models you tried, but does the effort of building a predictive model really pay off — is it that much better than a baseline/null model? Were there any features of the model you selected that make it the best (e.g. fits nonlinearity well)?**
+The Random Forest model using the customized recipe for tree-based models is the best model. This Random Forest model is then fitted to the entire training dataset instead of resampling. The RMSE, MAE, RSQ, and MAPE in @tbl-metrics are used to assess the final model.
 
+The RMSE is 395.2473861, indicating that, on average, the magnitude of errors between the model's predictions and the actual values is approximately 395.25 units. The MAE is 302.6337524, indicating that, on average, the absolute difference between the model's predictions and the true values is approximately 302.63 units. The RSQ value of 0.4871928 indicates that around 48.72% of the variance in the target variable is accounted for by the model's predictions. The MAPE is 10.0115759, indicating that, on average, the difference between the model's predictions and the actual values equates to approximately 10.01% of the actual values. 
+
+```{r}
+#| label: tbl-metrics
+#| tbl-cap: "Final Model Assessment Metrics"
+#| echo: false
+
+final_table
+```
+
+Furthermore, predictions and the true birth weight values are explored in comparison using @fig-assess. Since the `birth_weight` variable was fitted in an original scale, this plot is already in an original scale without the need to transform back the data.
+
+```{r}
+#| label: fig-assess
+#| fig-cap: "Comparison of Actual and Predicted Values of Target Variable"
+#| echo: false
+
+final_plot
+```
+
+Most data are clusted in the middle range of around 3000 to 4000 grams. While a large number of observations are close to the reference line, there are a significant number of observations that deviate from the reference line. On the lower end of the data, there are outliers where the actual birth weights are much lower than the predicted birth weight. Similarly on the higher end of the data, there are clusters of actual birth weights that are much higher than the predicted birth weight. @fig-assess shows that the final model fitted to the entire training dataset is not an excellent predictor according to the testing dataset. While the model is able to predict the birth weight of babies to a certain extent, the predictions are not perfectly accurate. 
+
+Overall, considering these metrics and the context provided, the Random Forest model appears to perform reasonably well. It exhibits relatively low errors in the context of the target variable, a moderate level of variance explained by the model, and a relatively small percentage error in predictions. Therefore, it can be concluded that the model is good for the given problem. 
 
 ## Conclusion
 
 **State any conclusions or discoveries/insights. Future work, new research questions, and next steps.**
+
+But there is still room for improvement, particularly in enhancing the explanatory power and reducing prediction errors further.
 
 
 ## References
@@ -171,5 +277,42 @@ This prediction research objective is a regression problem. The following metric
 
 
 ## Appendix: EDA
+
+@fig-appendix-eda1 shows the distribution of `postnatal_depression` variable in the original scale and the square-root transformed scale.
+
+```{r}
+#| label: fig-appendix-eda1
+#| fig-cap: "Postnatal Depression Level Distribution"
+#| echo: false
+
+a <- ggplot(pregnancy_train, aes(x = postnatal_depression)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black") +
+  theme_minimal() +
+  labs(title = "Original Scale",
+       x = "Postnatal Depression")
+b <- ggplot(pregnancy_train, aes(x = sqrt(postnatal_depression))) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black") +
+  theme_minimal() +
+  labs(title = "Square-Root Transformed",
+       x = "Postnatal Depression")
+(a + b)
+```
+
+@fig-appendix-eda2 shows a scatterplot to examine the relationship between the `postnatal_depression` and `promis_anxiety` variables. 
+
+```{r}
+#| label: fig-appendix-eda2
+#| fig-cap: "Correlation Between Depression and Anxiety Variables"
+#| echo: false
+set.seed(100)
+ggplot(pregnancy_train, aes(x = postnatal_depression, y = promis_anxiety)) +
+  geom_jitter(alpha = 0.2) +
+  geom_smooth(method = "lm", se = FALSE, color = "skyblue") +
+  theme_minimal() +
+  labs(title = "Postnatal Depression vs. PROMIS Anxiety Levels",
+       x = "Postnatal Depression",
+       y = "PROMIS Anxiety")
+```
+
 
 

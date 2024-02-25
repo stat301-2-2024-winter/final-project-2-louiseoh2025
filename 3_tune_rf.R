@@ -37,7 +37,7 @@ rf_workflow1 <- workflow() |>
 hardhat::extract_parameter_set_dials(rf_spec)
 # change hyperparameter range
 rf_param1 <- parameters(rf_spec) |> 
-  update(mtry = mtry(c(1, 15))) 
+  update(mtry = mtry(c(1, 42))) 
 # build tuning grid
 rf_grid1 <- grid_regular(rf_param1, levels = 5) 
 # fit workflow/model
@@ -61,7 +61,7 @@ rf_workflow2 <- workflow() |>
 hardhat::extract_parameter_set_dials(rf_spec)
 # change hyperparameter range
 rf_param2 <- parameters(rf_spec) |> 
-  update(mtry = mtry(c(1, 16))) 
+  update(mtry = mtry(c(1, 42))) 
 # build tuning grid
 rf_grid2 <- grid_regular(rf_param2, levels = 5) 
 # fit workflow/model

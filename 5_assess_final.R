@@ -39,14 +39,14 @@ final_plot <- pregnancy_test |>
   select(birth_weight) |>
   bind_cols(predict(final_fit, pregnancy_test)) |>
   ggplot(aes(x = birth_weight, y = .pred)) +
-  geom_abline(lty = 2) + 
-  geom_point(alpha = 0.4) + 
+  geom_point(alpha = 0.2) + 
+  geom_abline(lty = 5, color = "red") + 
   theme_minimal() +
   labs(title = "Baby's Actual vs. Predicted Birth Weight",
        x = "Birth Weight (g)", 
        y = "Predicted Birth Weight (g)") +
   coord_obs_pred()
-
+final_plot
 
 # save final tables and plots
 save(final_table, final_plot, file = here("results/assess_final.rda"))

@@ -34,11 +34,10 @@ bt_workflow1 <- workflow() |>
   add_model(bt_spec) |> 
   add_recipe(recipe1_tree)
 # hyperparameter tuning value
-hardhat::extract_parameter_set_dials(bt_spec) |> 
-  update(mtry = mtry(c(1, 15)))
+hardhat::extract_parameter_set_dials(bt_spec)
 # change hyperparameter ranges
 bt_param1 <- parameters(bt_spec) |> 
-  update(mtry = mtry(c(1, 15))) 
+  update(mtry = mtry(c(1, 42))) 
 # build tuning grid
 bt_grid1 <- grid_regular(bt_param1, levels = 5) 
 # fit workflow/model
@@ -61,11 +60,10 @@ bt_workflow2 <- workflow() |>
   add_model(bt_spec) |> 
   add_recipe(recipe2_tree)
 # hyperparameter tuning value
-hardhat::extract_parameter_set_dials(bt_spec) |> 
-  update(mtry = mtry(c(1, 16)))
+hardhat::extract_parameter_set_dials(bt_spec)
 # change hyperparameter ranges
 bt_param2 <- parameters(bt_spec) |> 
-  update(mtry = mtry(c(1, 16))) 
+  update(mtry = mtry(c(1, 42))) 
 # build tuning grid
 bt_grid2 <- grid_regular(bt_param2, levels = 5) 
 # fit workflow/model
