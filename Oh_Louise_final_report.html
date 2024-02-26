@@ -3045,12 +3045,12 @@ Github Repo Link
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><a href="https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git">https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git</a></p>
+<p><a href="https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git" class="uri">https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git</a></p>
 </div>
 </div>
 <section id="introduction" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<div class="page-columns page-full"><p>The COVID-19 pandemic was a substantial stressor, especially for pregnant individuals. The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li></div></div>
+<div class="page-columns page-full"><p>The COVID-19 pandemic was a substantial stressor, especially for pregnant individuals. The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19" class="uri">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li></div></div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3068,7 +3068,7 @@ Prediction Research Objective
 </section>
 <section id="data-overview" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="data-overview">Data Overview</h2>
-<div class="page-columns page-full"><p><a href="#tbl-data-codebook">Table 1</a> shows the variables and their descriptions in The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> used for this project.</p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li></div></div>
+<div class="page-columns page-full"><p><a href="#tbl-data-codebook">Table 1</a> shows the variables and their descriptions in The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> used for this project.</p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19" class="uri">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li></div></div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="tbl-data-codebook" class="anchored">
@@ -3493,56 +3493,81 @@ Prediction Research Objective
 <h4 class="anchored" data-anchor-id="recipes">Recipes</h4>
 <p>There are two distinct recipes fitted into all model types: the Kitchen Sink recipe (recipe 1) and a customized recipe (recipe 2). There are two versions of each recipe, one for parametric models and one for non-parametric/tree-based models.</p>
 <p><strong>Kitchen Sink Recipe (recipe 1):</strong></p>
+<p>Remove unique ID and date variable:</p>
 <ul>
-<li>Remove unique ID and date variable.</li>
+<li>The unique ID was removed because it does not help predict the baby’s weight and will add confusion to the model fitting. The date variable was removed because the month and year were created as new variables during the data cleaning process, and these two new variables were used as predictor variables. The status of NICU stay was removed because NICU is determined after the birth of the baby, so it cannot be used as a predictor variable. The length of the baby was used as a predictor variable because this is more easily predicted during the pregnancy period through technology.</li>
 </ul>
-<p>The unique ID was removed because it does not help predict the baby’s weight and will add confusion to the model fitting. The date variable was removed because the month and year were created as new variables during the data cleaning process, and these two new variables were used as predictor variables. The status of NICU stay was removed because NICU is determined after the birth of the baby, so it cannot be used as a predictor variable. The length of the baby was used as a predictor variable because this is more easily predicted during the pregnancy period through technology.</p>
+<p>Impute missing numerical variables using k nearest neighbors method:</p>
 <ul>
-<li>Impute missing numerical variables using k nearest neighbors method.</li>
+<li>All predictor variables except <code>language</code> had missing values. These missing values were filled in by replacing missing values with the average (or weighted average) of the k nearest neighbors’ values. This approach leverages the similarity between data points to estimate missing values. In real-world datasets, missing values are a common occurrence due to various reasons such as data entry errors, sensor malfunctions, or simply because the data was not collected. Imputing missing values is necessary to ensure that the dataset is complete and suitable for analysis or modeling. This step prepare the dataset for further analysis or modeling within a tidy and systematic workflow.</li>
 </ul>
-<p>All predictor variables except <code>language</code> had missing values. These missing values were filled in by replacing missing values with the average (or weighted average) of the k nearest neighbors’ values. This approach leverages the similarity between data points to estimate missing values. In real-world datasets, missing values are a common occurrence due to various reasons such as data entry errors, sensor malfunctions, or simply because the data was not collected. Imputing missing values is necessary to ensure that the dataset is complete and suitable for analysis or modeling. This step prepare the dataset for further analysis or modeling within a tidy and systematic workflow.</p>
+<p>Dummy encode all nominal predictors:</p>
 <ul>
-<li>Dummy encode all nominal predictors.</li>
+<li>Many machine learning algorithms require numerical input data. Dummy encoding allows categorical variables to be represented in a format that is compatible with these algorithms, enabling the model to learn from categorical data effectively. Dummy encoding eliminates the risk for unintended bias by representing each category as a separate binary variable, ensuring that the model treats all categories equally. Furthermore, nominal predictors with multiple categories may have some categories with only a few observations. Dummy encoding ensures that each category gets its own binary variable, preventing any single category from dominating the representation.</li>
 </ul>
-<p>Many machine learning algorithms require numerical input data. Dummy encoding allows categorical variables to be represented in a format that is compatible with these algorithms, enabling the model to learn from categorical data effectively. Dummy encoding eliminates the risk for unintended bias by representing each category as a separate binary variable, ensuring that the model treats all categories equally. Furthermore, nominal predictors with multiple categories may have some categories with only a few observations. Dummy encoding ensures that each category gets its own binary variable, preventing any single category from dominating the representation.</p>
+<p>Remove variables with zero variance:</p>
 <ul>
-<li>Remove variables with zero variance.</li>
+<li>Variables with one constant value do not provide any useful information for prediction. Keeping them in the dataset can potentially degrade the performance of machine learning algorithms, as they introduce unnecessary complexity without adding any predictive power. Keeping irrelevant variables in the dataset can make it more challenging to interpret the results of the model. By removing zero-variance variables, the resulting model becomes simpler and more interpretable, as it focuses only on the most relevant features for prediction.</li>
 </ul>
-<p>Variables with one constant value do not provide any useful information for prediction. Keeping them in the dataset can potentially degrade the performance of machine learning algorithms, as they introduce unnecessary complexity without adding any predictive power. Keeping irrelevant variables in the dataset can make it more challenging to interpret the results of the model. By removing zero-variance variables, the resulting model becomes simpler and more interpretable, as it focuses only on the most relevant features for prediction.</p>
+<p>Normalize numeric data to be ~ N(0, 1):</p>
 <ul>
-<li>Normalize numeric data to be ~ N(0, 1).</li>
+<li>Normalization ensures that all numeric variables are on a similar scale. This is useful since features with larger scales can dominate the optimization process, leading to suboptimal performance.</li>
 </ul>
-<p>Normalization ensures that all numeric variables are on a similar scale. This is useful since features with larger scales can dominate the optimization process, leading to suboptimal performance.</p>
+<p><em>Recipe for tree-based model was one-hot dummy encoded:</em></p>
 <ul>
-<li><em>recipe for tree-based model was one-hot dummy encoded</em></li>
+<li>Recipe for tree-based model is different based on how the models inherently handle categorical variables. Tree-based models benefit such encoding to properly utilize categorical variables in their numerical framework.</li>
 </ul>
-<p>Recipe for tree-based model is different based on how the models inherently handle categorical variables. Tree-based models benefit such encoding to properly utilize categorical variables in their numerical framework.</p>
 <p><strong>Customized Recipe (receipe 2):</strong></p>
 <p>From the kitchen sink recipe, the following steps were added.</p>
+<p>Apply square root transform to <code>postnatal_depression</code> for normality:</p>
 <ul>
-<li>Apply square root transform to <code>postnatal_depression</code> for normality.</li>
+<li>Before the predictors were normalized, the <code>postnatal_depression</code> variable was transformed for a normal distribution. This decision was based on a univariate analysis shown in <a href="#fig-appendix-eda1">Figure 3</a> (see Appendix: EDA).</li>
 </ul>
-<p>Before the predictors were normalized, the <code>postnatal_depression</code> variable was transformed for a normal distribution. This decision was based on a univariate analysis shown in <a href="#fig-appendix-eda1">Figure 3</a> (see Appendix: EDA).</p>
+<p>Add interaction term between <code>promis_anxiety</code> and <code>postnatal_depression</code> levels:</p>
 <ul>
-<li>Add interaction term between <code>promis_anxiety</code> and <code>postnatal_depression</code> levels.</li>
+<li>Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This approach can reveal synergistic effects, identify subgroups with distinct symptom patterns, and improve the model’s accuracy in the mother’s mental health predictors on baby’s birth weight. This decision was based on a bivariate analysis shown in <a href="#fig-appendix-eda2">Figure 4</a> (see Appendix: EDA).</li>
 </ul>
-<p>Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This approach can reveal synergistic effects, identify subgroups with distinct symptom patterns, and improve the model’s accuracy in the mother’s mental health predictors on baby’s birth weight. This decision was based on a bivariate analysis shown in <a href="#fig-appendix-eda2">Figure 4</a> (see Appendix: EDA).</p>
+<p><em>Recipe for tree-based model had interaction terms removed:</em></p>
 <ul>
-<li><em>recipe for tree-based model had interaction terms removed</em></li>
+<li>Interaction terms are often unnecessary and potentially detrimental when using tree-based models. Focusing on simpler feature representations allows tree-based models to leverage their strengths in capturing complex interactions while maintaining interpretability and generalization performance.</li>
 </ul>
-<p>Interaction terms are often unnecessary and potentially detrimental when using tree-based models. Focusing on simpler feature representations allows tree-based models to leverage their strengths in capturing complex interactions while maintaining interpretability and generalization performance.</p>
 </section>
 <section id="model-type-and-parameter-tuning" class="level4">
 <h4 class="anchored" data-anchor-id="model-type-and-parameter-tuning">Model Type and Parameter Tuning</h4>
-<ol start="0" type="1">
-<li><p>Null model</p></li>
-<li><p>Linear regression model</p></li>
-<li><p>Elastic Net: Lasso regression model - penalty</p></li>
-<li><p>Elastic Net: Ridge regression model - penalty</p></li>
-<li><p>K Nearest Neighbor model - neighbors</p></li>
-<li><p>Boosted Tree model - mtry, min_n</p></li>
-<li><p>Random Forest model - mtry, min_n, learn_rate</p></li>
-</ol>
+<p><strong>Null</strong> (parsnip engine):</p>
+<ul>
+<li>no tuning</li>
+</ul>
+<p><strong>Linear Regression</strong> (lm engine):</p>
+<ul>
+<li>no tuning</li>
+</ul>
+<p><strong>Elastic Net: Lasso Regression</strong> (glmnet engine):</p>
+<ul>
+<li><p>mixture was set to 0</p></li>
+<li><p>penalty was explored over range with 5 levels</p></li>
+</ul>
+<p><strong>Elastic Net: Ridge Regression</strong> (glmnet engine):</p>
+<ul>
+<li><p>mixture was set to 1</p></li>
+<li><p>penalty was explored over range with 5 levels</p></li>
+</ul>
+<p><strong>K Nearest Neighbor</strong> (kknn engine):</p>
+<ul>
+<li>neighbors was explored over with 5 levels</li>
+</ul>
+<p><strong>Boosted Tree</strong> (xgboost engine):</p>
+<ul>
+<li><p>number of randomly selected predictors to split on (mtry) was explored over with 42 levels</p></li>
+<li><p>minimum number of data points in a node for splitting (min_n) was explored over with 5 levels</p></li>
+<li><p>learning rate (learn_rate) was explored over with 10 levels</p></li>
+</ul>
+<p><strong>Random Forest</strong> (ranger engine):</p>
+<ul>
+<li><p>number of trees was set to 1000</p></li>
+<li><p>number of randomly selected predictors to split on (mtry) was explored over with 42 levels</p></li>
+<li><p>minimum number of data points in a node for splitting (min_n) was explored over with 5 levels</p></li>
+</ul>
 </section>
 <section id="metrics" class="level4">
 <h4 class="anchored" data-anchor-id="metrics">Metrics</h4>
@@ -3873,7 +3898,7 @@ Prediction Research Objective
 </div>
 </div>
 </div>
-<p>Most data are clusted in the middle range of around 3000 to 4000 grams. While a large number of observations are close to the reference line, there are a significant number of observations that deviate from the reference line. On the lower end of the data, there are outliers where the actual birth weights are much lower than the predicted birth weight. Similarly on the higher end of the data, there are clusters of actual birth weights that are much higher than the predicted birth weight. <a href="#fig-assess">Figure 2</a> shows that the final model fitted to the entire training dataset is not an excellent predictor according to the testing dataset. While the model is able to predict the birth weight of babies to a certain extent, the predictions are not perfectly accurate.</p>
+<p>Most data are clustered in the middle range of around 3000 to 4000 grams. While a large number of observations are close to the reference line, there are a significant number of observations that deviate from the reference line. On the lower end of the data, there are outliers where the actual birth weights are much lower than the predicted birth weight. Similarly on the higher end of the data, there are clusters of actual birth weights that are much higher than the predicted birth weight. <a href="#fig-assess">Figure 2</a> shows that the final model fitted to the entire training dataset is not an excellent predictor according to the testing dataset. While the model is able to predict the birth weight of babies to a certain extent, the predictions are not perfectly accurate.</p>
 <p>Overall, considering these metrics and the context provided, the Random Forest model appears to perform reasonably well. It exhibits relatively low errors in the context of the target variable, a moderate level of variance explained by the model, and a relatively small percentage error in predictions. Therefore, it can be concluded that the model is good for the given problem.</p>
 </section>
 <section id="conclusion" class="level2">
