@@ -307,7 +307,8 @@ b <- ggplot(pregnancy_train, aes(x = sqrt(postnatal_depression))) +
 set.seed(100)
 ggplot(pregnancy_train, aes(x = postnatal_depression, y = promis_anxiety)) +
   geom_jitter(alpha = 0.2) +
-  geom_smooth(method = "lm", se = FALSE, color = "skyblue") +
+  geom_smooth(method = "lm", se = FALSE, 
+              color = "red", linetype = 5) +
   theme_minimal() +
   labs(title = "Postnatal Depression vs. PROMIS Anxiety Levels",
        x = "Postnatal Depression",
