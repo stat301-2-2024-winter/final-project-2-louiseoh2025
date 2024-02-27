@@ -1,7 +1,7 @@
 ---
-title: "Executive Summary"
+title: "Improving Pregnancy Care During the Pandemic"
 subtitle: |
-  | Final Project 
+  | Executive Summary
   | Data Science 2 with R (STAT 301-2)
 author: "Louise Oh"
 date: today
@@ -28,24 +28,52 @@ citation-location: margin
 
 :::
 
+```{r}
+#| label: load-everything
+#| echo: false
+
+# load packages
+library(here)
+
+# load analysis
+load(here("analysis/assess_final_fit.rda"))
+```
+
+
 ## Purpose
 
-The Mental Health In Pregnancy During COVID-19 Dataset^[Mental Health In Pregnancy During COVID-19 --- [https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19](https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19)] is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.
+The Mental Health In Pregnancy During COVID-19 Dataset^[Mental Health In Pregnancy During COVID-19 --- [https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19](https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19)] is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project. 
 
 ::: {.callout-note icon="false"}
-## Prediction Research Objective 
+## Prediction Objective 
 
 The goal is regression, specifically what the weight of the child at birth will be based on the mother's biological and psychological factors in pregnancy during a pandemic.
 
 :::
 
-## Results 
+Developing a regression model to predict baby's birth weight based on maternal and infant factors during a pandemic is crucial for early identification of high-risk pregnancies and tailoring appropriate prenatal care interventions. Amid pandemic-related stressors, such a predictive model aids healthcare professionals in optimizing pregnancy care strategies, thereby promoting maternal and infant health outcomes during challenging times. 
 
-The target variable is `birth_weight`. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way, so no transformation is necessary.
+
+## Methods
+
+The target variable is `birth_weight`. The distribution of the variable is nearly normal thus all modeling and analyses were done in an original scale. A Null (baseline), Linear Regression, Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models were fitted using a kitchen sink recipe and a customized recipe. An analysis using Root Mean Squared Error revealed that the Random Forest model using the kitchen sink recipe outperformed all other models. The Random Forest model using the kitchen sink recipe was then fitted to the entire training dataset -- this is the final model used for this project. 
+
+## Results
+
+@tbl-metrics shows the metric values used to assess the final model. The magnitude of errors between the model's predictions and the actual values is approximately 395.25 units, on average. The absolute difference between the model's predictions and the true values is approximately 302.63 units, on average. Around 48.72% of the variance in the target variable is accounted for by the model's predictions. The difference between the model's predictions and the actual values equates to approximately 10.01% of the actual values, on average.
+
+```{r}
+#| label: tbl-metrics
+#| tbl-cap: "Final Model Assessment Metrics"
+#| echo: false
+
+final_table
+```
 
 ## Conclusion
 
+This regression problem was best predicted using a Random Forest Model using a kitchen sink recipe. The recipe was created from removing non-predictor variables, zero-variance variables, dummy encoding nominal variables, imputing missing variables using k nearest neighbor method, and normalizing all numeric data to have a standard deviation of one and a mean of zero. This model had a moderately good performance based on the context of the baby's birth weight data.
 
 ## Evaluation
 
-
+This project aligns with broader efforts to enhance maternal and infant well-being. However, since the kitchen sink recipe worked better than the customized recipe, future research can involve further investigation of the context of the data, exploratory data analysis, thus creating recipes that feature more feature engineering to enhance the performance of the models. More extensive and distinctive data on maternal biological and psychological health can be collected to be used as predictors of the baby's weight at birth. 

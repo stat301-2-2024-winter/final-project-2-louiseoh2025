@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Louise Oh">
-<meta name="dcterms.date" content="2024-02-20">
+<meta name="dcterms.date" content="2024-02-27">
 
-<title>Executive Summary</title>
+<title>Improving Pregnancy Care During the Pandemic</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2991,9 +2991,11 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#dataset-overview" id="toc-dataset-overview" class="nav-link active" data-scroll-target="#dataset-overview">Dataset Overview</a></li>
-  <li><a href="#target-variable" id="toc-target-variable" class="nav-link" data-scroll-target="#target-variable">Target Variable</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#purpose" id="toc-purpose" class="nav-link active" data-scroll-target="#purpose">Purpose</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
   </ul>
 </nav>
 </div>
@@ -3001,8 +3003,8 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Executive Summary</h1>
-<p class="subtitle lead"></p><p>Final Project<br>
+<h1 class="title">Improving Pregnancy Care During the Pandemic</h1>
+<p class="subtitle lead"></p><p>Executive Summary<br>
 Data Science 2 with R (STAT 301-2)</p><p></p>
 </div>
 
@@ -3020,7 +3022,7 @@ Data Science 2 with R (STAT 301-2)</p><p></p>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 20, 2024</p>
+      <p class="date">February 27, 2024</p>
     </div>
   </div>
   
@@ -3043,29 +3045,72 @@ Github Repo Link
 <p><a href="https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git">https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git</a></p>
 </div>
 </div>
-<section id="dataset-overview" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="dataset-overview">Dataset Overview</h2>
-<div class="page-columns page-full"><p>The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li></div></div>
+<section id="purpose" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
+<div class="page-columns page-full"><p>The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li></div></div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Prediction Research Objective
+Prediction Objective
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>The goal is regression, specifically what the weight of the child at birth will be based on the mother’s biological and psychological factors in pregnancy during a pandemic.</p>
 </div>
 </div>
+<p>Developing a regression model to predict baby’s birth weight based on maternal and infant factors during a pandemic is crucial for early identification of high-risk pregnancies and tailoring appropriate prenatal care interventions. Amid pandemic-related stressors, such a predictive model aids healthcare professionals in optimizing pregnancy care strategies, thereby promoting maternal and infant health outcomes during challenging times.</p>
 </section>
-<section id="target-variable" class="level2">
-<h2 class="anchored" data-anchor-id="target-variable">Target Variable</h2>
-<p>The target variable is <code>birth_weight</code>. This is a numerical variable in the form of double. The histogram below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end, of the weight distribution. The original data has a distribution closer to a normal distribution compared to when it is transformed in some way, so no transformation is necessary.</p>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<p>The target variable is <code>birth_weight</code>. The distribution of the variable is nearly normal thus all modeling and analyses were done in an original scale. A Null (baseline), Linear Regression, Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models were fitted using a kitchen sink recipe and a customized recipe. An analysis using Root Mean Squared Error revealed that the Random Forest model using the kitchen sink recipe outperformed all other models. The Random Forest model using the kitchen sink recipe was then fitted to the entire training dataset – this is the final model used for this project.</p>
 </section>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p><a href="#tbl-metrics">Table 1</a> shows the metric values used to assess the final model. The magnitude of errors between the model’s predictions and the actual values is approximately 395.25 units, on average. The absolute difference between the model’s predictions and the true values is approximately 302.63 units, on average. Around 48.72% of the variance in the target variable is accounted for by the model’s predictions. The difference between the model’s predictions and the actual values equates to approximately 10.01% of the actual values, on average.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-metrics" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table 1: Final Model Assessment Metrics</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">metric</th>
+<th style="text-align: right;">RandomForest</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">RMSE</td>
+<td style="text-align: right;">395.2473861</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MAE</td>
+<td style="text-align: right;">302.6337524</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RSQ</td>
+<td style="text-align: right;">0.4871928</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MAPE</td>
+<td style="text-align: right;">10.0115759</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This regression problem was best predicted using a Random Forest Model using a kitchen sink recipe. The recipe was created from removing non-predictor variables, zero-variance variables, dummy encoding nominal variables, imputing missing variables using k nearest neighbor method, and normalizing all numeric data to have a standard deviation of one and a mean of zero. This model had a moderately good performance based on the context of the baby’s birth weight data.</p>
+</section>
+<section id="evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
+<p>This project aligns with broader efforts to enhance maternal and infant well-being. However, since the kitchen sink recipe worked better than the customized recipe, future research can involve further investigation of the context of the data, exploratory data analysis, thus creating recipes that feature more feature engineering to enhance the performance of the models. More extensive and distinctive data on maternal biological and psychological health can be collected to be used as predictors of the baby’s weight at birth.</p>
 </section>
 
 

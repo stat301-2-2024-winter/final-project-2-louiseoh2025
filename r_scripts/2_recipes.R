@@ -20,7 +20,7 @@ load(here("data_splits/pregnancy_folds.rda"))
 recipe1 <- recipe(birth_weight ~ ., data = pregnancy_train) |> 
   # remove unique ID, date variable, and status of nicu stay
   step_rm(osf_id, delivery_date, nicu_stay) |> 
-  # impute missing numerical variables using knn 
+  # impute missing variables using knn 
   step_impute_knn(maternal_age, postnatal_depression, promis_anxiety, gestational_age, 
                   birth_length, threaten_life, threaten_baby_danger, threaten_baby_harm,
                   household_income, maternal_education, delivery_mode,

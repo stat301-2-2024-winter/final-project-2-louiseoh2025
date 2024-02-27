@@ -66,8 +66,7 @@ The target variable is `birth_weight`. This is a numerical variable in the form 
 
 ## Data Splitting and Resampling
 
-The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. There are 6078 observations in the cleaned dataset. There are 4861 observations in the training dataset. This is a relatively small dataset for machine learning. Therefore, repeated V-fold cross-validation with 10 folds and 5 repeats are performed on the training data. This technique randomly and repeatedly splits the data into 10 subsets of approximately equal size for training and validation. This provides a robust estimate of model performance and 10 sets of performance metrics. With this particular setup, each model will be trained and evaluated 50 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account. See 1_*.R scripts for codes. 
-
+The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. There are 6078 observations in the cleaned dataset. There are 4861 observations in the training dataset. This is a relatively small dataset for machine learning. Therefore, repeated V-fold cross-validation with 10 folds and 5 repeats are performed on the training data. This provides a robust estimate of model performance as, each model will be trained and evaluated 50 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account. See 1_*.R scripts for codes. 
 
 ## Recipes
 
