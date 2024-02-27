@@ -35,17 +35,15 @@ citation-location: margin
 library(tidyverse)
 library(tidymodels)
 library(here)
-library(knitr)
-library(skimr)
 library(patchwork)
 # load data
 load(here("data/pregnancy_codebook.rda"))
 load(here("data/pregnancy_clean.rda"))
-load(here("results/pregnancy_split.rda"))
+load(here("data_splits/pregnancy_split.rda"))
 # load analysis
-load(here("results/model_analysis_parameters.rda"))
-load(here("results/model_analysis_rmse.rda"))
-load(here("results/assess_final.rda"))
+load(here("analysis/model_analysis_parameters.rda"))
+load(here("analysis/model_analysis_rmse.rda"))
+load(here("analysis/assess_final_fit.rda"))
 ```
 
 ## Introduction
@@ -75,7 +73,7 @@ Developing a regression model to predict the weight of a child at birth based on
 
 # view codebook
 pregnancy_codebook |> 
-  kable()
+  knitr::kable()
 ```
 
 @tbl-data-overview shows an overview of the cleaned dataset. Data cleaning involved filtering out rows with missing `birth_weight` data and converting variables into appropriate variable types. Longer variable names were renamed, dates were changed into date formats, and factors were appropriately recoded and renamed.
@@ -86,7 +84,7 @@ pregnancy_codebook |>
 #| echo: false
 
 # skim data
-skim_without_charts(pregnancy)
+skimr::skim_without_charts(pregnancy)
 ```
 
 After performing data cleaning, there are 6078 observations with 18 variables. There is one target variable, `birth_weight`, 8 factor predictors and 9 numeric predictors. There are missing values in variables `household_income`, `maternal_eduction`, `delivery_date`, `delivery_mode`, `nicu_stay`, `delivery_month`, `delivery_year`, `maternal_age`, `postnatal_depression`, `promis_anxiety`, `gestational_age`, `birth_length`, `threaten_life`, `threaten_baby_danger`, and `threaten_baby_harm` -- all variables excluding the target variable, unique ID, and `language`. However, all variables have over 90% complete rate.
@@ -167,7 +165,7 @@ Add interaction term between `promis_anxiety` and `postnatal_depression` levels:
 
 #### Model Type and Parameter Tuning
 
-**Null** (parsnip engine):
+**Null Model** (parsnip engine):
 
 - no tuning
 

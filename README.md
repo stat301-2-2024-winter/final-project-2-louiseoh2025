@@ -2,46 +2,6 @@
 
 This project aims to properly develop a predictive model using supervised learning methods for Mental Health In Pregnancy During COVID-19^[Mental Health In Pregnancy During COVID-19 --- [https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19](https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19)], then properly apply machine/statistical learning methods to address it. The goal of this project is to predict the weight of the baby at birth based on the biological and psychological factors of mother and baby during a pandemic. There are two recipes used and six model types examined. 
 
-
-## Folders
-
-- `data/`: contains all datasets used for the final report
-
-- `memos/`: contains all progress memos that lead to the final project
-
-- `results/`: contains all splitted data, fitted/tuned models, analysis tables, and other outputs created from the .R scripts
-
-## R Scripts
-
-- `0_data_cleaning.R`: codes used to clean and save data ready for use
-
-- `1_initial_setup.R`: codes used to split and fold data
-
-- `2_eda.R`: codes used for eda of training data to create customized recipes
-
-- `2_recipes.R`: codes used to create all recipes used for fitting the models
-
-- `3_fit_baseline.R`: codes used to specify and fit/resample the null/baseline models
-
-- `3_fit_lm.R`: codes used to specify and fit/resample the linear regression models
-
-- `3_tune_lasso.R`: codes used to specify and fit/tune the lasso regression models
-
-- `3_tune_ridge.R`: codes used to specify and fit/tune the ridge regression models
-
-- `3_tune_knn.R`: codes used to specify and fit/tune the k-nearest neighbor models
-
-- `3_tune_bt.R`: codes used to specify and fit/tune the boosted tree models
-
-- `3_tune_rf.R`: codes used to specify and fit/tune the random forest models
-
-- `4_model_analysis.R`: codes used to analyze which model works best
-
-- `5_fit_final.R`: codes used to fit the final model chosen for the prediction project
-
-- `5_assess_final.R`: codes used to assess the final model fitted for the prediction project
-
-
 ## Reports
 
 - `Oh_Louise_final_report.qmd`: quarto markdown document to create the final report
@@ -51,4 +11,19 @@ This project aims to properly develop a predictive model using supervised learni
 - `Oh_Louise_executive_summary.qmd`: quarto markdown document to create the executive summary
 
 - `Oh_Louise_executive_summary.html`: the executive summary
+
+
+## Folders
+
+- `data/`: contains all datasets used for the final report (see `data/README.md`)
+
+- `r_scripts/`: contains all .R scripts that contains codes to creating this report (see `r_scripts/README.md`)
+
+- `recipes/`: contains .rda files with the saved recipes used for the models
+
+- `results/`: contains fitted, resampled, and tuned models created from the .R scripts
+
+- `analysis/`: contains .rda files with the saved model analysis tables and plots
+
+- `memos/`: contains all progress memo reports that lead to the final project
 
