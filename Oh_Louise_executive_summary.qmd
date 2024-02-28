@@ -56,7 +56,7 @@ Developing a regression model to predict baby's birth weight based on maternal a
 
 ## Methods
 
-The target variable is `birth_weight`. The distribution of the variable is nearly normal thus all modeling and analyses were done in an original scale. A Null (baseline), Linear Regression, Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models were fitted using a kitchen sink recipe and a customized recipe. An analysis using Root Mean Squared Error revealed that the Random Forest model using the kitchen sink recipe outperformed all other models. The Random Forest model using the kitchen sink recipe was then fitted to the entire training dataset -- this is the final model used for this project. 
+The target variable is baby's weight at birth. The distribution of the variable is nearly normal thus all modeling and analyses were done in an original scale. A Null (baseline), Linear Regression, Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models were fitted using a kitchen sink recipe and a customized recipe. An analysis using Root Mean Squared Error revealed that the Random Forest model using the kitchen sink recipe outperformed all other models. The Random Forest model using the kitchen sink recipe was then fitted to the entire training dataset -- this is the final model used for this project. 
 
 ## Results
 

@@ -59,7 +59,7 @@ ridge_workflow2 <- workflow() |>
 # hyperparameter tuning grid
 ridge_params <- hardhat::extract_parameter_set_dials(ridge_spec)
 # build tuning grid
-ridge_grid <- grid_regular(ridge_params, levels = 5)
+ridge_grid <- grid_regular(ridge_params, levels = 10)
 # fit workflow/model
 ridge_tuned2 <- ridge_workflow2 |> 
   tune_grid(

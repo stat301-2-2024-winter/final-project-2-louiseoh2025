@@ -43,6 +43,7 @@ load(here("data_splits/pregnancy_split.rda"))
 # load analysis
 load(here("analysis/stats_target_var.rda"))
 load(here("analysis/model_analysis_parameters.rda"))
+load(here("analysis/model_analysis_autoplot.rda"))
 load(here("analysis/model_analysis_rmse.rda"))
 load(here("analysis/assess_final_fit.rda"))
 ```
@@ -75,7 +76,7 @@ pregnancy_codebook |>
   knitr::kable()
 ```
 
-@tbl-data-overview shows an overview of the cleaned dataset. Data cleaning involved filtering out rows with missing `birth_weight` data and converting variables into appropriate variable types. Longer variable names were renamed, dates were changed into date formats, and factors were appropriately recoded and renamed.
+@tbl-data-overview shows an overview of the cleaned dataset. Data cleaning involved filtering out rows with missing birth weight data and converting variables into appropriate variable types. Longer variable names were renamed, dates were changed into date formats, and factors were appropriately recoded and renamed.
 
 ```{r}
 #| label: tbl-data-overview
@@ -90,7 +91,7 @@ After performing data cleaning, there are 6078 observations with 18 variables. T
 
 #### Target Variable
 
-The target variable is `birth_weight`, a numerical variable in the form of double. @fig-target-plot below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end. The original data has a distribution closer to a normal distribution compared to when it is transformed. Thus, the original data without transformation will be used for fitting the models.
+The target outcome is the weight of the baby at birth, which a numerical variable in the form of double. @fig-target-plot below shows a unimodal distribution that is slightly skewed toward the left, but still nearly symmetric. The distribution looks nearly normal with outliers on both ends, but slightly more on the lower end. The original data has a distribution closer to a normal distribution compared to when it is transformed. Thus, the original data without transformation will be used for fitting the models.
 
 ```{r}
 #| label: fig-target-plot
@@ -100,7 +101,7 @@ The target variable is `birth_weight`, a numerical variable in the form of doubl
 target_dist
 ```
 
-@tbl-target-stat shows the summary statistics of the target variable. `birth_weight` has a minimum value of 303, maximum value of 5968, and a median value of 3431. The interquartile range is 641. In the later part of model analyses, the summary statistics of the target variable will be useful in interpreting the assessment metric values.
+@tbl-target-stat shows the summary statistics of the target variable. The birth weight data has a minimum value of 303, maximum value of 5968, and a median value of 3431. The interquartile range is 641. In the later part of model analyses, the summary statistics of the target variable will be useful in interpreting the assessment metric values.
 
 ```{r}
 #| label: tbl-target-stat
@@ -114,7 +115,7 @@ target_stats
 
 #### Data Splitting
 
-The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, `birth_weight`. There are 6078 observations in the cleaned dataset. There are 4861 observations in the training dataset.
+The cleaned pregnancy data was split into training (80%) and testing (20%) datasets. The split was stratified by the target variable, birth weight. There are 6078 observations in the cleaned dataset. There are 4861 observations in the training dataset.
 
 #### Resampling
 
@@ -128,11 +129,11 @@ There are two distinct recipes fitted into all model types: the Kitchen Sink rec
 
 -   Remove unique ID and date variable:
 
-    -   The unique ID was removed because it does not help predict the baby's weight and will add confusion to the model fitting. The date variable was removed because the month and year were created as new variables during the data cleaning process, and these two new variables were used as predictor variables. The status of NICU stay was removed because NICU is determined after the birth of the baby, so it cannot be used as a predictor variable. The length of the baby was used as a predictor variable because this is more easily predicted during the pregnancy period through technology.
+    -   The unique ID was removed because it does not help predict the baby's weight and will add confusion to the model fitting. The date variable was removed because the month and year were created as new variables during the data cleaning process, and these two new variables were used as predictor variables. The status of NICU stay was removed because NICU stay is determined after the birth of the baby, so it cannot be used as a predictor variable. The length of the baby was used as a predictor variable because this is more easily predicted during the pregnancy period through technology.
 
--   Impute missing numerical variables using k nearest neighbors method:
+-   Impute missing numerical variables using K Nearest Neighbors method:
 
-    -   All predictor variables except `language` had missing values. These missing values were filled in by replacing missing values with the average (or weighted average) of the k nearest neighbors' values. This approach leverages the similarity between data points to estimate missing values. In real-world datasets, missing values are a common occurrence due to various reasons such as data entry errors, sensor malfunctions, or simply because the data was not collected. Imputing missing values is necessary to ensure that the dataset is complete and suitable for analysis or modeling. This step prepare the dataset for further analysis or modeling within a tidy and systematic workflow.
+    -   All predictor variables except the language suvey was conducted in had missing values. These missing values were filled in by replacing missing values with the average (or weighted average) of the K Nearest Neighbors' values. This approach leverages the similarity between data points to estimate missing values. In real-world datasets, missing values are a common occurrence due to various reasons such as data entry errors, sensor malfunctions, or simply because the data was not collected. Imputing missing values is necessary to ensure that the dataset is complete and suitable for analysis or modeling. This step prepare the dataset for further analysis or modeling within a tidy and systematic workflow.
 
 -   Dummy encode all nominal predictors:
 
@@ -154,13 +155,13 @@ There are two distinct recipes fitted into all model types: the Kitchen Sink rec
 
 From the kitchen sink recipe, the following steps were added based on an exploratory data analysis of the training dataset.
 
--   Apply square root transform to `postnatal_depression` for normality:
+-   Apply square root transformation to postnatal depression for normality:
 
-    -   Before the predictors were normalized, the `postnatal_depression` variable was transformed for a normal distribution. This decision was based on a univariate analysis shown in @fig-appendix-eda1 (see Appendix: EDA).
+    -   Before the predictors were normalized, the postnatal depression data was transformed for a normal distribution. This decision was based on a univariate analysis shown in @fig-appendix-eda1 (see Appendix: EDA). **add research proof**
 
--   Add interaction term between `promis_anxiety` and `postnatal_depression` levels:
+-   Add interaction term between PROMIS anxiety and postnatal depression levels:
 
-    -   Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This approach can reveal synergistic effects, identify subgroups with distinct symptom patterns, and improve the model's accuracy in the mother's mental health predictors on baby's birth weight. This decision was based on a bivariate analysis shown in @fig-appendix-eda2 (see Appendix: EDA).
+    -   Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This decision was based on A bivariate analysis in @fig-appendix-eda2 also showed that these two variables had a strong linear correlation with a correlation coefficient of around 0.8 (see Appendix: EDA).
 
 *Recipe for tree-based model had interaction terms removed:*
 
@@ -168,37 +169,48 @@ From the kitchen sink recipe, the following steps were added based on an explora
 
 #### Model Type and Parameter Tuning
 
--   Null Model (parsnip engine)
+-   Null Model (parsnip engine):
 
--   Linear Regression (lm engine)
+    -   No tuning was performed.
+
+-   Linear Regression (lm engine):
+
+    -   No tuning was performed.
 
 -   Elastic Net: Lasso Regression (glmnet engine):
 
-    -   mixture was set to 0
-    -   penalty was explored over range with 5 levels
+    -   The mixture was set to 0 for lasso regression.
+    -   The penalty was tuned.
+    -   The number of values of each parameter to use to make the regular grid was set to level 10, creating 100 different combinations of results. 
 
 -   Elastic Net: Ridge Regression (glmnet engine):
 
-    -   mixture was set to 1
-    -   penalty was explored over range with 5 levels
+    -   The mixture was set to 1 for ridge regression. 
+    -   The penalty was tuned.
+    -   The number of values of each parameter to use to make the regular grid was set to level 10, creating 100 different combinations of results. 
+
 
 -   K Nearest Neighbor (kknn engine):
 
-    -   neighbors was explored over with 5 levels
+    -   The neighbors was explored over with 10 levels.
+    -   The number of values of each parameter to use to make the regular grid was set to level 10, creating 100 different combinations of results. 
 
 -   Boosted Tree (xgboost engine):
 
-    -   number of randomly selected predictors to split on was explored over with 42 levels
-    -   minimum number of data points in a node for splitting was explored over with 5 levels
-    -   learning rate was explored over with 10 levels
+    -   The number of randomly selected predictors to split on was explored over with 2 to 25 levels, since there were 43 predictors used in my recipe. 
+    -   The minimum number of data points in a node for splitting was explored over with 2 to 25 levels. 
+    -   The learning rate was explored over with 10 levels.
+    -   The number of values of each parameter to use to make the regular grid was set to level 5, creating 25 different combinations of results. 
 
 -   Random Forest (ranger engine):
 
-    -   number of trees was set to 1000
+    -   The number of trees was set to 1000, a standard number for random forest models. 
 
-    -   number of randomly selected predictors to split on was explored over with 42 levels
+    -   The number of randomly selected predictors to split on was explored over with 2 to 25 levels. 
 
-    -   minimum number of data points in a node for splitting was explored over with 5 levels
+    -   The minimum number of data points in a node for splitting was explored over with 2 to 25 levels.
+    
+    - The number of values of each parameter to use to make the regular grid was set to level 5, creating 25 different combinations of results. 
 
 #### Metrics
 
@@ -219,7 +231,7 @@ The lasso regression, ridge regression, k nearest neighbor, boosted tree, and ra
 
 ```{r}
 #| label: tbl-parameters
-#| tbl-cap: "Best Hyperparameters for Each Model"
+#| tbl-cap: "Table of Best Hyperparameters for Each Model"
 #| echo: false
 
 lasso_best
@@ -230,6 +242,23 @@ rf_best
 ```
 
 **Include a discussion comparing any systematic differences in performance between model types or recipes. If variations in recipes were used to explore predictive importance of certain variables, then it should be discussed here.**
+
+```{r}
+#| label: tbl-autoplots
+#| tbl-cap: "Autoplot of Best Hyperparameters for Each Model"
+#| echo: false
+
+lasso1_auto
+lasso2_auto
+ridge1_auto
+ridge2_auto
+knn1_auto
+knn2_auto
+bt1_auto
+bt2_auto
+rf1_auto
+rf2_auto
+```
 
 #### Selecting the Best Model
 
@@ -265,7 +294,7 @@ final_table
 
 #### Comparison of Actual and Predicted Values of the Target Variable
 
-Furthermore, predictions and the true birth weight values are explored in comparison using @fig-assess. Since the `birth_weight` variable was fitted in an original scale, this plot is already in an original scale without the need to transform back the data.
+Furthermore, predictions and the true birth weight values are explored in comparison using @fig-assess. Since the the birth weight data was fitted in an original scale, this plot is already in an original scale without the need to transform back the data.
 
 ```{r}
 #| label: fig-assess
@@ -291,7 +320,7 @@ The goal of this project was to predict the weight of the baby at birth based on
 
 One aspect for potential enhancement in this project is the feature engineering of the recipes. The customized recipe underperformed the kitchen sink recipe for all models. This means that there may still be room for improvement in creating a better recipe, particularly in enhancing the explanatory power and reducing prediction errors further. While multiple features like variable interactions, data transformations, and different imputation methods were explored in various combination, it was difficult to create a customized recipe that significantly outperformed the kitchen sink recipe.
 
-One possible reason for this is that the variables used to predict the target variables may have not had a large influence on the target variable of interest. For instance, the depression levels, household income, and the age of the mother may not have been correlated to the baby's birth weight, thus the model may have not had good predictors to accurately predict the weight of the baby at birth. In addition, there was little variance in the target variable compared to the number of observations. Because `birth_weight` has a small interquartile range compared to its median and range, it may have been harder for models to make accurate predictions.
+One possible reason for this is that the variables used to predict the target variables may have not had a large influence on the target variable of interest. For instance, the depression levels, household income, and the age of the mother may not have been correlated to the baby's birth weight, thus the model may have not had good predictors to accurately predict the weight of the baby at birth. In addition, there was little variance in the target variable compared to the number of observations. Because birth weight data has a small interquartile range compared to its median and range, it may have been harder for models to make accurate predictions.
 
 Another point of further investigation is that the RMSE of the model fitted to my entire training dataset is better than when the model was resampled (10 folds, 5 repeats). Considering the data variability, overfitting, and randomness, it is not uncommon for the RMSE of a model trained on the entire dataset to be better than that obtained from cross-validation. However, it is essential to reconsider the potential reasons behind the difference and to interpret the results cautiously. This would also be a next step to this project.
 
