@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Louise Oh">
-<meta name="dcterms.date" content="2024-02-27">
+<meta name="dcterms.date" content="2024-02-29">
 
 <title>Improving Pregnancy Care During the Pandemic</title>
 <style>
@@ -2992,7 +2992,7 @@ vertical-align: -.125em;
    
   <ul>
   <li><a href="#purpose" id="toc-purpose" class="nav-link active" data-scroll-target="#purpose">Purpose</a></li>
-  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection">Model Selection</a></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
@@ -3022,7 +3022,7 @@ Data Science 2 with R (STAT 301-2)</p><p></p>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 27, 2024</p>
+      <p class="date">February 29, 2024</p>
     </div>
   </div>
   
@@ -3063,18 +3063,129 @@ Prediction Objective
 </div>
 <p>Developing a regression model to predict baby’s birth weight based on maternal and infant factors during a pandemic is crucial for early identification of high-risk pregnancies and tailoring appropriate prenatal care interventions. Amid pandemic-related stressors, such a predictive model aids healthcare professionals in optimizing pregnancy care strategies, thereby promoting maternal and infant health outcomes during challenging times.</p>
 </section>
-<section id="methods" class="level2">
-<h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p>The target variable is <code>birth_weight</code>. The distribution of the variable is nearly normal thus all modeling and analyses were done in an original scale. A Null (baseline), Linear Regression, Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models were fitted using a kitchen sink recipe and a customized recipe. An analysis using Root Mean Squared Error revealed that the Random Forest model using the kitchen sink recipe outperformed all other models. The Random Forest model using the kitchen sink recipe was then fitted to the entire training dataset – this is the final model used for this project.</p>
+<section id="model-selection" class="level2">
+<h2 class="anchored" data-anchor-id="model-selection">Model Selection</h2>
+<p>The target variable is baby’s weight at birth. The distribution of the variable is nearly normal thus all modeling and analyses were done in an original scale. A Null (baseline), Linear Regression, Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models were fitted, and tuned if necessary, using a kitchen sink recipe (recipe 1) and a customized recipe (recipe 2). <a href="#tbl-analysis">Table 1</a> shows the comparison of Root Mean Squared Error across models. This analysis revealed that the Random Forest model using the kitchen sink recipe had the lowest error, outperforming all other models. The Random Forest model using the kitchen sink recipe was then fitted to the entire training dataset – this is the final model used for this project.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-analysis" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table 1: RMSE Analysis for Model Selection</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: left;">recipe</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Null</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
+<td style="text-align: right;">535.0439</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.290396</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Linear Regression</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
+<td style="text-align: right;">420.8525</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.312625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Linear Regression</td>
+<td style="text-align: left;">recipe 2 (parametric)</td>
+<td style="text-align: right;">420.9596</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.310306</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lasso Regression</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
+<td style="text-align: right;">420.8793</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.301162</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lasso Regression</td>
+<td style="text-align: left;">recipe 2 (parametric)</td>
+<td style="text-align: right;">420.9762</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.297828</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ridge Regression</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
+<td style="text-align: right;">420.7347</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.329501</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ridge Regression</td>
+<td style="text-align: left;">recipe 2 (parametric)</td>
+<td style="text-align: right;">420.8152</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.326704</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">K Nearest Neighbor</td>
+<td style="text-align: left;">recipe 1 (tree)</td>
+<td style="text-align: right;">502.9329</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">2.732970</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">K Nearest Neighbor</td>
+<td style="text-align: left;">recipe 2 (tree)</td>
+<td style="text-align: right;">502.7304</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">2.716658</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Boosted Tree</td>
+<td style="text-align: left;">recipe 1 (tree)</td>
+<td style="text-align: right;">403.5212</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.096123</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Boosted Tree</td>
+<td style="text-align: left;">recipe 2 (tree)</td>
+<td style="text-align: right;">403.5212</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.096123</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;">recipe 1 (tree)</td>
+<td style="text-align: right;">399.2312</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.228117</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;">recipe 2 (tree)</td>
+<td style="text-align: right;">399.3286</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.231121</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
-<p><a href="#tbl-metrics">Table 1</a> shows the metric values used to assess the final model. The magnitude of errors between the model’s predictions and the actual values is approximately 395.25 units, on average. The absolute difference between the model’s predictions and the true values is approximately 302.63 units, on average. Around 48.72% of the variance in the target variable is accounted for by the model’s predictions. The difference between the model’s predictions and the actual values equates to approximately 10.01% of the actual values, on average.</p>
+<p><a href="#tbl-metrics">Table 2</a> shows the metric values used to assess the final model. The magnitude of errors between the model’s predictions and the actual values is approximately 395.25 units, on average. The absolute difference between the model’s predictions and the true values is approximately 302.63 units, on average. Around 48.72% of the variance in the target variable is accounted for by the model’s predictions. The difference between the model’s predictions and the actual values equates to approximately 10.01% of the actual values, on average.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="tbl-metrics" class="anchored">
 <table class="table table-sm table-striped small">
-<caption>Table 1: Final Model Assessment Metrics</caption>
+<caption>Table 2: Final Model Assessment Metrics</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">metric</th>
@@ -3084,19 +3195,19 @@ Prediction Objective
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">RMSE</td>
-<td style="text-align: right;">395.2473861</td>
+<td style="text-align: right;">395.4440966</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">MAE</td>
-<td style="text-align: right;">302.6337524</td>
+<td style="text-align: right;">303.9587767</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">RSQ</td>
-<td style="text-align: right;">0.4871928</td>
+<td style="text-align: right;">0.4864822</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">MAPE</td>
-<td style="text-align: right;">10.0115759</td>
+<td style="text-align: right;">10.0243045</td>
 </tr>
 </tbody>
 </table>
@@ -3110,7 +3221,7 @@ Prediction Objective
 </section>
 <section id="evaluation" class="level2">
 <h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
-<p>This project aligns with broader efforts to enhance maternal and infant well-being. However, since the kitchen sink recipe worked better than the customized recipe, future research can involve further investigation of the context of the data, exploratory data analysis, thus creating recipes that feature more feature engineering to enhance the performance of the models. More extensive and distinctive data on maternal biological and psychological health can be collected to be used as predictors of the baby’s weight at birth.</p>
+<p>This project aligns with broader efforts to enhance maternal and infant well-being by providing a model to predict birth weight of babies at birth to anticipate infant needs like NICU stay. The model performs moderately well enough to produce low error statistics. However, since health data is crucial and must be accurate to provide appropriate care to patients, the model could be further improved for accuracy. Since the kitchen sink recipe worked better than the customized recipe, future research can involve further investigation of the context of the data, exploratory data analysis, thus creating recipes that feature more feature engineering to enhance the performance of the models. Futhermore, more extensive data with more variation on maternal biological and psychological health can be collected to be used as predictors of the baby’s weight at birth.</p>
 </section>
 
 

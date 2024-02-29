@@ -36,6 +36,7 @@ citation-location: margin
 library(here)
 
 # load analysis
+load(here("analysis/model_analysis_rmse.rda"))
 load(here("analysis/assess_final_fit.rda"))
 ```
 
@@ -54,9 +55,18 @@ The goal is regression, specifically what the weight of the child at birth will 
 Developing a regression model to predict baby's birth weight based on maternal and infant factors during a pandemic is crucial for early identification of high-risk pregnancies and tailoring appropriate prenatal care interventions. Amid pandemic-related stressors, such a predictive model aids healthcare professionals in optimizing pregnancy care strategies, thereby promoting maternal and infant health outcomes during challenging times. 
 
 
-## Methods
+## Model Selection
 
-The target variable is baby's weight at birth. The distribution of the variable is nearly normal thus all modeling and analyses were done in an original scale. A Null (baseline), Linear Regression, Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models were fitted using a kitchen sink recipe and a customized recipe. An analysis using Root Mean Squared Error revealed that the Random Forest model using the kitchen sink recipe outperformed all other models. The Random Forest model using the kitchen sink recipe was then fitted to the entire training dataset -- this is the final model used for this project. 
+The target variable is baby's weight at birth. The distribution of the variable is nearly normal thus all modeling and analyses were done in an original scale. A Null (baseline), Linear Regression, Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models were fitted, and tuned if necessary, using a kitchen sink recipe (recipe 1) and a customized recipe (recipe 2). @tbl-analysis shows the comparison of Root Mean Squared Error across models. This analysis revealed that the Random Forest model using the kitchen sink recipe had the lowest error, outperforming all other models. The Random Forest model using the kitchen sink recipe was then fitted to the entire training dataset -- this is the final model used for this project. 
+
+```{r}
+#| label: tbl-analysis
+#| tbl-cap: "RMSE Analysis for Model Selection"
+#| echo: false
+
+tbl_rmse
+```
+
 
 ## Results
 
@@ -76,4 +86,4 @@ This regression problem was best predicted using a Random Forest Model using a k
 
 ## Evaluation
 
-This project aligns with broader efforts to enhance maternal and infant well-being. However, since the kitchen sink recipe worked better than the customized recipe, future research can involve further investigation of the context of the data, exploratory data analysis, thus creating recipes that feature more feature engineering to enhance the performance of the models. More extensive and distinctive data on maternal biological and psychological health can be collected to be used as predictors of the baby's weight at birth. 
+This project aligns with broader efforts to enhance maternal and infant well-being by providing a model to predict birth weight of babies at birth to anticipate infant needs like NICU stay. The model performs moderately well enough to produce low error statistics. However, since health data is crucial and must be accurate to provide appropriate care to patients, the model could be further improved for accuracy.  Since the kitchen sink recipe worked better than the customized recipe, future research can involve further investigation of the context of the data, exploratory data analysis, thus creating recipes that feature more feature engineering to enhance the performance of the models. Futhermore, more extensive data with more variation on maternal biological and psychological health can be collected to be used as predictors of the baby's weight at birth. 
