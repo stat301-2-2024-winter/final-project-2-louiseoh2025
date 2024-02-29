@@ -35,7 +35,7 @@ knn_workflow1 <- workflow() |>
 # hyperparameter tuning grid
 knn_params <- parameters(knn_spec)
 # build tuning grid
-knn_grid <- grid_regular(knn_params, levels = 10)
+knn_grid <- grid_regular(knn_params, levels = 15)
 # fit workflow/model
 knn_tuned1 <- knn_workflow1 |> 
   tune_grid(

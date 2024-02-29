@@ -50,7 +50,7 @@ ridge1_auto <- autoplot(ridge_tuned1, metric = "rmse") +
 ridge2_auto <- autoplot(ridge_tuned2, metric = "rmse") + 
   theme_minimal()  +
   labs(title = "Ridge Regression Model",
-       subtitle = "recipe 1 (parametric)")
+       subtitle = "recipe 2 (parametric)")
 # knn
 knn1_auto <- autoplot(knn_tuned1, metric = "rmse") + 
   theme_minimal() +

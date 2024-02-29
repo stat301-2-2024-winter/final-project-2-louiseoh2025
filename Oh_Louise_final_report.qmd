@@ -231,7 +231,7 @@ The lasso regression, ridge regression, k nearest neighbor, boosted tree, and ra
 
 ```{r}
 #| label: tbl-parameters
-#| tbl-cap: "Table of Best Hyperparameters for Each Model"
+#| tbl-cap: "Table of Best Parameters for Each Model"
 #| echo: false
 
 lasso_best
@@ -241,28 +241,9 @@ bt_best
 rf_best
 ```
 
-**Include a discussion comparing any systematic differences in performance between model types or recipes. If variations in recipes were used to explore predictive importance of certain variables, then it should be discussed here.**
+#### Comparing RMSE Metric
 
-```{r}
-#| label: tbl-autoplots
-#| tbl-cap: "Autoplot of Best Hyperparameters for Each Model"
-#| echo: false
-
-lasso1_auto
-lasso2_auto
-ridge1_auto
-ridge2_auto
-knn1_auto
-knn2_auto
-bt1_auto
-bt2_auto
-rf1_auto
-rf2_auto
-```
-
-#### Selecting the Best Model
-
-@tbl-analysis presents the RMSE (Root Mean Square Error) values for different models created with both recipes, serving as indicators of predictive accuracy. Among the listed models, the Random Forest model using the kitchen sink recipe stands out, boasting the lowest RMSE of 399.13. On average, the birth weight predictions made by the Random Forest model using recipe 1 are approximately 399.13 grams away from the actual birth weights The standard error is 3.22 suggests that the RMSE value potentially deviates by approximately 3.22 units from the true error on average. Still, the Random Forest model excels in accurately predicting outcomes compared to others. Consequently, when prioritizing precise predictions, selecting **the Random Forest model using recipe 1 would be the most favorable option**.
+@tbl-analysis presents the RMSE (Root Mean Square Error) values for different models created with both recipes, serving as indicators of predictive accuracy. Among the listed models, the Random Forest model using the kitchen sink recipe stands out, boasting the lowest RMSE of 399.13. On average, the birth weight predictions made by the Random Forest model using recipe 1 are approximately 399.13 grams away from the actual birth weights The standard error is 3.228117 suggests that the RMSE value potentially deviates by approximately 3.23 units from the true error on average. Still, the Random Forest model excels in accurately predicting outcomes compared to others. Consequently, when prioritizing precise predictions, selecting **the Random Forest model using recipe 1 would be the most favorable option**.
 
 ```{r}
 #| label: tbl-analysis
@@ -272,9 +253,25 @@ rf2_auto
 tbl_rmse
 ```
 
-Comparing the RMSE values across models, it is evident that all complex models outperform the null model significantly. The null model yields an RMSE of 535.04, whereas even the least performing complex model, like the K Nearest Neighbor using recipe 2, has an RMSE of 502.95, showcasing a significant improvement. The best performing model, the Random Forest model using recipe 1, substantially reduces the RMSE by approximately 135.91 units compared to the null model.
+Comparing the RMSE values across models, it is evident that all complex models outperform the null model significantly. The null model yields an RMSE of 535.04, whereas even the least performing complex model, like the K Nearest Neighbor using recipe 2, has an RMSE of 502.93, showcasing a significant improvement. The best performing model, the Random Forest model using recipe 1, substantially reduces the RMSE by approximately 135.91 units from the null model. 
 
-It is not entirely surprising that a Random Forest model outperforms other models in this scenario. Random Forest's ensemble approach, ability to capture non-linear relationships, and robustness to noise and overfitting often contribute to its superior performance. Additionally, its handling of categorical variables and less sensitivity to feature scaling can provide advantages over other models.
+Next, @fig-autoplots-better shows figures that plot the RMSE by . See @fig-autoplots for RMSE autoplots for all models (See Appendix: EDA).
+
+```{r}
+#| label: fig-autoplots-better
+#| fig-cap: "Autoplot of Best Parameters for Models Fitted Using the Better Recipe "
+#| echo: false
+
+lasso1_auto
+ridge1_auto
+knn2_auto
+bt1_auto
+rf1_auto
+```
+
+#### Best Model Selection
+
+The Random Forest is the best performing model based on the RMSE metrics across models. It is not entirely surprising that a Random Forest model outperforms other models in this scenario. Random Forest's ensemble approach, ability to capture non-linear relationships, and robustness to noise and overfitting often contribute to its superior performance. Additionally, its handling of categorical variables and less sensitivity to feature scaling can provide advantages over other models. Since predictor variable transformation performed in recipe 2 does not have a large impact on tree-based models, it was expected that recipes 1 and 2 would have similar perfromance. However, it is surprising that recipe 1 worked better on the random forest model since it is a very simple kichen sink recipe.
 
 ## Final Model Analysis
 
@@ -282,7 +279,7 @@ The Random Forest model using the kitchen sink recipe for tree-based models is t
 
 #### Assessment Metrics
 
-@tbl-metrics shows the values of RMSE, MAE, RSQ, and MAPE used to assess the final model. The RMSE is 395.2473861, indicating that, on average, the magnitude of errors between the model's predictions and the actual values is approximately 395.25 units. The MAE is 302.6337524, indicating that, on average, the absolute difference between the model's predictions and the true values is approximately 302.63 units. The RSQ value of 0.4871928 indicates that around 48.72% of the variance in the target variable is accounted for by the model's predictions. The MAPE is 10.0115759, indicating that, on average, the difference between the model's predictions and the actual values equates to approximately 10.01% of the actual values. Considering the summary statistics of the target variable in @tbl-target-stat, these metric values are fairly reasonable and indication of a moderately good model.
+@tbl-metrics shows the values of RMSE, MAE, RSQ, and MAPE used to assess the final model. The RMSE is 395.4440966, indicating that, on average, the magnitude of errors between the model's predictions and the actual values is approximately 395.44 units. The MAE is 303.9587767, indicating that, on average, the absolute difference between the model's predictions and the true values is approximately 303.96 units. The RSQ value of 0.4864822 indicates that around 48.64% of the variance in the target variable is accounted for by the model's predictions. The MAPE is 10.0243045, indicating that, on average, the difference between the model's predictions and the actual values equates to approximately 10.02% of the actual values. Considering the summary statistics of the birth weight data in @tbl-target-stat, these metric values are fairly reasonable and indication of a moderately good model.
 
 ```{r}
 #| label: tbl-metrics
@@ -292,7 +289,7 @@ The Random Forest model using the kitchen sink recipe for tree-based models is t
 final_table
 ```
 
-#### Comparison of Actual and Predicted Values of the Target Variable
+#### Comparison of Actual and Predicted Values
 
 Furthermore, predictions and the true birth weight values are explored in comparison using @fig-assess. Since the the birth weight data was fitted in an original scale, this plot is already in an original scale without the need to transform back the data.
 
@@ -304,21 +301,21 @@ Furthermore, predictions and the true birth weight values are explored in compar
 final_plot
 ```
 
-Most data are clustered in the middle range of around 3000 to 4000 grams. While a large number of observations are close to the reference line, there is a large number of observations that deviate from the reference line, especially for observations on the extreme ends of the data range. On the lower end of the data, there are outliers where the actual birth weights are much lower than the predicted birth weight. Similarly, on the higher end of the data, there are clusters of actual birth weights that are much higher than the predicted birth weight. @fig-assess shows that the final model fitted to the entire training dataset is not a perfect predictor according to the testing dataset. While the model is able to predict the birth weight of babies to a certain extent, the predictions are not perfectly accurate.
+Most data are clustered in the middle range of around 3000 to 4000 grams. While a large number of observations are close to the reference line, there is a large number of observations that deviate from the reference line, especially for observations on the extreme ends of the data range. On the lower end of the data, there are outliers where the actual birth weights are much lower than the predicted birth weight. Similarly, on the higher end of the data, there are clusters of actual birth weights that are much higher than the predicted birth weight. @fig-assess shows that the final model fitted to the entire training dataset is not an exceptionally accurate predictor according to the testing dataset. While the model is able to predict the birth weight of babies to a certain extent, the predictions are not perfectly accurate.
 
-#### Final Model Result
+#### Final Fit Performance
 
-Overall, considering these metrics and the context provided, the Random Forest model appears to perform reasonably well. It exhibits relatively low errors in the context of the target variable, a moderate level of variance explained by the model, and a relatively small percentage error in predictions. Therefore, it can be concluded that the model performs moderately well for the given problem.
+Overall, considering the metrics and the context provided, the Random Forest model fitted to the entire training dataset appears to perform reasonably well on the testing dataset. It exhibits relatively low errors in the context of the target variable, a moderate level of variance explained by the model, and a relatively small percentage error in predictions. Therefore, it can be concluded that the model performs moderately well for the given prediction problem.
 
 ## Conclusion
 
 #### Results
 
-The goal of this project was to predict the weight of the baby at birth based on data on the biological and psychological factors of the mother and baby in pregnancy during a pandemic. This regression problem was best predicted using a Random Forest Model using a kitchen sink recipe. The recipe was created from removing non-predictor variables, zero-variance variables, dummy encoding nominal variables, imputing missing variables using k nearest neighbor method, and normalizing all numeric data to have a standard deviation of one and a mean of zero. This model had a moderately good performance based on the context of the `baby_weight` data with a Root Mean Squared Error of 395.24 and a Mean Absolute Percentage Error of 10.01%.
+The goal of this project was to predict the weight of the baby at birth based on data on the biological and psychological factors of the mother and baby in pregnancy during a pandemic. This regression problem was best predicted using a Random Forest Model using a kitchen sink recipe. The recipe was created from removing non-predictor variables, zero-variance variables, dummy encoding nominal variables, imputing missing variables using K Nearest Neighbor method, and normalizing all numeric data to have a standard deviation of one and a mean of zero. A simple recipe worked the best for this prediction problem. This model had a moderately good performance based on the context of the baby weight data with a Root Mean Squared Error of 395.44 and a Mean Absolute Percentage Error of 10.02%.
 
 #### Evaluation
 
-One aspect for potential enhancement in this project is the feature engineering of the recipes. The customized recipe underperformed the kitchen sink recipe for all models. This means that there may still be room for improvement in creating a better recipe, particularly in enhancing the explanatory power and reducing prediction errors further. While multiple features like variable interactions, data transformations, and different imputation methods were explored in various combination, it was difficult to create a customized recipe that significantly outperformed the kitchen sink recipe.
+One aspect for potential enhancement in this project is the feature engineering of the recipes. The customized recipe underperformed the kitchen sink recipe for all models. While a simple recipe may work the best in some circumstances, this may also mean that there is still be room for improvement in creating a better recipe, particularly in enhancing the explanatory power and reducing prediction errors further. While multiple features like variable interactions, data transformations, and different imputation methods were explored in various combination, it was difficult to create a customized recipe that significantly outperformed the kitchen sink recipe.
 
 One possible reason for this is that the variables used to predict the target variables may have not had a large influence on the target variable of interest. For instance, the depression levels, household income, and the age of the mother may not have been correlated to the baby's birth weight, thus the model may have not had good predictors to accurately predict the weight of the baby at birth. In addition, there was little variance in the target variable compared to the number of observations. Because birth weight data has a small interquartile range compared to its median and range, it may have been harder for models to make accurate predictions.
 
@@ -328,7 +325,7 @@ Another point of further investigation is that the RMSE of the model fitted to m
 
 Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). *Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset.* Data in brief, 49, 109366. https://doi.org/10.1016/j.dib.2023.109366
 
-## Appendix: EDA
+## Appendix: EDA (Exploratory Data Analysis)
 
 @fig-appendix-eda1 shows the distribution of `postnatal_depression` variable in the original scale and the square-root transformed scale.
 
@@ -365,4 +362,25 @@ ggplot(pregnancy_train, aes(x = postnatal_depression, y = promis_anxiety)) +
   labs(title = "Postnatal Depression vs. PROMIS Anxiety Levels",
        x = "Postnatal Depression",
        y = "PROMIS Anxiety")
+```
+
+## Appendix: RMSE Parameters (Autoplots)
+
+@fig-autoplots
+
+```{r}
+#| label: fig-autoplots
+#| fig-cap: "Autoplot of Best Parameters for Each Model"
+#| echo: false
+
+lasso1_auto
+lasso2_auto
+ridge1_auto
+ridge2_auto
+knn1_auto
+knn2_auto
+bt1_auto
+bt2_auto
+rf1_auto
+rf2_auto
 ```
