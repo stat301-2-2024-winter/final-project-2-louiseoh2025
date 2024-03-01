@@ -33,7 +33,8 @@ knn_workflow1 <- workflow() |>
   add_model(knn_spec) |> 
   add_recipe(recipe1_tree)
 # hyperparameter tuning grid
-knn_params <- parameters(knn_spec)
+knn_params <- hardhat::extract_parameter_set_dials(knn_spec) |> 
+  update(neighbors = neighbors(range = c(40, 80)))
 # build tuning grid
 knn_grid <- grid_regular(knn_params, levels = 15)
 # fit workflow/model

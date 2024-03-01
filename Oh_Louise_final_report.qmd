@@ -157,7 +157,7 @@ From the kitchen sink recipe, the following steps were added based on an explora
 
 -   Apply square root transformation to postnatal depression for normality:
 
-    -   Before the predictors were normalized, the postnatal depression data was transformed for a normal distribution. This decision was based on a univariate analysis shown in @fig-appendix-eda1 (see Appendix: EDA). **add research proof**
+    -   Before the predictors were normalized, the postnatal depression data was transformed for a normal distribution. This decision was based on a univariate analysis shown in @fig-appendix-eda1 (see Appendix: EDA). 
 
 -   Add interaction term between PROMIS anxiety and postnatal depression levels:
 
@@ -179,38 +179,30 @@ From the kitchen sink recipe, the following steps were added based on an explora
 
 -   Elastic Net: Lasso Regression (glmnet engine):
 
-    -   The mixture was set to 0 for lasso regression.
-    -   The penalty was tuned.
-    -   The number of values of each parameter to use to make the regular grid was set to level 10, creating 100 different combinations of results. 
+    -   The mixture was set to 1 for lasso regression.
+    -   The penalty was explored over \[ , \] with 10 levels.
 
 -   Elastic Net: Ridge Regression (glmnet engine):
 
-    -   The mixture was set to 1 for ridge regression. 
-    -   The penalty was tuned.
-    -   The number of values of each parameter to use to make the regular grid was set to level 10, creating 100 different combinations of results. 
-
+    -   The mixture was set to 0 for ridge regression.
+    -   The penalty was explored over \[ , \] with 10 levels.
 
 -   K Nearest Neighbor (kknn engine):
 
-    -   The neighbors was explored over with 10 levels.
-    -   The number of values of each parameter to use to make the regular grid was set to level 10, creating 100 different combinations of results. 
+    -   The neighbors was explored over \[25, 40\] with 15 levels.
 
 -   Boosted Tree (xgboost engine):
 
-    -   The number of randomly selected predictors to split on was explored over with 2 to 25 levels, since there were 43 predictors used in my recipe. 
-    -   The minimum number of data points in a node for splitting was explored over with 2 to 25 levels. 
-    -   The learning rate was explored over with 10 levels.
-    -   The number of values of each parameter to use to make the regular grid was set to level 5, creating 25 different combinations of results. 
+    -   The number of trees was set to 1000, a standard number for tree-based models.
+    -   The number of randomly selected predictors to split on was explored over \[2, 25\] with 5 level s, since there were 43 predictors used in my recipe.
+    -   The minimum number of data points in a node for splitting was explored over \[2, 25\] with 5 levels.
+    -   The learning rate was explored over \[ , \] with 5 levels.
 
 -   Random Forest (ranger engine):
 
-    -   The number of trees was set to 1000, a standard number for random forest models. 
-
-    -   The number of randomly selected predictors to split on was explored over with 2 to 25 levels. 
-
-    -   The minimum number of data points in a node for splitting was explored over with 2 to 25 levels.
-    
-    - The number of values of each parameter to use to make the regular grid was set to level 5, creating 25 different combinations of results. 
+    -   The number of trees was set to 1000, a standard number for tree-based models.
+    -   The number of randomly selected predictors to split on was explored over \[2, 25\] with 5 levels.
+    -   The minimum number of data points in a node for splitting was explored over \[2, 25\] with 5 levels.
 
 #### Metrics
 
@@ -225,13 +217,27 @@ RMSE, MAE, RSQ, and MAPE are used to assess the final model. These four metrics 
 
 ## Model Building & Selection Results
 
-#### Best Tuning Parameters
+#### Comparing Submodels
 
-The lasso regression, ridge regression, k nearest neighbor, boosted tree, and random forest models had their parameters tuned. @tbl-parameters shows the best parameters of each model adjusted to and used to fit the data.
+The lasso regression, ridge regression, k nearest neighbor, boosted tree, and random forest models had their parameters tuned. Sub-models and the tuning process for each model types were examined. First, @fig-autoplots-better is a visual inspection of autoplots. The models are evaluated based on their RMSE, which was previously selected as the comparison metric. @fig-autoplots-better only shows the plots for each model type using the better performing recipe. See @fig-autoplots for RMSE autoplots for all models (See Appendix: EDA).
+
+```{r}
+#| label: fig-autoplots-better
+#| fig-cap: "Autoplot of Best Parameters for Models Fitted Using the Better Recipe "
+#| echo: false
+
+lasso1_auto
+ridge1_auto
+knn2_auto
+bt1_auto
+rf1_auto
+```
+
+It is easier to view the best hyperparameters, using RMSE for comparison, on each of the objects containing the tuning information. @tbl-parameters shows the best hyperparameters of each model adjusted to and used to fit the data for both recipes.
 
 ```{r}
 #| label: tbl-parameters
-#| tbl-cap: "Table of Best Parameters for Each Model"
+#| tbl-cap: "Table of Best Hyperparameters for Each Model"
 #| echo: false
 
 lasso_best
@@ -253,21 +259,7 @@ rf_best
 tbl_rmse
 ```
 
-Comparing the RMSE values across models, it is evident that all complex models outperform the null model significantly. The null model yields an RMSE of 535.04, whereas even the least performing complex model, like the K Nearest Neighbor using recipe 2, has an RMSE of 502.93, showcasing a significant improvement. The best performing model, the Random Forest model using recipe 1, substantially reduces the RMSE by approximately 135.91 units from the null model. 
-
-Next, @fig-autoplots-better shows figures that plot the RMSE by . See @fig-autoplots for RMSE autoplots for all models (See Appendix: EDA).
-
-```{r}
-#| label: fig-autoplots-better
-#| fig-cap: "Autoplot of Best Parameters for Models Fitted Using the Better Recipe "
-#| echo: false
-
-lasso1_auto
-ridge1_auto
-knn2_auto
-bt1_auto
-rf1_auto
-```
+Comparing the RMSE values across models, it is evident that all complex models outperform the null model significantly. The null model yields an RMSE of 535.04, whereas even the least performing complex model, like the K Nearest Neighbor using recipe 2, has an RMSE of 502.93, showcasing a significant improvement. The best performing model, the Random Forest model using recipe 1, substantially reduces the RMSE by approximately 135.91 units from the null model.
 
 #### Best Model Selection
 
@@ -323,7 +315,7 @@ Another point of further investigation is that the RMSE of the model fitted to m
 
 ## References
 
-Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. https://doi.org/10.1176/appi.ajp.2020.20030305 
+Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. https://doi.org/10.1176/appi.ajp.2020.20030305
 
 Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. https://doi.org/10.1016/j.dib.2023.109366
 

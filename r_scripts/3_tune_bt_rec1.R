@@ -26,6 +26,7 @@ load(here("recipes/pregnancy_recipes.rda"))
 ## USING RECIPE 1 tree -----
 # model specification
 bt_spec <- boost_tree(mode = "regression",
+                      trees = 1000,
                       min_n = tune(),
                       mtry = tune(), 
                       learn_rate = tune()) |> 

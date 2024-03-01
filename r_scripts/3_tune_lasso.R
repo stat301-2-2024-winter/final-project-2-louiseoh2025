@@ -26,7 +26,7 @@ load(here("recipes/pregnancy_recipes.rda"))
 ## USING RECIPE 1 -----
 # model specification
 lasso_spec <- linear_reg(penalty = tune(), 
-                         mixture = 0) |> 
+                         mixture = 1) |> 
   set_engine("glmnet") |> 
   set_mode("regression")
 # define workflow
@@ -36,7 +36,7 @@ lasso_workflow1 <- workflow() |>
 # hyperparameter tuning grid
 lasso_params <- hardhat::extract_parameter_set_dials(lasso_spec)
 # build tuning grid
-lasso_grid <- grid_regular(lasso_params, levels = 10)
+lasso_grid <- grid_regular(lasso_params, levels = 10) 
 # fit workflow/model
 lasso_tuned1 <- lasso_workflow1 |> 
   tune_grid(
@@ -49,7 +49,7 @@ lasso_tuned1 <- lasso_workflow1 |>
 ## USING RECIPE 2 -----
 # model specification
 lasso_spec <- linear_reg(penalty = tune(), 
-                         mixture = 0) |> 
+                         mixture = 1) |> 
   set_engine("glmnet") |> 
   set_mode("regression")
 # define workflow

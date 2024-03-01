@@ -26,7 +26,7 @@ load(here("recipes/pregnancy_recipes.rda"))
 ## USING RECIPE 1 -----
 # model specification
 ridge_spec <- linear_reg(penalty = tune(), 
-                         mixture = 1) |> 
+                         mixture = 0) |> 
   set_engine("glmnet") |> 
   set_mode("regression")
 # define workflow
@@ -49,7 +49,7 @@ ridge_tuned1 <- ridge_workflow1 |>
 ## USING RECIPE 2 -----
 # model specification
 ridge_spec <- linear_reg(penalty = tune(), 
-                         mixture = 1) |> 
+                         mixture = 0) |> 
   set_engine("glmnet") |> 
   set_mode("regression")
 # define workflow
