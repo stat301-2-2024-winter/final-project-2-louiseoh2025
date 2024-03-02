@@ -45,38 +45,38 @@ lasso2_auto <- autoplot(lasso_tuned2, metric = "rmse") +
 # ridge
 ridge1_auto <- autoplot(ridge_tuned1, metric = "rmse") + 
   theme_minimal()  +
-  labs(title = "Ridge Regression Model",
+  labs(title = "Ridge Regression",
        subtitle = "recipe 1 (parametric)")
 ridge2_auto <- autoplot(ridge_tuned2, metric = "rmse") + 
   theme_minimal()  +
-  labs(title = "Ridge Regression Model",
-       subtitle = "recipe 2 (parametric)")
+  labs(title = "Ridge Regression",
+       subtitle = "recipe 1 (parametric)")
 # knn
 knn1_auto <- autoplot(knn_tuned1, metric = "rmse") + 
   theme_minimal() +
-  labs(title = "K Nearest Neighbor Model",
+  labs(title = "K Nearest Neighbor",
        subtitle = "recipe 1 (tree)")
 knn2_auto <- autoplot(knn_tuned2, metric = "rmse") + 
   theme_minimal() +
-  labs(title = "K Nearest Neighbor Model",
+  labs(title = "K Nearest Neighbor",
        subtitle = "recipe 2 (tree)")
 # bt
 bt1_auto <- autoplot(bt_tuned1, metric = "rmse") + 
   theme_minimal() +
-  labs(title = "Boosted Tree Model",
+  labs(title = "Boosted Tree",
        subtitle = "recipe 1 (tree)")
 bt2_auto <- autoplot(bt_tuned2, metric = "rmse") + 
   theme_minimal() +
-  labs(title = "Boosted Tree Model",
+  labs(title = "Boosted Tree",
        subtitle = "recipe 2 (tree)")
 # rf
 rf1_auto <- autoplot(rf_tuned1, metric = "rmse") + 
   theme_minimal() +
-  labs(title = "Random Forest Model",
+  labs(title = "Random Forest",
        subtitle = "recipe 1 (tree)")
 rf2_auto <- autoplot(rf_tuned2, metric = "rmse") + 
   theme_minimal() +
-  labs(title = "Random Forest Model",
+  labs(title = "Random Forest",
        subtitle = "recipe 2 (tree)")
 
 # save model tuning para analysis autoplots

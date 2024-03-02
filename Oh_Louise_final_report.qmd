@@ -111,7 +111,7 @@ target_dist
 target_stats
 ```
 
-## Methods
+## Model Building & Selection Methods
 
 #### Data Splitting
 
@@ -180,23 +180,23 @@ From the kitchen sink recipe, the following steps were added based on an explora
 -   Elastic Net: Lasso Regression (glmnet engine):
 
     -   The mixture was set to 1 for lasso regression.
-    -   The penalty was explored over \[ , \] with 10 levels.
+    -   The penalty was tuned but not updated and explored over with 5 levels.
 
 -   Elastic Net: Ridge Regression (glmnet engine):
 
     -   The mixture was set to 0 for ridge regression.
-    -   The penalty was explored over \[ , \] with 10 levels.
+    -   The penalty was tuned but not updated and explored over with 5 levels.
 
 -   K Nearest Neighbor (kknn engine):
 
-    -   The neighbors was explored over \[25, 40\] with 15 levels.
+    -   The neighbors was explored over \[40, 80\] with 15 levels.
 
 -   Boosted Tree (xgboost engine):
 
     -   The number of trees was set to 1000, a standard number for tree-based models.
     -   The number of randomly selected predictors to split on was explored over \[2, 25\] with 5 level s, since there were 43 predictors used in my recipe.
     -   The minimum number of data points in a node for splitting was explored over \[2, 25\] with 5 levels.
-    -   The learning rate was explored over \[ , \] with 5 levels.
+    -   The learning rate was tuned but not updated.
 
 -   Random Forest (ranger engine):
 
@@ -219,21 +219,39 @@ RMSE, MAE, RSQ, and MAPE are used to assess the final model. These four metrics 
 
 #### Comparing Submodels
 
-The lasso regression, ridge regression, k nearest neighbor, boosted tree, and random forest models had their parameters tuned. Sub-models and the tuning process for each model types were examined. First, @fig-autoplots-better is a visual inspection of autoplots. The models are evaluated based on their RMSE, which was previously selected as the comparison metric. @fig-autoplots-better only shows the plots for each model type using the better performing recipe. See @fig-autoplots for RMSE autoplots for all models (See Appendix: EDA).
+The lasso regression, ridge regression, k nearest neighbor, boosted tree, and random forest models had their parameters tuned. Sub-models and the tuning process for each model types were examined. First, a visual inspection of autoplots was done over each model using the better recipe. (See Appendix: RMSE by Model Parameters for autoplots of all models)
+
+@fig-autoplot-en1 shows the RMSE by parameters for the elastic net models (Lasso and Ridge Regressions) using the kitchen sink recipe. 
 
 ```{r}
-#| label: fig-autoplots-better
-#| fig-cap: "Autoplot of Best Parameters for Models Fitted Using the Better Recipe "
+#| label: fig-autoplot-en1
+#| fig-cap: "RMSE by Hyperparameters of Elastic Net (recipe 1) Models"
 #| echo: false
 
-lasso1_auto
-ridge1_auto
-knn2_auto
-bt1_auto
-rf1_auto
+(lasso1_auto + ridge1_auto)
 ```
 
-It is easier to view the best hyperparameters, using RMSE for comparison, on each of the objects containing the tuning information. @tbl-parameters shows the best hyperparameters of each model adjusted to and used to fit the data for both recipes.
+@fig-autoplot-knn2 shows the RMSE by parameters for the K Nearest Neighbor models using the customized recipe. 
+
+```{r}
+#| label: fig-autoplot-knn2
+#| fig-cap: "RMSE by Hyperparameters of K Nearest Neighbor (recipe 2) Model"
+#| echo: false
+
+knn2_auto
+```
+
+@fig-autoplot-tree1 shows the RMSE by parameters for the other Boosted Tree and Random Forest models using the kitchen sink recipe. 
+
+```{r}
+#| label: fig-autoplot-tree1
+#| fig-cap: "RMSE by Hyperparameters of Tree-Based (recipe 1) Models"
+#| echo: false
+
+(bt1_auto + rf1_auto)
+```
+
+It is easier to view the best hyperparameters by RMSE for comparison on each of the objects containing the tuning information. @tbl-parameters shows the best hyperparameters of each model adjusted to and used to fit the data for both recipes.
 
 ```{r}
 #| label: tbl-parameters
@@ -247,7 +265,7 @@ bt_best
 rf_best
 ```
 
-#### Comparing RMSE Metric
+#### Selecting A Model: RMSE 
 
 @tbl-analysis presents the RMSE (Root Mean Square Error) values for different models created with both recipes, serving as indicators of predictive accuracy. Among the listed models, the Random Forest model using the kitchen sink recipe stands out, boasting the lowest RMSE of 399.13. On average, the birth weight predictions made by the Random Forest model using recipe 1 are approximately 399.13 grams away from the actual birth weights The standard error is 3.228117 suggests that the RMSE value potentially deviates by approximately 3.23 units from the true error on average. Still, the Random Forest model excels in accurately predicting outcomes compared to others. Consequently, when prioritizing precise predictions, selecting **the Random Forest model using recipe 1 would be the most favorable option**.
 
@@ -259,9 +277,9 @@ rf_best
 tbl_rmse
 ```
 
-Comparing the RMSE values across models, it is evident that all complex models outperform the null model significantly. The null model yields an RMSE of 535.04, whereas even the least performing complex model, like the K Nearest Neighbor using recipe 2, has an RMSE of 502.93, showcasing a significant improvement. The best performing model, the Random Forest model using recipe 1, substantially reduces the RMSE by approximately 135.91 units from the null model.
+Comparing the RMSE values across models, it is evident that all complex models outperform the null model significantly. The null model yields an RMSE of 535.04, whereas even the worst performing complex model, like the K Nearest Neighbor using recipe 1, has an RMSE of 491.90, showcasing a significant improvement. The best performing model, the Random Forest model using recipe 1, substantially reduces the RMSE by approximately 135.91 units from the null model.
 
-#### Best Model Selection
+#### The Best Model 
 
 The Random Forest is the best performing model based on the RMSE metrics across models. It is not entirely surprising that a Random Forest model outperforms other models in this scenario. Random Forest's ensemble approach, ability to capture non-linear relationships, and robustness to noise and overfitting often contribute to its superior performance. Additionally, its handling of categorical variables and less sensitivity to feature scaling can provide advantages over other models. Since predictor variable transformation performed in recipe 2 does not have a large impact on tree-based models, it was expected that recipes 1 and 2 would have similar perfromance. However, it is surprising that recipe 1 worked better on the random forest model since it is a very simple kichen sink recipe.
 
@@ -358,23 +376,55 @@ ggplot(pregnancy_train, aes(x = postnatal_depression, y = promis_anxiety)) +
        y = "PROMIS Anxiety")
 ```
 
-## Appendix: RMSE Parameters (Autoplots)
+## Appendix: RMSE by Model Parameters (Autoplots)
 
-@fig-autoplots
+@fig-autoplot-lasso shows the RMSE by hyperparameters of the Lasso Regression Models by recipe.
 
 ```{r}
-#| label: fig-autoplots
-#| fig-cap: "Autoplot of Best Parameters for Each Model"
+#| label: fig-autoplot-lasso
+#| fig-cap: "RMSE by Hyperparameters of Lasso Regression Models"
 #| echo: false
 
-lasso1_auto
-lasso2_auto
-ridge1_auto
-ridge2_auto
-knn1_auto
-knn2_auto
-bt1_auto
-bt2_auto
-rf1_auto
-rf2_auto
+(lasso1_auto + lasso2_auto)
 ```
+
+@fig-autoplot-ridge shows the RMSE by hyperparameters of the Ridge Regression Models by recipe. 
+
+```{r}
+#| label: fig-autoplot-ridge
+#| fig-cap: "RMSE by Hyperparameters of Ridge Regression Models"
+#| echo: false
+
+(ridge1_auto + ridge2_auto) 
+```
+
+@fig-autoplot-knn shows the RMSE by hyperparameters of the K Nearest Neighbor Models by recipe. 
+
+```{r}
+#| label: fig-autoplot-knn
+#| fig-cap: "RMSE by Hyperparameters of K Nearest Neighbor Models"
+#| echo: false
+
+(knn1_auto + knn2_auto)
+```
+
+@fig-autoplot-bt shows the RMSE by hyperparameters of the Boosted Tree models by recipe. 
+
+```{r}
+#| label: fig-autoplot-bt
+#| fig-cap: "RMSE by Hyperparameters of Boosted Tree Models"
+#| echo: false
+
+(bt1_auto + bt2_auto)
+```
+
+@fig-autoplot-rf shows the RMSE by hyperparameters of the Random Forest models by recipe. 
+
+```{r}
+#| label: fig-autoplot-rf
+#| fig-cap: "RMSE by Hyperparameters of Random Forest Models"
+#| echo: false
+
+(rf1_auto + rf2_auto)
+```
+

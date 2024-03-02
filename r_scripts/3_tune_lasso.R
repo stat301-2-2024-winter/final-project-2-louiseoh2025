@@ -36,7 +36,7 @@ lasso_workflow1 <- workflow() |>
 # hyperparameter tuning grid
 lasso_params <- hardhat::extract_parameter_set_dials(lasso_spec)
 # build tuning grid
-lasso_grid <- grid_regular(lasso_params, levels = 10) 
+lasso_grid <- grid_regular(lasso_params, levels = 5) 
 # fit workflow/model
 lasso_tuned1 <- lasso_workflow1 |> 
   tune_grid(
@@ -59,7 +59,7 @@ lasso_workflow2 <- workflow() |>
 # hyperparameter tuning grid
 lasso_params <- hardhat::extract_parameter_set_dials(lasso_spec)
 # build tuning grid
-lasso_grid <- grid_regular(lasso_params, levels = 10)
+lasso_grid <- grid_regular(lasso_params, levels = 5)
 # fit workflow/model
 lasso_tuned2 <- lasso_workflow2 |> 
   tune_grid(
