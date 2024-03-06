@@ -50,7 +50,7 @@ ridge1_auto <- autoplot(ridge_tuned1, metric = "rmse") +
 ridge2_auto <- autoplot(ridge_tuned2, metric = "rmse") + 
   theme_minimal()  +
   labs(title = "Ridge Regression",
-       subtitle = "recipe 1 (parametric)")
+       subtitle = "recipe 2 (parametric)")
 # knn
 knn1_auto <- autoplot(knn_tuned1, metric = "rmse") + 
   theme_minimal() +
@@ -89,19 +89,18 @@ save(lasso1_auto, lasso2_auto,
 
 ## TUNED MODEL PARAMETERS -----
 lasso1_best <- select_best(lasso_tuned1, metric = "rmse") |> 
-  mutate(recipe = "recipe 1 (parametric)")
+  mutate(recipe = "recipe 1 (parametric)") 
 lasso2_best <- select_best(lasso_tuned2, metric = "rmse") |> 
   mutate(recipe = "recipe 2 (parametric)")
 lasso_best <- bind_rows(lasso1_best, lasso2_best) |> 
-  select(recipe, everything()) |> 
+  select(recipe, everything(), -.config) |> 
   kable(caption = "Lasso Regression")
-lasso_best
 ridge1_best <- select_best(ridge_tuned1, metric = "rmse") |> 
   mutate(recipe = "recipe 1 (parametric)")
 ridge2_best <- select_best(ridge_tuned2, metric = "rmse") |> 
   mutate(recipe = "recipe 2 (parametric)")
 ridge_best <- bind_rows(ridge1_best, ridge2_best) |> 
-  select(recipe, everything()) |> 
+  select(recipe, everything(), -.config) |> 
   kable(caption = "Ridge Regression")
 ridge_best
 knn1_best <- select_best(knn_tuned1, metric = "rmse") |> 
@@ -109,7 +108,7 @@ knn1_best <- select_best(knn_tuned1, metric = "rmse") |>
 knn2_best <- select_best(knn_tuned2, metric = "rmse") |> 
   mutate(recipe = "recipe 2 (tree)")
 knn_best <- bind_rows(knn1_best, knn2_best) |> 
-  select(recipe, everything()) |> 
+  select(recipe, everything(), -.config) |> 
   kable(caption = "K Nearest Neighbor")
 knn_best
 bt1_best <- select_best(bt_tuned1, metric = "rmse") |> 
@@ -117,7 +116,7 @@ bt1_best <- select_best(bt_tuned1, metric = "rmse") |>
 bt2_best <- select_best(bt_tuned2, metric = "rmse") |> 
   mutate(recipe = "recipe 2 (tree)")
 bt_best <- bind_rows(bt1_best, bt2_best) |> 
-  select(recipe, everything()) |> 
+  select(recipe, everything(), -.config) |> 
   kable(caption = "Boosted Tree")
 bt_best
 rf1_best <- select_best(rf_tuned1, metric = "rmse") |> 
@@ -125,7 +124,7 @@ rf1_best <- select_best(rf_tuned1, metric = "rmse") |>
 rf2_best <- select_best(rf_tuned2, metric = "rmse") |> 
   mutate(recipe = "recipe 2 (tree)")
 rf_best <- bind_rows(rf1_best, rf2_best) |> 
-  select(recipe, everything()) |> 
+  select(recipe, everything(), -.config) |> 
   kable(caption = "Random Forest")
 rf_best
 
