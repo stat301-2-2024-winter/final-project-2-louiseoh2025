@@ -3051,7 +3051,7 @@ Github Repo Link
 </div>
 <section id="introduction" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<div class="page-columns page-full"><p>The COVID-19 pandemic was a substantial stressor, especially for pregnant individuals. The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is a dataset used in a research study aimed to understand the impact of COVID-19-related stresses on pregnant women and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project (Lebel et al., 2023)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19" class="uri">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li><li id="fn2"><p><sup>2</sup> Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. — <a href="https://doi.org/10.1176/appi.ajp.2020.20030305">https://doi.org/10.1176/appi.ajp.2020.20030305</a></p></li></div></div>
+<div class="page-columns page-full"><p>The COVID-19 pandemic was a substantial stressor, especially for pregnant individuals. The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is a dataset used in a research study aimed to understand the impact of COVID-19-related stresses on pregnant women and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project (Lebel et al., 2023)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19" class="uri">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li><li id="fn2"><p><sup>2</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19" class="uri">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li></div></div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3510,7 +3510,7 @@ Prediction Research Objective
 </div>
 </section>
 </section>
-<section id="model-building-selection-methods" class="level2">
+<section id="model-building-selection-methods" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="model-building-selection-methods">Model Building &amp; Selection Methods</h2>
 <section id="data-splitting" class="level4">
 <h4 class="anchored" data-anchor-id="data-splitting">Data Splitting</h4>
@@ -3520,7 +3520,7 @@ Prediction Research Objective
 <h4 class="anchored" data-anchor-id="resampling">Resampling</h4>
 <p>This dataset is relatively small for machine learning. Therefore, repeated V-fold cross-validation with 10 folds and 5 repeats are performed on the training data. This provides a robust estimate of model performance as, each model will be trained and evaluated 50 times, covering various combinations of training and validation data. This is better than simply fitting and testing the models because it prevents overfitting and improves parameter and model accuracy by taking the uncertainty into account.</p>
 </section>
-<section id="recipes" class="level4">
+<section id="recipes" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="recipes">Recipes</h4>
 <p>There are two distinct recipes fitted into all model types: the Kitchen Sink recipe (recipe 1) and a customized recipe (recipe 2). There are two versions of each recipe, one for parametric models and one for non-parametric/tree-based models.</p>
 <p><strong>Kitchen Sink Recipe (recipe 1):</strong></p>
@@ -3557,10 +3557,10 @@ Prediction Research Objective
 </ul></li>
 <li><p>Add interaction term between PROMIS anxiety and postnatal depression levels.</p>
 <ul>
-<li>Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This decision is backed up by secondary research that showed evidence that anxiety, oftentimes, may occur as a symptom of clinical depression. Similarly, it is common to have depression that is triggered by an anxiety disorder, including general, panic, and separation anxiety disorders. Many people have a diagnosis of both an anxiety disorder and clinical depression (Kalin, 2020)[Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., &amp; van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. — <a href="https://doi.org/10.1016/j.dib.2023.109366">https://doi.org/10.1016/j.dib.2023.109366</a>]. A bivariate analysis in <a href="#fig-appendix-eda2">Figure 7</a> also showed that these two variables had a strong linear correlation with a correlation coefficient of around 0.8 (see Appendix: EDA).</li>
+<li>Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This decision is backed up by secondary research that showed evidence that anxiety, oftentimes, may occur as a symptom of clinical depression. Similarly, it is common to have depression that is triggered by an anxiety disorder, including general, panic, and separation anxiety disorders. Many people have a diagnosis of both an anxiety disorder and clinical depression (Kalin, 2020)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. A bivariate analysis in <a href="#fig-appendix-eda2">Figure 7</a> also showed that these two variables had a strong linear correlation with a correlation coefficient of around 0.8 (see Appendix: EDA).</li>
 </ul></li>
 </ul>
-<p>Recipe for tree-based model had interaction terms removed. Interaction terms are often unnecessary and potentially detrimental when using tree-based models. Focusing on simpler feature representations allows tree-based models to leverage their strengths in capturing complex interactions while maintaining interpretability and generalization performance. Recipe for tree-based model was one-hot dummy encoded, just like the kitchen sink recipe.</p>
+<div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup> Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., &amp; van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. — <a href="https://doi.org/10.1016/j.dib.2023.109366" class="uri">https://doi.org/10.1016/j.dib.2023.109366</a></p></li></div><p>Recipe for tree-based model had interaction terms removed. Interaction terms are often unnecessary and potentially detrimental when using tree-based models. Focusing on simpler feature representations allows tree-based models to leverage their strengths in capturing complex interactions while maintaining interpretability and generalization performance. Recipe for tree-based model was one-hot dummy encoded, just like the kitchen sink recipe.</p>
 </section>
 <section id="model-type-and-parameter-tuning" class="level4">
 <h4 class="anchored" data-anchor-id="model-type-and-parameter-tuning">Model Type and Parameter Tuning</h4>
@@ -3975,12 +3975,12 @@ Prediction Research Objective
 </section>
 <section id="references" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="references">References</h2>
-<div class="page-columns page-full"><p>Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. (https://doi.org/10.1176/appi.ajp.2020.20030305)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup> https://doi.org/10.1176/appi.ajp.2020.20030305</p></li></div></div>
-<div class="page-columns page-full"><p>Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., &amp; van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. (https://doi.org/10.1016/j.dib.2023.109366)<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup> https://doi.org/10.1016/j.dib.2023.109366</p></li></div></div>
+<div class="page-columns page-full"><p>Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. (https://doi.org/10.1176/appi.ajp.2020.20030305)<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup> https://doi.org/10.1176/appi.ajp.2020.20030305</p></li></div></div>
+<div class="page-columns page-full"><p>Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., &amp; van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. (https://doi.org/10.1016/j.dib.2023.109366)<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup> https://doi.org/10.1016/j.dib.2023.109366</p></li></div></div>
 </section>
 <section id="appendix-eda-exploratory-data-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="appendix-eda-exploratory-data-analysis">Appendix: EDA (Exploratory Data Analysis)</h2>
-<p><a href="#fig-appendix-eda1">Figure 6</a> shows the distribution of <code>postnatal_depression</code> variable in the original scale and the square-root transformed scale.</p>
+<p><a href="#fig-appendix-eda1">Figure 6</a> shows the distribution of postnatal depression level in the original scale and the square-root transformed scale.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-appendix-eda1" class="quarto-figure quarto-figure-center anchored">
@@ -3991,7 +3991,7 @@ Prediction Research Objective
 </div>
 </div>
 </div>
-<p><a href="#fig-appendix-eda2">Figure 7</a> shows a scatterplot to examine the relationship between the <code>postnatal_depression</code> and <code>promis_anxiety</code> variables.</p>
+<p><a href="#fig-appendix-eda2">Figure 7</a> shows a scatterplot to examine the relationship between the postnatal depression and PROMIS anxiety levels of pregnant mothers.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-appendix-eda2" class="quarto-figure quarto-figure-center anchored">

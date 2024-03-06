@@ -50,9 +50,11 @@ load(here("analysis/assess_final_fit.rda"))
 
 ## Introduction
 
-The COVID-19 pandemic was a substantial stressor, especially for pregnant individuals. The Mental Health In Pregnancy During COVID-19 Dataset[^1] is a dataset used in a research study aimed to understand the impact of COVID-19-related stresses on pregnant women and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project (Lebel et al., 2023)^[Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. --- [https://doi.org/10.1176/appi.ajp.2020.20030305](https://doi.org/10.1176/appi.ajp.2020.20030305)]. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.
+The COVID-19 pandemic was a substantial stressor, especially for pregnant individuals. The Mental Health In Pregnancy During COVID-19 Dataset[^1] is a dataset used in a research study aimed to understand the impact of COVID-19-related stresses on pregnant women and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project (Lebel et al., 2023)[^1]. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.
 
 [^1]: Mental Health In Pregnancy During COVID-19 --- <https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19>
+
+[^2]: Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. --- <https://doi.org/10.1176/appi.ajp.2020.20030305>
 
 ::: {.callout-note icon="false"}
 ## Prediction Research Objective
@@ -161,9 +163,11 @@ From the kitchen sink recipe, the following steps were added based on an explora
 
 -   Add interaction term between PROMIS anxiety and postnatal depression levels.
 
-    -   Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This decision is backed up by secondary research that showed evidence that anxiety, oftentimes, may occur as a symptom of clinical depression. Similarly, it is common to have depression that is triggered by an anxiety disorder, including general, panic, and separation anxiety disorders. Many people have a diagnosis of both an anxiety disorder and clinical depression (Kalin, 2020)[Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. --- [https://doi.org/10.1016/j.dib.2023.109366](https://doi.org/10.1016/j.dib.2023.109366)]. A bivariate analysis in @fig-appendix-eda2 also showed that these two variables had a strong linear correlation with a correlation coefficient of around 0.8 (see Appendix: EDA).
+    -   Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This decision is backed up by secondary research that showed evidence that anxiety, oftentimes, may occur as a symptom of clinical depression. Similarly, it is common to have depression that is triggered by an anxiety disorder, including general, panic, and separation anxiety disorders. Many people have a diagnosis of both an anxiety disorder and clinical depression (Kalin, 2020)[^3]. A bivariate analysis in @fig-appendix-eda2 also showed that these two variables had a strong linear correlation with a correlation coefficient of around 0.8 (see Appendix: EDA).
 
 Recipe for tree-based model had interaction terms removed. Interaction terms are often unnecessary and potentially detrimental when using tree-based models. Focusing on simpler feature representations allows tree-based models to leverage their strengths in capturing complex interactions while maintaining interpretability and generalization performance. Recipe for tree-based model was one-hot dummy encoded, just like the kitchen sink recipe. 
+
+[^3]: Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. --- <https://doi.org/10.1016/j.dib.2023.109366>
 
 #### Model Type and Parameter Tuning
 
@@ -336,7 +340,7 @@ Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Free
 
 ## Appendix: EDA (Exploratory Data Analysis)
 
-@fig-appendix-eda1 shows the distribution of `postnatal_depression` variable in the original scale and the square-root transformed scale.
+@fig-appendix-eda1 shows the distribution of postnatal depression level in the original scale and the square-root transformed scale.
 
 ```{r}
 #| label: fig-appendix-eda1
@@ -356,7 +360,7 @@ b <- ggplot(pregnancy_train, aes(x = sqrt(postnatal_depression))) +
 (a + b)
 ```
 
-@fig-appendix-eda2 shows a scatterplot to examine the relationship between the `postnatal_depression` and `promis_anxiety` variables.
+@fig-appendix-eda2 shows a scatterplot to examine the relationship between the postnatal depression and PROMIS anxiety levels of pregnant mothers. 
 
 ```{r}
 #| label: fig-appendix-eda2
