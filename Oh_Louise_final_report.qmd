@@ -24,7 +24,8 @@ citation-location: margin
 ::: {.callout-tip icon="false"}
 ## Github Repo Link
 
-<https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git>
+[https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git](https://github.com/stat301-2-2024-winter/final-project-2-louiseoh2025.git)
+
 :::
 
 ```{r}
@@ -50,7 +51,7 @@ load(here("analysis/assess_final_fit.rda"))
 
 ## Introduction
 
-The COVID-19 pandemic was a substantial stressor, especially for pregnant individuals. The Mental Health In Pregnancy During COVID-19 Dataset[^1] is a dataset used in a research study aimed to understand the impact of COVID-19-related stresses on pregnant women and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project (Lebel et al., 2023)[^1]. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.
+The COVID-19 pandemic was a substantial stressor, especially for pregnant individuals. The Mental Health In Pregnancy During COVID-19 Dataset[^1] is a dataset used in a research study aimed to understand the impact of COVID-19-related stresses on pregnant women and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project (Lebel et al., 2023)[^2]. This survey-based data allows for insights that can inform targeted interventions and support strategies to address the impact of COVID-19-related stresses on maternal and infant health.
 
 [^1]: Mental Health In Pregnancy During COVID-19 --- <https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19>
 
@@ -218,7 +219,7 @@ RMSE, MAE, RSQ, and MAPE are used to assess the chosen final model. These four m
 
 #### Comparing Submodels
 
-The lasso regression, ridge regression, k nearest neighbor, boosted tree, and random forest models had their parameters tuned. Sub-models and the tuning process for each model types were examined. First, a visual inspection of autoplots was done over each model using the better recipe. (See Appendix: RMSE by Model Parameters for autoplots of all models)
+The Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models had their parameters tuned. Submodels and the tuning process for each model types were examined. First, a visual inspection of autoplots was done over each model using the better recipe. (See Appendix: RMSE by Model Parameters for autoplots of all models)
 
 @fig-autoplot-en1 shows the RMSE by parameters for the elastic net models (Lasso and Ridge Regressions) using the kitchen sink recipe. 
 

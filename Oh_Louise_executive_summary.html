@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Louise Oh">
-<meta name="dcterms.date" content="2024-02-29">
+<meta name="dcterms.date" content="2024-03-05">
 
 <title>Improving Pregnancy Care During the Pandemic</title>
 <style>
@@ -3022,7 +3022,7 @@ Data Science 2 with R (STAT 301-2)</p><p></p>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 29, 2024</p>
+      <p class="date">March 5, 2024</p>
     </div>
   </div>
   
@@ -3047,7 +3047,7 @@ Github Repo Link
 </div>
 <section id="purpose" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
-<div class="page-columns page-full"><p>The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Mental Health In Pregnancy During COVID-19 — <a href="https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19">https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19</a></p></li></div></div>
+<div class="page-columns page-full"><p>The Mental Health In Pregnancy During COVID-19 Dataset<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is aimed to understand the impact of COVID-19-related stresses on pregnant individuals and their infants and collected survey-based data across Canada as part of the Pregnancy during the COVID-19 Pandemic (PdP) project (Lebel et al., 2023)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> ^1</p></li><li id="fn2"><p><sup>2</sup> Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. — <a href="https://doi.org/10.1176/appi.ajp.2020.20030305" class="uri">https://doi.org/10.1176/appi.ajp.2020.20030305</a></p></li></div></div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3105,44 +3105,44 @@ Prediction Objective
 <tr class="even">
 <td style="text-align: left;">Lasso Regression</td>
 <td style="text-align: left;">recipe 1 (parametric)</td>
-<td style="text-align: right;">420.8793</td>
-<td style="text-align: right;">50</td>
-<td style="text-align: right;">3.301162</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Lasso Regression</td>
-<td style="text-align: left;">recipe 2 (parametric)</td>
-<td style="text-align: right;">420.9762</td>
-<td style="text-align: right;">50</td>
-<td style="text-align: right;">3.297828</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Ridge Regression</td>
-<td style="text-align: left;">recipe 1 (parametric)</td>
 <td style="text-align: right;">420.7347</td>
 <td style="text-align: right;">50</td>
 <td style="text-align: right;">3.329501</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Ridge Regression</td>
+<td style="text-align: left;">Lasso Regression</td>
 <td style="text-align: left;">recipe 2 (parametric)</td>
 <td style="text-align: right;">420.8152</td>
 <td style="text-align: right;">50</td>
 <td style="text-align: right;">3.326704</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">Ridge Regression</td>
+<td style="text-align: left;">recipe 1 (parametric)</td>
+<td style="text-align: right;">420.8793</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.301162</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ridge Regression</td>
+<td style="text-align: left;">recipe 2 (parametric)</td>
+<td style="text-align: right;">420.9762</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.297828</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">K Nearest Neighbor</td>
 <td style="text-align: left;">recipe 1 (tree)</td>
-<td style="text-align: right;">502.9329</td>
+<td style="text-align: right;">491.9024</td>
 <td style="text-align: right;">50</td>
-<td style="text-align: right;">2.732970</td>
+<td style="text-align: right;">2.833431</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">K Nearest Neighbor</td>
 <td style="text-align: left;">recipe 2 (tree)</td>
-<td style="text-align: right;">502.7304</td>
+<td style="text-align: right;">491.6231</td>
 <td style="text-align: right;">50</td>
-<td style="text-align: right;">2.716658</td>
+<td style="text-align: right;">2.816305</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Boosted Tree</td>
@@ -3161,16 +3161,16 @@ Prediction Objective
 <tr class="even">
 <td style="text-align: left;">Random Forest</td>
 <td style="text-align: left;">recipe 1 (tree)</td>
-<td style="text-align: right;">399.2312</td>
+<td style="text-align: right;">399.2334</td>
 <td style="text-align: right;">50</td>
-<td style="text-align: right;">3.228117</td>
+<td style="text-align: right;">3.217119</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Random Forest</td>
 <td style="text-align: left;">recipe 2 (tree)</td>
-<td style="text-align: right;">399.3286</td>
+<td style="text-align: right;">399.3020</td>
 <td style="text-align: right;">50</td>
-<td style="text-align: right;">3.231121</td>
+<td style="text-align: right;">3.220000</td>
 </tr>
 </tbody>
 </table>
@@ -3180,7 +3180,7 @@ Prediction Objective
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
-<p><a href="#tbl-metrics">Table 2</a> shows the metric values used to assess the final model. The magnitude of errors between the model’s predictions and the actual values is approximately 395.25 units, on average. The absolute difference between the model’s predictions and the true values is approximately 302.63 units, on average. Around 48.72% of the variance in the target variable is accounted for by the model’s predictions. The difference between the model’s predictions and the actual values equates to approximately 10.01% of the actual values, on average.</p>
+<p><a href="#tbl-metrics">Table 2</a> shows the metric values used to assess the final model. The magnitude of errors between the model’s predictions and the actual values is approximately 395.44 units, on average. The absolute difference between the model’s predictions and the true values is approximately 303.96 units, on average. Around 48.65% of the variance in the target variable is accounted for by the model’s predictions. The difference between the model’s predictions and the actual values equates to approximately 10.02% of the actual values, on average.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="tbl-metrics" class="anchored">
@@ -3217,11 +3217,11 @@ Prediction Objective
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>This regression problem was best predicted using a Random Forest Model using a kitchen sink recipe. The recipe was created from removing non-predictor variables, zero-variance variables, dummy encoding nominal variables, imputing missing variables using k nearest neighbor method, and normalizing all numeric data to have a standard deviation of one and a mean of zero. This model had a moderately good performance based on the context of the baby’s birth weight data.</p>
+<p>This regression problem was best predicted using a Random Forest Model using a kitchen sink recipe. The recipe was created from removing non-predictor variables, zero-variance variables, dummy encoding nominal variables, imputing missing variables using K Nearest Neighbor method, and normalizing all numeric data to have a standard deviation of one and a mean of zero. This model had a moderately good performance based on the context of the baby’s birth weight data.</p>
 </section>
 <section id="evaluation" class="level2">
 <h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
-<p>This project aligns with broader efforts to enhance maternal and infant well-being by providing a model to predict birth weight of babies at birth to anticipate infant needs like NICU stay. The model performs moderately well enough to produce low error statistics. However, since health data is crucial and must be accurate to provide appropriate care to patients, the model could be further improved for accuracy. Since the kitchen sink recipe worked better than the customized recipe, future research can involve further investigation of the context of the data, exploratory data analysis, thus creating recipes that feature more feature engineering to enhance the performance of the models. Futhermore, more extensive data with more variation on maternal biological and psychological health can be collected to be used as predictors of the baby’s weight at birth.</p>
+<p>This project aligns with broader efforts to enhance maternal and infant well-being by providing a model to predict birth weight of babies at birth to anticipate infant needs like NICU stay. The model performs moderately well enough to produce low error statistics. However, since health data is crucial and must be accurate to provide appropriate care to patients, the model could be further improved for accuracy. Since the kitchen sink recipe worked better than the customized recipe, future research can involve further investigation of the context of the data, exploratory data analysis, thus creating recipes that feature more feature engineering to enhance the performance of the models. Furthermore, more extensive data with more variation on maternal biological and psychological health can be collected to be used as predictors of the baby’s weight at birth.</p>
 </section>
 
 
