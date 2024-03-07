@@ -47,7 +47,7 @@ The Mental Health In Pregnancy During COVID-19 Dataset[^1] is aimed to understan
 
 [^1]: Mental Health In Pregnancy During COVID-19 --- <https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19>
 
-[^2]: Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. <https://doi.org/10.1016/j.dib.2023.109366>
+[^2]: Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. --- <https://doi.org/10.1016/j.dib.2023.109366>
 
 ::: {.callout-note icon="false"}
 ## Prediction Objective 
