@@ -126,9 +126,9 @@ This dataset is relatively small for machine learning. Therefore, repeated V-fol
 
 #### Recipes
 
-There are two distinct recipes fitted into all model types: the Kitchen Sink recipe (recipe 1) and a customized recipe (recipe 2). There are two versions of each recipe, one for parametric models and one for non-parametric/tree-based models.
+There are two distinct recipes fitted into all model types: the kitchen sink recipe (recipe 1) and a customized recipe (recipe 2). There are two versions of each recipe, one for parametric models and one for non-parametric/tree-based models.
 
-**Kitchen Sink Recipe (recipe 1):**
+**Kitchen Sink Recipe (recipe 1)**
 
 The following basic steps were performed in creating the kitchen sink recipe:
 
@@ -154,15 +154,15 @@ The following basic steps were performed in creating the kitchen sink recipe:
 
 Recipe for tree-based model was one-hot dummy encoded. Recipe for tree-based model is different based on how the models inherently handle categorical variables. Tree-based models benefit such encoding to properly utilize categorical variables in their numerical framework.
 
-**Customized Recipe (receipe 2):**
+**Customized Recipe (recipe 2)**
 
 From the kitchen sink recipe, the following steps were added based on an exploratory data analysis of the training dataset:
 
--   Apply square root transformation to postnatal depression for normality.
+-   Apply square root transformation to Edinburgh Postnatal Depression Scale for normality.
 
-    -   Before the predictors were normalized, the postnatal depression data was transformed for a normal distribution. This decision was based on a univariate analysis shown in @fig-appendix-eda1 (see Appendix: EDA). 
+    -   Before the predictors were normalized, the Edinburgh Postnatal Depression Scale data was transformed for a normal distribution. This decision was based on a univariate analysis shown in @fig-appendix-eda1 (see Appendix: EDA). 
 
--   Add interaction term between PROMIS anxiety and postnatal depression levels.
+-   Add interaction term between Patient-Reported Outcomes Measurement Information System (PROMIS) on Anxiety and Edinburgh Postnatal Depression Scale.
 
     -   Adding an interaction term between anxiety and depression levels allows the models to capture nuanced relationships that cannot be fully explained by considering each variable independently. This decision is backed up by secondary research that showed evidence that anxiety, oftentimes, may occur as a symptom of clinical depression. Similarly, it is common to have depression that is triggered by an anxiety disorder, including general, panic, and separation anxiety disorders. Many people have a diagnosis of both an anxiety disorder and clinical depression (Kalin, 2020)[^3]. A bivariate analysis in @fig-appendix-eda2 also showed that these two variables had a strong linear correlation with a correlation coefficient of around 0.8 (see Appendix: EDA).
 
@@ -219,9 +219,9 @@ RMSE, MAE, RSQ, and MAPE are used to assess the chosen final model. These four m
 
 #### Comparing Submodels
 
-The Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models had their parameters tuned. Submodels and the tuning process for each model types were examined. First, a visual inspection of autoplots was done over each model using the better recipe. (See Appendix: RMSE by Model Parameters for autoplots of all models)
+The Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Random Forest models had their parameters tuned. Submodels and the tuning process for each model types were examined. First, a visual inspection of autoplots was done over each model using the better-performing recipe. (See Appendix: RMSE by Model Parameters for autoplots of all models using the worse-performing recipe)
 
-@fig-autoplot-en1 shows the RMSE by parameters for the elastic net models (Lasso and Ridge Regressions) using the kitchen sink recipe. 
+@fig-autoplot-en1 shows the RMSE by parameters for the Elastic Net models (Lasso and Ridge Regressions) using the kitchen sink recipe. The larger the amount of regularization, the better the RMSE was. However, the difference was large for Lasso Regression and minimal for Ridge Regression. 
 
 ```{r}
 #| label: fig-autoplot-en1
@@ -231,7 +231,7 @@ The Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Ra
 (lasso1_auto + ridge1_auto)
 ```
 
-@fig-autoplot-knn2 shows the RMSE by parameters for the K Nearest Neighbor models using the customized recipe. 
+@fig-autoplot-knn2 shows the RMSE by parameters for the K Nearest Neighbor models using the customized recipe. This plot shows that when the number of nearest neighbors is between 55 and 60, the RMSE will be at its lowest and perform the best.
 
 ```{r}
 #| label: fig-autoplot-knn2
@@ -241,25 +241,33 @@ The Lasso Regression, Ridge Regression, K Nearest Neighbor, Boosted Tree, and Ra
 knn2_auto
 ```
 
-@fig-autoplot-tree1 shows the RMSE by parameters for the other Boosted Tree and Random Forest models using the kitchen sink recipe. 
+@fig-autoplot-tree1 shows the RMSE by parameters for the other Boosted Tree model using the kitchen sink recipe. The submodel with a learning rate of 0.316 performed significantly better than other submodels. Within that learning rate, the rough trend seemed to be that the larger the number of randomly selected predictors, the lower the RMSE. 
 
 ```{r}
 #| label: fig-autoplot-tree1
-#| fig-cap: "RMSE by Hyperparameters of Tree-Based (recipe 1) Models"
+#| fig-cap: "RMSE by Hyperparameters of Boosted Tree (recipe 1) Model"
 #| echo: false
 
-(bt1_auto / rf1_auto)
+bt1_auto
 ```
 
-It is easier to view the best hyperparameters by RMSE for comparison on each of the objects containing the tuning information. @tbl-parameters shows the best hyperparameters of each model adjusted to and used to fit the data for both recipes. These tables were used after fitting each models to adjust the parameters based on the best performing submodel for each model type. 
+@fig-autoplot-tree2 shows the RMSE by parameters for the other Random Forest model using the kitchen sink recipe. The graph shows that, for all minimal node sizes in general, the RMSE decreases as the number of randomly selected predictors increases. However beyond around 20 predictors, the RMSE seems to slightly increase for submodels with smaller number of minimal node sizes. 
+
+```{r}
+#| label: fig-autoplot-tree2
+#| fig-cap: "RMSE by Hyperparameters of Random Forest (recipe 1) Model"
+#| echo: false
+
+rf1_auto
+```
+
+The autoplots for tree-based models are better explained in the next section using a table of the best hyperparameters by RMSE for comparison on each of the objects containing the tuning information. @tbl-parameters shows the best hyperparameters of the tree models adjusted to and used to fit the data for both recipes. These tables were used after fitting each model to adjust the parameters based on the best performing submodel for each model type. 
 
 ```{r}
 #| label: tbl-parameters
 #| tbl-cap: "Table of Best Hyperparameters for Each Model"
 #| echo: false
 
-lasso_best
-ridge_best
 knn_best
 bt_best
 rf_best
@@ -329,39 +337,39 @@ The goal of this project was to predict the weight of the baby at birth based on
 
 One aspect for potential enhancement in this project is the feature engineering of the recipes. The customized recipe underperformed the kitchen sink recipe for all models. While a simple recipe may work the best in some circumstances, this may also mean that there is still be room for improvement in creating a better recipe, particularly in enhancing the explanatory power and reducing prediction errors further. While multiple features like variable interactions, data transformations, and different imputation methods were explored in various combination, it was difficult to create a customized recipe that significantly outperformed the kitchen sink recipe.
 
-One possible reason for this is that the variables used to predict the target variables may have not had a large influence on the target variable of interest. For instance, the depression levels, household income, and the age of the mother may not have been correlated to the baby's birth weight, thus the model may have not had good predictors to accurately predict the weight of the baby at birth. In addition, there was little variance in the target variable compared to the number of observations. Because birth weight data has a small interquartile range compared to its median and range, it may have been harder for models to make accurate predictions.
+One possible reason for this is that the variables used to predict the target variables may have not had a large influence on the target variable of interest. For instance, the Edinburgh Postnatal Depression Scale, household income, and the age of the mother may not have had any relationship with the baby's birth weight scientifically, thus the model may have not had good predictors to accurately predict the weight of the baby at birth. The original dataset used in this project only has 15 predictor variables; more number of biological predictors relevant to a baby's birth weight could lead to construction of a better performing model. In addition, there was little variance in the target variable compared to the number of observations. Because birth weight data has a small interquartile range compared to its median and range, it may have been harder for models to make accurate predictions. 
 
-Another point of further investigation is that the RMSE of the model fitted to my entire training dataset is better than when the model was resampled (10 folds, 5 repeats). Considering the data variability, overfitting, and randomness, it is not uncommon for the RMSE of a model trained on the entire dataset to be better than that obtained from cross-validation. However, it is essential to reconsider the potential reasons behind the difference and to interpret the results cautiously. This would also be a next step to this project.
+Another point of further investigation is that the RMSE of the model fitted to my entire training dataset is better than when the model was resampled (10 folds, 5 repeats). Considering the data variability, overfitting, and randomness, it is not uncommon for the RMSE of a model trained on the entire dataset to be better than that obtained from cross-validation. However, it is essential to reconsider the potential reasons behind the difference and to interpret the results cautiously with appropriate background context. Overall, further exploration and refinement could be performed as a next step to this project to unlock the full potential of predictive modeling in this context.
 
 ## References
 
-Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. (https://doi.org/10.1176/appi.ajp.2020.20030305)^[https://doi.org/10.1176/appi.ajp.2020.20030305]
+Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. <https://doi.org/10.1176/appi.ajp.2020.20030305>
 
-Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. (https://doi.org/10.1016/j.dib.2023.109366)^[https://doi.org/10.1016/j.dib.2023.109366]
+Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. <https://doi.org/10.1016/j.dib.2023.109366>
 
 ## Appendix: EDA (Exploratory Data Analysis)
 
-@fig-appendix-eda1 shows the distribution of postnatal depression level in the original scale and the square-root transformed scale.
+@fig-appendix-eda1 shows the distribution of Edinburgh Postnatal Depression Scale in the original scale and the square-root transformed scale.
 
 ```{r}
 #| label: fig-appendix-eda1
-#| fig-cap: "Postnatal Depression Level Distribution"
+#| fig-cap: "Edinburgh Postnatal Depression Scale Distribution"
 #| echo: false
 
 a <- ggplot(pregnancy_train, aes(x = postnatal_depression)) +
   geom_histogram(bins = 30, fill = "skyblue", color = "black") +
   theme_minimal() +
   labs(title = "Original Scale",
-       x = "Postnatal Depression")
+       x = "Edinburgh Postnatal Depression Scale")
 b <- ggplot(pregnancy_train, aes(x = sqrt(postnatal_depression))) +
   geom_histogram(bins = 30, fill = "skyblue", color = "black") +
   theme_minimal() +
   labs(title = "Square-Root Transformed",
-       x = "Postnatal Depression")
+       x = "Edinburgh Postnatal Depression Scale")
 (a + b)
 ```
 
-@fig-appendix-eda2 shows a scatterplot to examine the relationship between the postnatal depression and PROMIS anxiety levels of pregnant mothers. 
+@fig-appendix-eda2 shows a scatterplot to examine the relationship between the Edinburgh Postnatal Depression Scale and Patient-Reported Outcomes Measurement Information System (PROMIS) on Anxiety of pregnant mothers. 
 
 ```{r}
 #| label: fig-appendix-eda2
@@ -371,64 +379,52 @@ set.seed(100)
 ggplot(pregnancy_train, aes(x = postnatal_depression, y = promis_anxiety)) +
   geom_jitter(alpha = 0.2) +
   geom_smooth(method = "lm", se = FALSE, 
-              color = "red", linetype = 5) +
+              color = "blue", linetype = 5) +
   theme_minimal() +
-  labs(title = "Postnatal Depression vs. PROMIS Anxiety Levels",
-       x = "Postnatal Depression",
+  labs(title = "Edinburgh Postnatal Depression Scale vs. PROMIS Anxiety Levels",
+       x = "Edinburgh Postnatal Depression Scale",
        y = "PROMIS Anxiety")
 ```
 
 ## Appendix: RMSE by Model Parameters (Autoplots)
 
-@fig-autoplot-lasso shows the RMSE by hyperparameters of the Lasso Regression Models by recipe.
+@fig-autoplot-en2 shows the RMSE by hyperparameters of the Elastic Net models using the customized recipe.
 
 ```{r}
-#| label: fig-autoplot-lasso
-#| fig-cap: "RMSE by Hyperparameters of Lasso Regression Models"
+#| label: fig-autoplot-en2
+#| fig-cap: "RMSE by Hyperparameters of Elastic Net Models (recipe 2)"
 #| echo: false
 
-(lasso1_auto + lasso2_auto)
+(lasso2_auto + ridge2_auto)
 ```
 
-@fig-autoplot-ridge shows the RMSE by hyperparameters of the Ridge Regression Models by recipe. 
-
-```{r}
-#| label: fig-autoplot-ridge
-#| fig-cap: "RMSE by Hyperparameters of Ridge Regression Models"
-#| echo: false
-
-(ridge1_auto + ridge2_auto) 
-```
-
-@fig-autoplot-knn shows the RMSE by hyperparameters of the K Nearest Neighbor Models by recipe. 
+@fig-autoplot-knn shows the RMSE by hyperparameters of the K Nearest Neighbor model using the kitchen sink recipe. 
 
 ```{r}
 #| label: fig-autoplot-knn
-#| fig-cap: "RMSE by Hyperparameters of K Nearest Neighbor Models"
+#| fig-cap: "RMSE by Hyperparameters of K Nearest Neighbor Model (recipe 1)"
 #| echo: false
-#| out-width: "2"
-#| out-height: "1"
 
-(knn1_auto + knn2_auto)
+knn1_auto
 ```
 
-@fig-autoplot-bt shows the RMSE by hyperparameters of the Boosted Tree models by recipe. 
+@fig-autoplot-bt shows the RMSE by hyperparameters of the Boosted Tree model using the customized recipe. 
 
 ```{r}
 #| label: fig-autoplot-bt
-#| fig-cap: "RMSE by Hyperparameters of Boosted Tree Models"
+#| fig-cap: "RMSE by Hyperparameters of Boosted Tree Model (recipe 2)"
 #| echo: false
 
-(bt1_auto / bt2_auto)
+bt2_auto
 ```
 
-@fig-autoplot-rf shows the RMSE by hyperparameters of the Random Forest models by recipe. 
+@fig-autoplot-rf shows the RMSE by hyperparameters of the Random Forest model using the customized recipe. 
 
 ```{r}
 #| label: fig-autoplot-rf
-#| fig-cap: "RMSE by Hyperparameters of Random Forest Models"
+#| fig-cap: "RMSE by Hyperparameters of Random Forest Model (recipe 2)"
 #| echo: false
 
-(rf1_auto / rf2_auto)
+rf2_auto
 ```
 

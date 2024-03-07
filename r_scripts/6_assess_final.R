@@ -40,7 +40,7 @@ final_plot <- pregnancy_test |>
   bind_cols(predict(final_fit, pregnancy_test)) |>
   ggplot(aes(x = birth_weight, y = .pred)) +
   geom_point(alpha = 0.2) + 
-  geom_abline(lty = 5, color = "red") + 
+  geom_abline(linetype = 5, color = "blue") + 
   theme_minimal() +
   labs(title = "Baby's Actual vs. Predicted Birth Weight",
        x = "Birth Weight (g)", 

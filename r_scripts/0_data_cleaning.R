@@ -93,7 +93,7 @@ pregnancy_codebook <- as_tibble(data.frame(
     "gestational age at birth (weeks)",
     "month of delivery",
     "year of delivery",
-    "length of the baby (cm)",
+    "length/height of the baby (cm)",
     "weight of the baby (g)",
     "method of delivery (vaginally, c-section: Caesarean-section)",
     "status of infant admission to the Neonatal Intensive Care Unit (Yes, No)",

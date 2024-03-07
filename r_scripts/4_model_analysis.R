@@ -138,7 +138,7 @@ tbl_null <- null_fit |>
   show_best("rmse") |> 
   slice_min(mean) |> 
   select(mean, n, std_err) |> 
-  mutate(model = "Null",
+  mutate(model = "Null (baseline)",
          recipe = "recipe 1 (parametric)")
 tbl_lm1 <- lm_fit1 |> 
   show_best("rmse") |> 
