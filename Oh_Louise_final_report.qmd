@@ -55,7 +55,7 @@ The COVID-19 pandemic was a substantial stressor, especially for pregnant indivi
 
 [^1]: Mental Health In Pregnancy During COVID-19 --- <https://www.kaggle.com/datasets/yeganehbavafa/mental-health-in-the-pregnancy-during-the-covid-19>
 
-[^2]: Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. --- <https://doi.org/10.1176/appi.ajp.2020.20030305>
+[^2]: Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. --- <https://doi.org/10.1016/j.dib.2023.109366>
 
 ::: {.callout-note icon="false"}
 ## Prediction Research Objective
@@ -168,7 +168,7 @@ From the kitchen sink recipe, the following steps were added based on an explora
 
 Recipe for tree-based model had interaction terms removed. Interaction terms are often unnecessary and potentially detrimental when using tree-based models. Focusing on simpler feature representations allows tree-based models to leverage their strengths in capturing complex interactions while maintaining interpretability and generalization performance. Recipe for tree-based model was one-hot dummy encoded, just like the kitchen sink recipe. 
 
-[^3]: Lebel, C., Tomfohr-Madsen, L., Giesbrecht, G., Lai, B. P. Y., Bagshawe, M., Freeman, M., Hapin, M. K., MacKinnon, A., Patel, P., van Sloten, M., & van de Wouw, M. (2023). Prenatal mental health data and birth outcomes in the pregnancy during the COVID-19 Pandemic dataset. Data in brief, 49, 109366. --- <https://doi.org/10.1016/j.dib.2023.109366>
+[^3]: Kalin, N. H. (2020). The critical relationship between anxiety and depression. American Journal of Psychiatry, 177(5), 365–367. --- <https://doi.org/10.1176/appi.ajp.2020.20030305>
 
 #### Model Type and Parameter Tuning
 
